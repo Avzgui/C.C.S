@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Model.Environment;
 
 /**
+ *
  * @author Antoine "Avzgui" Richard
  */
-public class CCS_Creator_Model {
-    
-    public CCS_Creator_Model(){
-    }
-    
+public enum Flow {
+    IN,
+    OUT
 }

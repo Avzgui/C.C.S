@@ -48,6 +48,7 @@ public class CCS_Creator_View extends Thread {
         //Elements layout
         this.frame.setLayout(new BorderLayout());
         this.frame.add(scrollPane, BorderLayout.CENTER);
+        this.frame.add(tools, BorderLayout.NORTH);
         
         //pack and show
         this.frame.pack();
