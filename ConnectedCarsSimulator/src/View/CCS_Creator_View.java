@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Simulator.View;
+package View;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,17 +15,17 @@ import javax.swing.JToolBar;
 /**
  * @author Antoine "Avzgui" Richard
  */
-public class CCS_View extends Thread {
+public class CCS_Creator_View extends Thread {
     
     private final JFrame frame;
     private final JPanel panel;
     private final JToolBar tools;
     
-    public CCS_View(int height, int width){
+    public CCS_Creator_View(int height, int width){
         super();
         
         //Frame initialization
-        this.frame = new JFrame("Connected Cars Simulator");
+        this.frame = new JFrame("CCS Creator");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setPreferredSize(new Dimension(height, width));
         this.frame.setResizable(true);

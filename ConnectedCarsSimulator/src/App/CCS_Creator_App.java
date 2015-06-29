@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CCS_Creator;
+package App;
 
-import CCS_Creator.View.CCS_Creator_View;
+import View.CCS_Creator_View;
 
 /**
  * @author Antoine "Avzgui" Richard
