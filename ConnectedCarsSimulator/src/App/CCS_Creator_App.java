@@ -5,6 +5,7 @@
  */
 package App;
 
+import Model.CCS_Creator_Model;
 import View.CCS_Creator_View;
 
 
@@ -16,6 +17,8 @@ public class CCS_Creator_App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        CCS_Creator_View view = new CCS_Creator_View(800, 600);
+        CCS_Creator_Model model = new CCS_Creator_Model();
+        CCS_Creator_View view = new CCS_Creator_View(800, 600, model);
+        view.start();
     }
 }

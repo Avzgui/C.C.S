@@ -128,13 +128,12 @@ public class Intersection extends Infrastructure {
         //For each way beginning at the Cardinal Point
         for(int i = 0 ; i < this.nb_ways.get(Flow.IN, begin) ; i++){
             
-            /* ----- General Case : front way ----- */
             
             //If the way already exist, delete it
             if(this.ways.contains(begin, i))
                 this.ways.remove(begin, i);
             
-            //Create the future way
+            //Create and initialize the future way
             Way way = new Way();
             
             //Get the zone in the conflict zone, dx and dy
@@ -144,19 +143,19 @@ public class Intersection extends Infrastructure {
             int front_zone_size = this.conflict_zone_size.get(begin.getFront());
             int dx = getDX(begin, Flow.IN);
             int dy = getDY(begin, Flow.IN);
-            
+                
             //For each cell of the way before the conflict zone
             for(int j = this.ways_size.get(Flow.IN, begin) ; j > 0 ; j--){
-                
+
                 //Determine coordinate of the cell
                 int cell_x;
                 int cell_y;
-                
+
                 //If begin is West or East
                 if(begin.isHorizontal()){
                     //X depends of begin zone size, dx and j
                     cell_x = this.x + dx * (begin_zone_size + j);
-                    
+
                     //Y depends of zone size, dy and i
                     cell_y = this.y + dy * (zone_size - i);
                 }
@@ -164,66 +163,73 @@ public class Intersection extends Infrastructure {
                 else{
                     //X depends of zone size, dx and i
                     cell_x = this.x + dx * (zone_size - i);
-                    
+
                     //Y depends of begin zone size, dy and j
                     cell_y = this.y + dy * (begin_zone_size + j);
                 }
-                
+
                 //Add cell to the future way
                 way.addCell(new Cell(cell_x, cell_y));
             }
             
-            //For each cell of the way in the conflict zone
-            for(int j = 0 ; j < begin_zone_size + front_zone_size + 1 ; j++){
-                //Determine coordinate of the cell
-                int cell_x;
-                int cell_y;
-                
-                if(begin.isHorizontal()){
-                    // X depends of begin zone size, j and dx
-                    cell_x = this.x + dx * (begin_zone_size - j);
-                    
-                    // Y depends of zone size, i and dy
-                    cell_y = this.y + dy * (zone_size - i);
-                }
-                else{
-                    // X depends of zone size, i and dx
-                    cell_x = this.x + dx * (zone_size - i);
-                    
-                    // Y depends of begin zone size, j and dy
-                    cell_y = this.y + dy * (begin_zone_size - j);
-                }
-                
-                //Add cell to the future way
-                way.addCell(new Cell(cell_x, cell_y));
-            }
+            /* ----- General Case : front way ----- */
             
-            //For each cell of the way after the conflict zone
-            for(int j = 1 ; j >= this.ways_size.get(Flow.OUT, begin.getFront()) ; j++){
-                
-                //Determine coordinate of the cell
-                int cell_x;
-                int cell_y;
-                
-                //If begin is West or East
-                if(begin.isHorizontal()){
-                    //X depends of front zone size, dx and j
-                    cell_x = this.x + dx * (front_zone_size + j);
-                    
-                    //Y depends of zone size, dy and i
-                    cell_y = this.y + dy * (zone_size - i);
+            //If the front way can be create
+            if(i < this.nb_ways.get(Flow.OUT, begin.getFront())){
+
+                //For each cell of the way in the conflict zone
+                for(int j = 0 ; j < begin_zone_size + front_zone_size + 1 ; j++){
+                    //Determine coordinate of the cell
+                    int cell_x;
+                    int cell_y;
+
+                    if(begin.isHorizontal()){
+                        // X depends of begin zone size, j and dx
+                        cell_x = this.x + dx * (begin_zone_size - j);
+
+                        // Y depends of zone size, i and dy
+                        cell_y = this.y + dy * (zone_size - i);
+                    }
+                    else{
+                        // X depends of zone size, i and dx
+                        cell_x = this.x + dx * (zone_size - i);
+
+                        // Y depends of begin zone size, j and dy
+                        cell_y = this.y + dy * (begin_zone_size - j);
+                    }
+
+                    //Add cell to the future way
+                    way.addCell(new Cell(cell_x, cell_y));
                 }
-                //If begin is North or South
-                else{
-                    //X depends of zone size, dx and i
-                    cell_x = this.x + dx * (zone_size - i);
+
+                //For each cell of the way after the conflict zone
+                for(int j = 1 ; j <= this.ways_size.get(Flow.OUT, begin.getFront()) ; j++){
+
+                    //Determine coordinate of the cell
+                    int cell_x;
+                    int cell_y;
+
+                    //If begin is West or East
+                    if(begin.isHorizontal()){
+                        //X depends of front zone size, dx and j
+                        cell_x = this.x - dx * (front_zone_size + j);
+
+                        //Y depends of zone size, dy and i
+                        cell_y = this.y + dy * (zone_size - i);
+                    }
                     
-                    //Y depends of front zone size, dy and j
-                    cell_y = this.y + dy * (front_zone_size + j);
+                    //If begin is North or South
+                    else{
+                        //X depends of zone size, dx and i
+                        cell_x = this.x + dx * (zone_size - i);
+
+                        //Y depends of front zone size, dy and j
+                        cell_y = this.y - dy * (front_zone_size + j);
+                    }
+
+                    //Add cell to the future way
+                    way.addCell(new Cell(cell_x, cell_y));
                 }
-                
-                //Add cell to the future way
-                way.addCell(new Cell(cell_x, cell_y));
             }
             
             //Add the way to the array of ways
