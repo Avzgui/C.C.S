@@ -7,10 +7,7 @@ package Model.Environment;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 /**
  * @author Antoine "Avzgui" Richard

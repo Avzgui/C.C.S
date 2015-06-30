@@ -17,6 +17,20 @@ public enum Flow {
      * 
      * @return 
      */
+    public Flow getOpposite(){
+        switch(this){
+            case IN :
+                return OUT;
+            case OUT :
+                return IN;
+        }
+        return null;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
     public String toString(){
         switch(this){
             case IN :

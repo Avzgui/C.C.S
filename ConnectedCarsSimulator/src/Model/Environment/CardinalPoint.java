@@ -70,42 +70,6 @@ public enum CardinalPoint {
      * 
      * @return 
      */
-    public int getDX(){
-        switch(this){
-            case NORTH :
-                return -1;
-            case SOUTH :
-                return 1;
-            case WEST : 
-                return -1;
-            case EAST :
-                return 1; 
-        }
-        return 0;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    public int getDY(){
-        switch(this){
-            case NORTH :
-                return -1;
-            case SOUTH :
-                return 1;
-            case WEST : 
-                return 1;
-            case EAST :
-                return -1; 
-        }
-        return 0;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
     public boolean isVertical(){
         return (this == NORTH || this == SOUTH);
     }

@@ -5,10 +5,12 @@
  */
 package Model.Environment;
 
+import static Model.Environment.CardinalPoint.EAST;
+import static Model.Environment.CardinalPoint.NORTH;
+import static Model.Environment.CardinalPoint.SOUTH;
+import static Model.Environment.CardinalPoint.WEST;
 import com.google.common.collect.Table;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 /**
  *
@@ -38,12 +40,7 @@ public class Intersection extends Infrastructure {
         this.conflict_zone_size = new HashMap<CardinalPoint, Integer>();
         
         //Initialize conflict zone
-        this.conflict_zone_size.put(CardinalPoint.NORTH, 0);
-        this.conflict_zone_size.put(CardinalPoint.SOUTH, 0);
-        this.conflict_zone_size.put(CardinalPoint.WEST, 0);
-        this.conflict_zone_size.put(CardinalPoint.EAST, 0);
-        
-        //Get max for each IN/OUT
+        updateConflictZone();
     }
 
     /**
@@ -60,6 +57,7 @@ public class Intersection extends Infrastructure {
      */
     public void setNb_ways(Table<Flow, CardinalPoint, Integer> nb_ways) {
         this.nb_ways = nb_ways;
+        updateConflictZone();
     }
     
     /**
@@ -70,6 +68,7 @@ public class Intersection extends Infrastructure {
      */
     public void setNb_way(Flow flow, CardinalPoint point, int nb_way) {
         this.nb_ways.put(flow, point, nb_way);
+        updateConflictZone();
     }
 
     /**
@@ -104,5 +103,65 @@ public class Intersection extends Infrastructure {
      */
     public void createWays(CardinalPoint begin){
        
+    }
+    
+    private void updateConflictZone(){
+        //Initialize conflict zone
+        this.conflict_zone_size.put(CardinalPoint.NORTH, 0);
+        this.conflict_zone_size.put(CardinalPoint.SOUTH, 0);
+        this.conflict_zone_size.put(CardinalPoint.WEST, 0);
+        this.conflict_zone_size.put(CardinalPoint.EAST, 0);
+        
+        //Get max for each IN/OUT
+        for(Flow flow : this.nb_ways.rowKeySet()){
+            for(CardinalPoint point : this.nb_ways.columnKeySet()){
+                //If exist
+                if(this.nb_ways.get(flow, point) != null){
+                    //Get value
+                    int value = this.nb_ways.get(flow, point);
+                    
+                    //Get the zone to test (a little ugly)
+                    CardinalPoint zone = getZone(point, flow);
+                    
+                    //If value > max
+                    if(value > this.conflict_zone_size.get(zone))
+                        this.conflict_zone_size.put(zone, value);
+                }
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param flow
+     * @return 
+     */
+    private CardinalPoint getZone(CardinalPoint point, Flow flow){
+        if(flow == Flow.IN){
+            switch(point){
+                case NORTH :
+                    return WEST;
+                case SOUTH :
+                    return EAST;
+                case WEST : 
+                    return NORTH;
+                case EAST :
+                    return SOUTH; 
+            }
+        }
+        else{
+            switch(point){
+                case NORTH :
+                    return EAST;
+                case SOUTH :
+                    return WEST;
+                case WEST : 
+                    return SOUTH;
+                case EAST :
+                    return NORTH; 
+            }
+        }
+        
+        return null;
     }
 }
