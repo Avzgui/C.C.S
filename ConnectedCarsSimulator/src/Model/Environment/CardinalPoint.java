@@ -101,4 +101,38 @@ public enum CardinalPoint {
         }
         return 0;
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isVertical(){
+        return (this == NORTH || this == SOUTH);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isHorizontal(){
+        return (this == EAST || this == WEST);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public String toString(){
+        switch(this){
+            case NORTH :
+                return "SOUTH";
+            case SOUTH :
+                return "NORTH";
+            case WEST : 
+                return "EAST";
+            case EAST :
+                return "WEST"; 
+        }
+        return null;
+    }
 }

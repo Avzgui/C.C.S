@@ -5,6 +5,8 @@
  */
 package Model.Environment;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ public class Infrastructure {
     
     protected int x;
     protected int y;
-    protected HashMap<Entry<CardinalPoint, Integer>, Way> ways;
+    protected Table<CardinalPoint, Integer, Way> ways;
     
     /**
      * Infrastructure's Constructor
@@ -28,7 +30,7 @@ public class Infrastructure {
     public Infrastructure(int x, int y){
         this.x = x;
         this.y = y;
-        this.ways = new HashMap<>();
+        this.ways = HashBasedTable.create();
     }
 
     /**
@@ -67,7 +69,7 @@ public class Infrastructure {
      * 
      * @return 
      */
-    public HashMap<Entry<CardinalPoint, Integer>, Way> getWays() {
+    public Table<CardinalPoint, Integer, Way> getWays() {
         return ways;
     }
 
@@ -75,7 +77,7 @@ public class Infrastructure {
      * 
      * @param ways 
      */
-    public void setWays(HashMap<Entry<CardinalPoint, Integer>, Way> ways) {
+    public void setWays(Table<CardinalPoint, Integer, Way> ways) {
         this.ways = ways;
     }
     
@@ -86,8 +88,7 @@ public class Infrastructure {
      * @param way 
      */
     public void addWay(CardinalPoint begin, Integer id, Way way){
-        Entry<CardinalPoint, Integer> key = new SimpleEntry<>(begin, id);
-        this.ways.put(key, way);
+        this.ways.put(begin, id, way);
     }
     
     /**
@@ -95,10 +96,9 @@ public class Infrastructure {
      * @param begin
      * @param end 
      */
-    public void removeWay(CardinalPoint begin, CardinalPoint end){
-        Entry<CardinalPoint, CardinalPoint> key = new SimpleEntry<>(begin, end);
-        if(this.ways.containsKey(key))
-            this.ways.remove(key);
+    public void removeWay(CardinalPoint begin, Integer id){
+        if(this.ways.contains(begin, id))
+            this.ways.remove(begin, id);
     }
     
     /**
@@ -108,12 +108,10 @@ public class Infrastructure {
     public ArrayList<Cell> getCells(){
        ArrayList<Cell> cells = new ArrayList<>();
        
-       //For each Way
-       for(Entry<Entry<CardinalPoint, Integer>, Way> entry : this.ways.entrySet()){
-           //For each cell
-           for(Cell cell : entry.getValue().getCells()){
-               if(!cells.contains(cell))
-                   cells.add(cell);
+       for(Way way : this.ways.values()){
+           for(Cell cell : way.getCells()){
+                if(!cells.contains(cell))
+                    cells.add(cell);
            }
        }
        

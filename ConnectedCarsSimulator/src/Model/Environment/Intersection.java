@@ -5,6 +5,7 @@
  */
 package Model.Environment;
 
+import com.google.common.collect.Table;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -16,8 +17,9 @@ import java.util.Map.Entry;
 public class Intersection extends Infrastructure {
 
     // IN : 0, OUT : 1
-    private HashMap<Entry<Flow, CardinalPoint>, Integer> nb_ways;
-    private HashMap<Entry<Flow, CardinalPoint>, Integer> ways_size;
+    private Table<Flow, CardinalPoint, Integer> nb_ways;
+    private Table<Flow, CardinalPoint, Integer> ways_size;
+    private HashMap<CardinalPoint, Integer> conflict_zone_size;
     
     /**
      * Intersection's Constructor
@@ -26,19 +28,29 @@ public class Intersection extends Infrastructure {
      * @param nb_ways
      * @param ways_size
      */
+    @SuppressWarnings("empty-statement")
     public Intersection(int x, int y, 
-            HashMap<Entry<Flow, CardinalPoint>, Integer> nb_ways,
-            HashMap<Entry<Flow, CardinalPoint>, Integer> ways_size) {
+            Table<Flow, CardinalPoint, Integer> nb_ways,
+            Table<Flow, CardinalPoint, Integer> ways_size) {
         super(x, y);
         this.nb_ways = nb_ways;
         this.ways_size = ways_size;
+        this.conflict_zone_size = new HashMap<CardinalPoint, Integer>();
+        
+        //Initialize conflict zone
+        this.conflict_zone_size.put(CardinalPoint.NORTH, 0);
+        this.conflict_zone_size.put(CardinalPoint.SOUTH, 0);
+        this.conflict_zone_size.put(CardinalPoint.WEST, 0);
+        this.conflict_zone_size.put(CardinalPoint.EAST, 0);
+        
+        //Get max for each IN/OUT
     }
 
     /**
      * 
      * @return 
      */
-    public HashMap<Entry<Flow, CardinalPoint>, Integer> getNb_ways() {
+    public Table<Flow, CardinalPoint, Integer> getNb_ways() {
         return nb_ways;
     }
 
@@ -46,7 +58,7 @@ public class Intersection extends Infrastructure {
      * 
      * @param nb_ways 
      */
-    public void setNb_ways(HashMap<Entry<Flow, CardinalPoint>, Integer> nb_ways) {
+    public void setNb_ways(Table<Flow, CardinalPoint, Integer> nb_ways) {
         this.nb_ways = nb_ways;
     }
     
@@ -57,15 +69,14 @@ public class Intersection extends Infrastructure {
      * @param nb_way 
      */
     public void setNb_way(Flow flow, CardinalPoint point, int nb_way) {
-        Entry<Flow, CardinalPoint> key = new SimpleEntry<>(flow, point);
-        this.nb_ways.put(key, nb_way);
+        this.nb_ways.put(flow, point, nb_way);
     }
 
     /**
      * 
      * @return 
      */
-    public HashMap<Entry<Flow, CardinalPoint>, Integer> getWays_size() {
+    public Table<Flow, CardinalPoint, Integer> getWays_size() {
         return ways_size;
     }
 
@@ -73,7 +84,7 @@ public class Intersection extends Infrastructure {
      * 
      * @param ways_size 
      */
-    public void setWays_size(HashMap<Entry<Flow, CardinalPoint>, Integer> ways_size) {
+    public void setWays_size(Table<Flow, CardinalPoint, Integer> ways_size) {
         this.ways_size = ways_size;
     }
     
@@ -84,8 +95,7 @@ public class Intersection extends Infrastructure {
      * @param size 
      */
     public void setWay_Size(Flow flow, CardinalPoint point, int size) {
-        Entry<Flow, CardinalPoint> key = new SimpleEntry<>(flow, point);
-        this.nb_ways.put(key, size);
+        this.ways_size.put(flow, point, size);
     }
     
     /**
@@ -93,27 +103,6 @@ public class Intersection extends Infrastructure {
      * @param begin 
      */
     public void createWays(CardinalPoint begin){
-       //For each way IN
-       Entry<Flow, CardinalPoint> in_key = new SimpleEntry<>(Flow.IN, begin); 
-       for(int i = 0 ; i < this.nb_ways.get(in_key) ; i++){
-           
-           /* ----- General Case : the front way ----- */
-           
-           //If an out way exist.
-           Entry<Flow, CardinalPoint> out_key = new SimpleEntry<>(Flow.OUT, begin.getFront());
-           if(i < this.nb_ways.get(out_key)){
-               //Remove the existing way
-               Entry<CardinalPoint, Integer> way_key = new SimpleEntry<>(begin, i);
-               if(this.ways.containsKey(way_key))
-                   this.ways.remove(way_key);
-               
-               //Create a new Way
-               Way way = new Way();
-               // TODO !!
-               for(int j = 0 ; j < this.ways_size.get(in_key) ; j++){
-                   
-               }
-           }               
-       }
+       
     }
 }

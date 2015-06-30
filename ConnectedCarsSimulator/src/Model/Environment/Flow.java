@@ -11,5 +11,19 @@ package Model.Environment;
  */
 public enum Flow {
     IN,
-    OUT
+    OUT;
+    
+    /**
+     * 
+     * @return 
+     */
+    public String toString(){
+        switch(this){
+            case IN :
+                return "IN";
+            case OUT :
+                return "OUT";
+        }
+        return null;
+    } 
 }
