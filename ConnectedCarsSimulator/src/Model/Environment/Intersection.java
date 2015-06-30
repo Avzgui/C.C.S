@@ -21,7 +21,7 @@ public class Intersection extends Infrastructure {
     // IN : 0, OUT : 1
     private Table<Flow, CardinalPoint, Integer> nb_ways;
     private Table<Flow, CardinalPoint, Integer> ways_size;
-    private HashMap<CardinalPoint, Integer> conflict_zone_size;
+    private final HashMap<CardinalPoint, Integer> conflict_zone_size;
     
     /**
      * Intersection's Constructor
@@ -37,10 +37,16 @@ public class Intersection extends Infrastructure {
         super(x, y);
         this.nb_ways = nb_ways;
         this.ways_size = ways_size;
-        this.conflict_zone_size = new HashMap<CardinalPoint, Integer>();
+        this.conflict_zone_size = new HashMap<>();
         
         //Initialize conflict zone
         updateConflictZone();
+        
+        //Initialize the ways
+        createWays(CardinalPoint.NORTH);
+        createWays(CardinalPoint.SOUTH);
+        createWays(CardinalPoint.WEST);
+        createWays(CardinalPoint.EAST);
     }
 
     /**
@@ -58,6 +64,10 @@ public class Intersection extends Infrastructure {
     public void setNb_ways(Table<Flow, CardinalPoint, Integer> nb_ways) {
         this.nb_ways = nb_ways;
         updateConflictZone();
+        createWays(CardinalPoint.NORTH);
+        createWays(CardinalPoint.SOUTH);
+        createWays(CardinalPoint.WEST);
+        createWays(CardinalPoint.EAST);
     }
     
     /**
@@ -69,6 +79,10 @@ public class Intersection extends Infrastructure {
     public void setNb_way(Flow flow, CardinalPoint point, int nb_way) {
         this.nb_ways.put(flow, point, nb_way);
         updateConflictZone();
+        createWays(CardinalPoint.NORTH);
+        createWays(CardinalPoint.SOUTH);
+        createWays(CardinalPoint.WEST);
+        createWays(CardinalPoint.EAST);
     }
 
     /**
@@ -85,6 +99,10 @@ public class Intersection extends Infrastructure {
      */
     public void setWays_size(Table<Flow, CardinalPoint, Integer> ways_size) {
         this.ways_size = ways_size;
+        createWays(CardinalPoint.NORTH);
+        createWays(CardinalPoint.SOUTH);
+        createWays(CardinalPoint.WEST);
+        createWays(CardinalPoint.EAST);
     }
     
     /**
@@ -95,16 +113,127 @@ public class Intersection extends Infrastructure {
      */
     public void setWay_Size(Flow flow, CardinalPoint point, int size) {
         this.ways_size.put(flow, point, size);
+        createWays(CardinalPoint.NORTH);
+        createWays(CardinalPoint.SOUTH);
+        createWays(CardinalPoint.WEST);
+        createWays(CardinalPoint.EAST);
     }
     
     /**
      * 
      * @param begin 
      */
-    public void createWays(CardinalPoint begin){
+    private void createWays(CardinalPoint begin){
        
+        //For each way beginning at the Cardinal Point
+        for(int i = 0 ; i < this.nb_ways.get(Flow.IN, begin) ; i++){
+            
+            /* ----- General Case : front way ----- */
+            
+            //If the way already exist, delete it
+            if(this.ways.contains(begin, i))
+                this.ways.remove(begin, i);
+            
+            //Create the future way
+            Way way = new Way();
+            
+            //Get the zone in the conflict zone, dx and dy
+            CardinalPoint zone = getZone(begin, Flow.IN);
+            int zone_size = this.conflict_zone_size.get(zone);
+            int begin_zone_size = this.conflict_zone_size.get(begin);
+            int front_zone_size = this.conflict_zone_size.get(begin.getFront());
+            int dx = getDX(begin, Flow.IN);
+            int dy = getDY(begin, Flow.IN);
+            
+            //For each cell of the way before the conflict zone
+            for(int j = this.ways_size.get(Flow.IN, begin) ; j > 0 ; j--){
+                
+                //Determine coordinate of the cell
+                int cell_x;
+                int cell_y;
+                
+                //If begin is West or East
+                if(begin.isHorizontal()){
+                    //X depends of begin zone size, dx and j
+                    cell_x = this.x + dx * (begin_zone_size + j);
+                    
+                    //Y depends of zone size, dy and i
+                    cell_y = this.y + dy * (zone_size - i);
+                }
+                //If begin is North or South
+                else{
+                    //X depends of zone size, dx and i
+                    cell_x = this.x + dx * (zone_size - i);
+                    
+                    //Y depends of begin zone size, dy and j
+                    cell_y = this.y + dy * (begin_zone_size + j);
+                }
+                
+                //Add cell to the future way
+                way.addCell(new Cell(cell_x, cell_y));
+            }
+            
+            //For each cell of the way in the conflict zone
+            for(int j = 0 ; j < begin_zone_size + front_zone_size + 1 ; j++){
+                //Determine coordinate of the cell
+                int cell_x;
+                int cell_y;
+                
+                if(begin.isHorizontal()){
+                    // X depends of begin zone size, j and dx
+                    cell_x = this.x + dx * (begin_zone_size - j);
+                    
+                    // Y depends of zone size, i and dy
+                    cell_y = this.y + dy * (zone_size - i);
+                }
+                else{
+                    // X depends of zone size, i and dx
+                    cell_x = this.x + dx * (zone_size - i);
+                    
+                    // Y depends of begin zone size, j and dy
+                    cell_y = this.y + dy * (begin_zone_size - j);
+                }
+                
+                //Add cell to the future way
+                way.addCell(new Cell(cell_x, cell_y));
+            }
+            
+            //For each cell of the way after the conflict zone
+            for(int j = 1 ; j >= this.ways_size.get(Flow.OUT, begin.getFront()) ; j++){
+                
+                //Determine coordinate of the cell
+                int cell_x;
+                int cell_y;
+                
+                //If begin is West or East
+                if(begin.isHorizontal()){
+                    //X depends of front zone size, dx and j
+                    cell_x = this.x + dx * (front_zone_size + j);
+                    
+                    //Y depends of zone size, dy and i
+                    cell_y = this.y + dy * (zone_size - i);
+                }
+                //If begin is North or South
+                else{
+                    //X depends of zone size, dx and i
+                    cell_x = this.x + dx * (zone_size - i);
+                    
+                    //Y depends of front zone size, dy and j
+                    cell_y = this.y + dy * (front_zone_size + j);
+                }
+                
+                //Add cell to the future way
+                way.addCell(new Cell(cell_x, cell_y));
+            }
+            
+            //Add the way to the array of ways
+            this.ways.put(begin, i, way);
+        }
     }
     
+    /**
+     * 
+     */
     private void updateConflictZone(){
         //Initialize conflict zone
         this.conflict_zone_size.put(CardinalPoint.NORTH, 0);
@@ -131,8 +260,10 @@ public class Intersection extends Infrastructure {
         }
     }
     
+   
     /**
      * 
+     * @param point
      * @param flow
      * @return 
      */
@@ -144,9 +275,9 @@ public class Intersection extends Infrastructure {
                 case SOUTH :
                     return EAST;
                 case WEST : 
-                    return NORTH;
+                    return SOUTH;
                 case EAST :
-                    return SOUTH; 
+                    return NORTH; 
             }
         }
         else{
@@ -156,12 +287,82 @@ public class Intersection extends Infrastructure {
                 case SOUTH :
                     return WEST;
                 case WEST : 
-                    return SOUTH;
+                    return NORTH;
                 case EAST :
-                    return NORTH; 
+                    return SOUTH; 
             }
         }
         
         return null;
+    }
+    
+    /**
+     * 
+     * @param point
+     * @param flow
+     * @return 
+     */
+    private int getDX(CardinalPoint point, Flow flow){
+        if(flow == Flow.IN){
+            switch(point){
+                case NORTH :
+                    return -1;
+                case SOUTH :
+                    return 1;
+                case WEST : 
+                    return -1;
+                case EAST :
+                    return 1; 
+            }
+        }
+        else{
+            switch(point){
+                case NORTH :
+                    return 1;
+                case SOUTH :
+                    return -1;
+                case WEST : 
+                    return -1;
+                case EAST :
+                    return 1; 
+            }
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * 
+     * @param point
+     * @param flow
+     * @return 
+     */
+    private int getDY(CardinalPoint point, Flow flow){
+        if(flow == Flow.IN){
+            switch(point){
+                case NORTH :
+                    return -1;
+                case SOUTH :
+                    return 1;
+                case WEST : 
+                    return 1;
+                case EAST :
+                    return -1; 
+            }
+        }
+        else{
+            switch(point){
+                case NORTH :
+                    return -1;
+                case SOUTH :
+                    return 1;
+                case WEST : 
+                    return -1;
+                case EAST :
+                    return 1; 
+            }
+        }
+        
+        return 0;
     }
 }
