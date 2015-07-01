@@ -22,6 +22,16 @@ public class Way {
     public Way() {
         this.cells = new ArrayList<>();
     }
+    
+    /**
+     * Way's copy constructor
+     * @param other 
+     */
+    public Way(Way other){
+        this.cells = new ArrayList<>();
+        for(Cell cell : other.getCells())
+            this.cells.add(new Cell(cell));
+    }
 
     /**
      * 

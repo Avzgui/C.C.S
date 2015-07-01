@@ -34,7 +34,7 @@ public class CCS_Creator_Model {
     public void addIntersection(int x, int y,
             Table<Flow, CardinalPoint, Integer> nb_ways,
             Table<Flow, CardinalPoint, Integer> ways_size){
-        Intersection intersection = new Intersection(x, y, nb_ways, ways_size);
+        Intersection intersection = new Intersection(x, y, nb_ways, ways_size, true);
         this.environment.put(x, y, intersection);
     }
     

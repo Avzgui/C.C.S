@@ -23,6 +23,15 @@ public class Cell {
         this.x = x;
         this.y = y;
     }
+    
+    /**
+     * Cell's Copy Constructor
+     * @param other 
+     */
+    public Cell(Cell other){
+        this.x = other.getX();
+        this.y = other.getY();
+    }
 
     /**
      * 
