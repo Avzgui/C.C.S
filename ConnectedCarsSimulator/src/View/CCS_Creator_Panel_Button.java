@@ -24,16 +24,24 @@ public class CCS_Creator_Panel_Button extends JButton implements ActionListener 
     private final CCS_Creator_Panel container;
     private Infrastructure infrastructure;
     private int cell_size;
+    private final int x_map;
+    private final int y_map;
     
     /**
      * 
+     * @param x_map
+     * @param y_map
      * @param x
      * @param y
      * @param width
      * @param height
      * @param container
      */
-    public CCS_Creator_Panel_Button(int x, int y, int width, int height, CCS_Creator_Panel container){
+    public CCS_Creator_Panel_Button(int x_map, int y_map, int x, int y, int width, int height, CCS_Creator_Panel container){
+        //Init identificator
+        this.x_map = x_map;
+        this.y_map = y_map;
+
         //Initialize ActionListener
         this.addActionListener(this);
 
@@ -45,6 +53,47 @@ public class CCS_Creator_Panel_Button extends JButton implements ActionListener 
         this.infrastructure = null;
         this.setBackground(Color.GREEN);
         this.setBounds(x, y, width, height);
+    }
+    
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param infrastructure
+     * @param container 
+     */
+    public CCS_Creator_Panel_Button(int x_map, int y_map, int x, int y, Infrastructure infrastructure, CCS_Creator_Panel container){
+        //Init identificator
+        this.x_map = x_map;
+        this.y_map = y_map;
+
+        //Initialize ActionListener
+        this.addActionListener(this);
+
+        //Link to the container
+        this.container = container;
+        
+        //Set properties of the button
+        this.cell_size = this.container.getCell_size();
+        this.infrastructure = infrastructure;
+        this.setBackground(Color.GREEN);
+        this.setBounds(x, y, this.infrastructure.getWidth()*this.cell_size, this.infrastructure.getHeight()*this.cell_size);
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public int getX_map() {
+        return x_map;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public int getY_map() {
+        return y_map;
     }
 
     /**
@@ -108,6 +157,7 @@ public class CCS_Creator_Panel_Button extends JButton implements ActionListener 
         if(this.infrastructure == null){
             System.out.println("Paint infrastructure !");
             this.infrastructure = this.container.getDefault_infrastructure();
+            this.container.addInfrastructure(this.getX(), this.getY(), this.x_map, this.y_map);
         }
     }
 }

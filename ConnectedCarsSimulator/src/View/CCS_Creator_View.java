@@ -5,7 +5,6 @@
  */
 package View;
 
-import Model.CCS_Creator_Model;
 import Model.Environment.CardinalPoint;
 import Model.Environment.Flow;
 import Model.Environment.Intersection;
@@ -24,17 +23,12 @@ import javax.swing.JToolBar;
  */
 public class CCS_Creator_View extends Thread {
     
-    private final CCS_Creator_Model model;
-    
     private final JFrame frame;
     private final CCS_Creator_Panel panel;
     private final JToolBar tools;
     
-    public CCS_Creator_View(int height, int width, CCS_Creator_Model model){
+    public CCS_Creator_View(int height, int width){
         super();
-        
-        //Init link to the model
-        this.model = model;
         
         //Init datum for intersection
         Table<Flow, CardinalPoint, Integer> nb_ways = HashBasedTable.create();
@@ -70,7 +64,7 @@ public class CCS_Creator_View extends Thread {
         this.frame.setResizable(true);
         
         //Panel initialization
-        this.panel = new CCS_Creator_Panel(this, 10, intersection);
+        this.panel = new CCS_Creator_Panel(this, 5, intersection);
         
         //Make the central panel scrollable
         JScrollPane scrollPane = new JScrollPane(this.panel);
@@ -89,10 +83,6 @@ public class CCS_Creator_View extends Thread {
         //pack and show
         this.frame.pack();
         this.frame.setVisible(true);
-    }
-
-    public CCS_Creator_Model getModel() {
-        return model;
     }
 
     public JFrame getFrame() {
