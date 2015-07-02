@@ -8,6 +8,7 @@ package Model.Environment;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 /**
  * @author Antoine "Avzgui" Richard
@@ -30,6 +31,27 @@ public class Infrastructure {
         this.x = x;
         this.y = y;
         this.ways = HashBasedTable.create();
+    }
+    
+    /**
+     * Infrastructure's Copy Constructeur
+     * @param other 
+     */
+    public Infrastructure(Infrastructure other){
+        this.x = other.getX();
+        this.y = other.getY();
+        this.ways = HashBasedTable.create();
+        
+        Table<CardinalPoint, Integer, Way> tmp = other.getWays();
+        for(CardinalPoint point : tmp.rowKeySet()){
+            for(Entry<Integer, Way> entry : tmp.row(point).entrySet()){
+                if(tmp.contains(point, entry.getKey())
+                    && !this.ways.contains(point, entry.getKey()))
+                {
+                    this.ways.put(point, entry.getKey(), entry.getValue());
+                }
+            }
+        }
     }
 
     /**

@@ -16,10 +16,10 @@ import javax.swing.JPanel;
  *
  * @author Antoine "Avzgui" Richard
  */
-public class CCS_Creator_Panel extends JPanel{
+public class CCS_Creator_Central_Panel extends JPanel{
 
     private final CCS_Creator_View view;
-    private final Table<Integer, Integer, CCS_Creator_Panel_Button> map;
+    private final Table<Integer, Integer, CCS_Creator_Central_Panel_Button> map;
     private Infrastructure default_infrastructure;
     private int cell_size;
     
@@ -28,7 +28,7 @@ public class CCS_Creator_Panel extends JPanel{
      * @param view
      * @param cell_size 
      */
-    CCS_Creator_Panel(CCS_Creator_View view, int cell_size, Infrastructure infrastructure){
+    CCS_Creator_Central_Panel(CCS_Creator_View view, int cell_size, Infrastructure infrastructure){
         super();
         
         //Init link to the view
@@ -91,35 +91,33 @@ public class CCS_Creator_Panel extends JPanel{
         
         //Place the intersection
         if(!this.map.contains(x_map, y_map)){
-            JButton button = new CCS_Creator_Panel_Button(x_map, y_map, x, y, this.default_infrastructure, this);
+            JButton button = new CCS_Creator_Central_Panel_Button(x_map, y_map, x, y, this.default_infrastructure, this);
             this.add(button);
-            this.map.put(x_map, y_map, (CCS_Creator_Panel_Button) button);
+            this.map.put(x_map, y_map, (CCS_Creator_Central_Panel_Button) button);
         }
         
         if(!this.map.contains(x_map, y_map-1)){
-            JButton buttonNorth = new CCS_Creator_Panel_Button(x_map, y_map-1, x, y-height, width, height, this);
+            JButton buttonNorth = new CCS_Creator_Central_Panel_Button(x_map, y_map-1, x, y-height, width, height, this);
             this.add(buttonNorth);
-            this.map.put(x_map, y_map-1, (CCS_Creator_Panel_Button) buttonNorth);
+            this.map.put(x_map, y_map-1, (CCS_Creator_Central_Panel_Button) buttonNorth);
         }
         
         if(!this.map.contains(x_map+1, y_map)){
-            JButton buttonEast = new CCS_Creator_Panel_Button(x_map+1, y_map, x+width, y, width, height, this);
+            JButton buttonEast = new CCS_Creator_Central_Panel_Button(x_map+1, y_map, x+width, y, width, height, this);
             this.add(buttonEast);
-            this.map.put(x_map+1, y_map, (CCS_Creator_Panel_Button) buttonEast);
+            this.map.put(x_map+1, y_map, (CCS_Creator_Central_Panel_Button) buttonEast);
         }
         
         if(!this.map.contains(x_map, y_map+1)){
-            JButton buttonSouth = new CCS_Creator_Panel_Button(x_map, y_map+1, x, y+height, width, height, this);
+            JButton buttonSouth = new CCS_Creator_Central_Panel_Button(x_map, y_map+1, x, y+height, width, height, this);
             this.add(buttonSouth);
-            this.map.put(x_map, y_map+1, (CCS_Creator_Panel_Button) buttonSouth);
+            this.map.put(x_map, y_map+1, (CCS_Creator_Central_Panel_Button) buttonSouth);
         }
         
         if(!this.map.contains(x_map-1, y_map)){
-            JButton buttonWest = new CCS_Creator_Panel_Button(x_map-1, y_map, x-width, y, width, height, this);
+            JButton buttonWest = new CCS_Creator_Central_Panel_Button(x_map-1, y_map, x-width, y, width, height, this);
             this.add(buttonWest);
-            this.map.put(x_map-1, y_map, (CCS_Creator_Panel_Button) buttonWest);
+            this.map.put(x_map-1, y_map, (CCS_Creator_Central_Panel_Button) buttonWest);
         }
-        
-        this.revalidate();
     }
 }

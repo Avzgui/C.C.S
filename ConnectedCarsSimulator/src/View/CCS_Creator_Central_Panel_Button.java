@@ -7,6 +7,7 @@ package View;
 
 import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
+import Model.Environment.Intersection;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,9 +20,9 @@ import javax.swing.JPanel;
  *
  * @author Antoine "Avzgui" Richard
  */
-public class CCS_Creator_Panel_Button extends JButton implements ActionListener {
+public class CCS_Creator_Central_Panel_Button extends JButton implements ActionListener {
     
-    private final CCS_Creator_Panel container;
+    private final CCS_Creator_Central_Panel container;
     private Infrastructure infrastructure;
     private int cell_size;
     private final int x_map;
@@ -37,7 +38,7 @@ public class CCS_Creator_Panel_Button extends JButton implements ActionListener 
      * @param height
      * @param container
      */
-    public CCS_Creator_Panel_Button(int x_map, int y_map, int x, int y, int width, int height, CCS_Creator_Panel container){
+    public CCS_Creator_Central_Panel_Button(int x_map, int y_map, int x, int y, int width, int height, CCS_Creator_Central_Panel container){
         //Init identificator
         this.x_map = x_map;
         this.y_map = y_map;
@@ -62,7 +63,7 @@ public class CCS_Creator_Panel_Button extends JButton implements ActionListener 
      * @param infrastructure
      * @param container 
      */
-    public CCS_Creator_Panel_Button(int x_map, int y_map, int x, int y, Infrastructure infrastructure, CCS_Creator_Panel container){
+    public CCS_Creator_Central_Panel_Button(int x_map, int y_map, int x, int y, Infrastructure infrastructure, CCS_Creator_Central_Panel container){
         //Init identificator
         this.x_map = x_map;
         this.y_map = y_map;
@@ -153,10 +154,9 @@ public class CCS_Creator_Panel_Button extends JButton implements ActionListener 
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        System.out.println("Clic !");
         if(this.infrastructure == null){
-            System.out.println("Paint infrastructure !");
-            this.infrastructure = this.container.getDefault_infrastructure();
+            if(this.container.getDefault_infrastructure() instanceof Intersection)
+                this.infrastructure = new Intersection((Intersection) this.container.getDefault_infrastructure());
             this.container.addInfrastructure(this.getX(), this.getY(), this.x_map, this.y_map);
         }
     }

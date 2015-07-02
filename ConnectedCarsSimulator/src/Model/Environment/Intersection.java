@@ -52,6 +52,22 @@ public class Intersection extends Infrastructure {
         
     }
     
+    /**
+     * 
+     * @param other 
+     */
+    public Intersection(Intersection other) {
+        
+        super(other);
+        this.nb_ways = other.nb_ways;
+        this.ways_size = other.ways_size;
+        this.conflict_zone_size = new HashMap<>(other.conflict_zone_size);
+        this.indonesian_cross = other.indonesian_cross;
+        
+        //Initialize conflict zone, ways and sizes
+        updateIntersection();
+    }
+    
     private void updateIntersection(){
         
         //Initialize conflict zone

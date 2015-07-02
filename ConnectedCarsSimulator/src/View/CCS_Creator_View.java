@@ -12,8 +12,6 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -21,10 +19,11 @@ import javax.swing.JToolBar;
 /**
  * @author Antoine "Avzgui" Richard
  */
-public class CCS_Creator_View extends Thread {
+public class CCS_Creator_View{
     
     private final JFrame frame;
-    private final CCS_Creator_Panel panel;
+    private final CCS_Creator_Central_Panel central_panel;
+    private final CCS_Creator_Left_Panel left_panel;
     private final JToolBar tools;
     
     public CCS_Creator_View(int height, int width){
@@ -63,11 +62,14 @@ public class CCS_Creator_View extends Thread {
         this.frame.setPreferredSize(new Dimension(height, width));
         this.frame.setResizable(true);
         
-        //Panel initialization
-        this.panel = new CCS_Creator_Panel(this, 5, intersection);
+        //Left Panel initialization
+        this.left_panel = new CCS_Creator_Left_Panel(this);
+        
+        //Central Panel initialization
+        this.central_panel = new CCS_Creator_Central_Panel(this, 5, intersection);
         
         //Make the central panel scrollable
-        JScrollPane scrollPane = new JScrollPane(this.panel);
+        JScrollPane scrollPane = new JScrollPane(this.central_panel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBounds(0, 0, height, width);
@@ -78,6 +80,7 @@ public class CCS_Creator_View extends Thread {
         //Elements layout
         this.frame.setLayout(new BorderLayout());
         this.frame.add(scrollPane, BorderLayout.CENTER);
+        this.frame.add(this.left_panel, BorderLayout.WEST);
         this.frame.add(tools, BorderLayout.NORTH);
         
         //pack and show
@@ -89,24 +92,11 @@ public class CCS_Creator_View extends Thread {
         return frame;
     }
 
-    public CCS_Creator_Panel getPanel() {
-        return panel;
+    public CCS_Creator_Central_Panel getCentralPanel() {
+        return central_panel;
     }
 
     public JToolBar getTools() {
         return tools;
-    }
-    
-    @Override
-    public void run(){
-        while(true){
-
-            try {
-                //Every 100ms, repaint the attribute panel
-                sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(CCS_Creator_View.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 }
