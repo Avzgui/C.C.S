@@ -92,8 +92,12 @@ public class CCS_Creator_View{
         return frame;
     }
 
-    public CCS_Creator_Central_Panel getCentralPanel() {
+    public CCS_Creator_Central_Panel getCentral_panel() {
         return central_panel;
+    }
+
+    public CCS_Creator_Left_Panel getLeft_panel() {
+        return left_panel;
     }
 
     public JToolBar getTools() {

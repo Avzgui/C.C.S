@@ -89,13 +89,13 @@ public enum CardinalPoint {
     public String toString(){
         switch(this){
             case NORTH :
-                return "SOUTH";
-            case SOUTH :
                 return "NORTH";
+            case SOUTH :
+                return "SOUTH";
             case WEST : 
-                return "EAST";
+                return "WEST";
             case EAST :
-                return "WEST"; 
+                return "EAST"; 
         }
         return null;
     }

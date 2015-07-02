@@ -53,6 +53,14 @@ public class CCS_Creator_Central_Panel extends JPanel{
         this.addInfrastructure(pos_x, pos_y, 0, 0);
     }
 
+    public CCS_Creator_View getView() {
+        return view;
+    }
+
+    public Table<Integer, Integer, CCS_Creator_Central_Panel_Button> getMap() {
+        return map;
+    }
+
     /**
      * 
      * @return 

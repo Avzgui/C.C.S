@@ -5,7 +5,9 @@
  */
 package View;
 
+import Model.Environment.CardinalPoint;
 import Model.Environment.Cell;
+import Model.Environment.Flow;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import java.awt.Color;
@@ -14,7 +16,6 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /**
  *
@@ -76,7 +77,9 @@ public class CCS_Creator_Central_Panel_Button extends JButton implements ActionL
         
         //Set properties of the button
         this.cell_size = this.container.getCell_size();
-        this.infrastructure = infrastructure;
+        if(infrastructure instanceof Intersection)
+            this.infrastructure = new Intersection( (Intersection) infrastructure);
+        //else for later
         this.setBackground(Color.GREEN);
         this.setBounds(x, y, this.infrastructure.getWidth()*this.cell_size, this.infrastructure.getHeight()*this.cell_size);
     }
@@ -110,7 +113,41 @@ public class CCS_Creator_Central_Panel_Button extends JButton implements ActionL
      * @param infrastructure 
      */
     public void setInfrastructure(Infrastructure infrastructure) {
-        this.infrastructure = infrastructure;
+        this.infrastructure = new Infrastructure(infrastructure);
+    }
+    
+    /**
+     * 
+     * @param flow
+     * @param point
+     * @param nb_ways
+     */
+    public void setNewNb_Ways(Flow flow, CardinalPoint point, int nb_ways){
+        if(this.infrastructure instanceof Intersection){
+            Intersection intersection = (Intersection) this.infrastructure;
+            intersection.setNb_way(flow, point, nb_ways);
+        }
+        else{} //For the road case
+        
+        this.setBounds(this.getX(), this.getY(), this.infrastructure.getWidth()*this.cell_size, this.infrastructure.getHeight()*this.cell_size);
+        repaint();
+    }
+    
+    /**
+     * 
+     * @param flow
+     * @param point
+     * @param ways_size
+     */
+    public void setNewWays_Size(Flow flow, CardinalPoint point, int ways_size){
+        if(this.infrastructure instanceof Intersection){
+            Intersection intersection = (Intersection) this.infrastructure;
+            intersection.setWay_Size(flow, point, ways_size);
+        }
+        else{} //For the road case
+        
+        this.setBounds(this.getX(), this.getY(), this.infrastructure.getWidth()*this.cell_size, this.infrastructure.getHeight()*this.cell_size);
+        repaint();
     }
 
     /**
@@ -159,5 +196,7 @@ public class CCS_Creator_Central_Panel_Button extends JButton implements ActionL
                 this.infrastructure = new Intersection((Intersection) this.container.getDefault_infrastructure());
             this.container.addInfrastructure(this.getX(), this.getY(), this.x_map, this.y_map);
         }
+        
+        this.container.getView().getLeft_panel().setSelectedIntersection(this.x_map, this.y_map, (Intersection) this.infrastructure);
     }
 }

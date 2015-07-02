@@ -179,13 +179,11 @@ public class Intersection extends Infrastructure {
      */
     protected void createWays(CardinalPoint begin){
        
+        //Clear all the ways
+        this.ways.row(begin).clear();
+        
         //For each way beginning at the Cardinal Point
         for(int i = 0 ; i < this.nb_ways.get(Flow.IN, begin) ; i++){
-            
-            
-            //If the way already exist, delete it
-            if(this.ways.contains(begin, i))
-                this.ways.remove(begin, i);
             
             //Create the future way
             Way way = new Way();
