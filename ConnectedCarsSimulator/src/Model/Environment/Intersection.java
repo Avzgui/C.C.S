@@ -23,6 +23,8 @@ public class Intersection extends Infrastructure {
     private Table<Flow, CardinalPoint, Integer> nb_ways;
     private Table<Flow, CardinalPoint, Integer> ways_size;
     private final HashMap<CardinalPoint, Integer> conflict_zone_size;
+    private int center_x;
+    private int center_y;
     private boolean indonesian_cross;
     
     /**
@@ -31,20 +33,49 @@ public class Intersection extends Infrastructure {
      * @param y
      * @param nb_ways
      * @param ways_size
+     * @param indonesian_cross
      */
     @SuppressWarnings("empty-statement")
     public Intersection(int x, int y, 
             Table<Flow, CardinalPoint, Integer> nb_ways,
             Table<Flow, CardinalPoint, Integer> ways_size,
             boolean indonesian_cross) {
+        
         super(x, y);
         this.nb_ways = nb_ways;
         this.ways_size = ways_size;
         this.conflict_zone_size = new HashMap<>();
         this.indonesian_cross = indonesian_cross;
         
+        //Initialize conflict zone, ways and sizes
+        updateIntersection();
+        
+    }
+    
+    private void updateIntersection(){
+        
         //Initialize conflict zone
         updateConflictZone();
+        
+        //Set width and center x
+        int max1 = Math.max(this.ways_size.get(Flow.IN, CardinalPoint.WEST),
+                        this.ways_size.get(Flow.OUT, CardinalPoint.WEST));
+        int max2 = Math.max(this.ways_size.get(Flow.IN, CardinalPoint.EAST),
+                        this.ways_size.get(Flow.OUT, CardinalPoint.EAST));
+        int max3 = this.conflict_zone_size.get(CardinalPoint.WEST);
+        int max4 = this.conflict_zone_size.get(CardinalPoint.EAST);
+        this.width = max1+max2+max3+max4+1;
+        this.center_x = this.x+max1+max3;
+        
+        //Set height and center y
+        max1 = Math.max(this.ways_size.get(Flow.IN, CardinalPoint.NORTH),
+                        this.ways_size.get(Flow.OUT, CardinalPoint.NORTH));
+        max2 = Math.max(this.ways_size.get(Flow.IN, CardinalPoint.SOUTH),
+                        this.ways_size.get(Flow.OUT, CardinalPoint.SOUTH));
+        max3 = this.conflict_zone_size.get(CardinalPoint.NORTH);
+        max4 = this.conflict_zone_size.get(CardinalPoint.SOUTH);
+        this.height = max1+max2+max3+max4+1;
+        this.center_y = this.y+max1+max3;
         
         //Initialize the ways
         createWays(CardinalPoint.NORTH);
@@ -67,11 +98,7 @@ public class Intersection extends Infrastructure {
      */
     public void setNb_ways(Table<Flow, CardinalPoint, Integer> nb_ways) {
         this.nb_ways = nb_ways;
-        updateConflictZone();
-        createWays(CardinalPoint.NORTH);
-        createWays(CardinalPoint.SOUTH);
-        createWays(CardinalPoint.WEST);
-        createWays(CardinalPoint.EAST);
+        updateIntersection();
     }
     
     /**
@@ -82,11 +109,7 @@ public class Intersection extends Infrastructure {
      */
     public void setNb_way(Flow flow, CardinalPoint point, int nb_way) {
         this.nb_ways.put(flow, point, nb_way);
-        updateConflictZone();
-        createWays(CardinalPoint.NORTH);
-        createWays(CardinalPoint.SOUTH);
-        createWays(CardinalPoint.WEST);
-        createWays(CardinalPoint.EAST);
+        updateIntersection();
     }
 
     /**
@@ -103,10 +126,7 @@ public class Intersection extends Infrastructure {
      */
     public void setWays_size(Table<Flow, CardinalPoint, Integer> ways_size) {
         this.ways_size = ways_size;
-        createWays(CardinalPoint.NORTH);
-        createWays(CardinalPoint.SOUTH);
-        createWays(CardinalPoint.WEST);
-        createWays(CardinalPoint.EAST);
+        updateIntersection();
     }
     
     /**
@@ -117,10 +137,7 @@ public class Intersection extends Infrastructure {
      */
     public void setWay_Size(Flow flow, CardinalPoint point, int size) {
         this.ways_size.put(flow, point, size);
-        createWays(CardinalPoint.NORTH);
-        createWays(CardinalPoint.SOUTH);
-        createWays(CardinalPoint.WEST);
-        createWays(CardinalPoint.EAST);
+        updateIntersection();
     }
 
     /**
@@ -137,6 +154,7 @@ public class Intersection extends Infrastructure {
      */
     public void setIndonesian_cross(boolean indonesian_cross) {
         this.indonesian_cross = indonesian_cross;
+        updateIntersection();
     }
     
     /**
@@ -175,18 +193,18 @@ public class Intersection extends Infrastructure {
                 //If begin is West or East
                 if(begin.isHorizontal()){
                     //X depends of begin zone size, dx and j
-                    cell_x = this.x + dx * (begin_zone_size + j);
+                    cell_x = this.center_x + dx * (begin_zone_size + j);
 
                     //Y depends of zone size, dy and i
-                    cell_y = this.y + dy * (zone_size - i);
+                    cell_y = this.center_y + dy * (zone_size - i);
                 }
                 //If begin is North or South
                 else{
                     //X depends of zone size, dx and i
-                    cell_x = this.x + dx * (zone_size - i);
+                    cell_x = this.center_x + dx * (zone_size - i);
 
                     //Y depends of begin zone size, dy and j
-                    cell_y = this.y + dy * (begin_zone_size + j);
+                    cell_y = this.center_y + dy * (begin_zone_size + j);
                 }
 
                 //Add cell to the future way
@@ -218,18 +236,18 @@ public class Intersection extends Infrastructure {
                     //If begin is West or East
                     if(right.isHorizontal()){
                         //X depends of front zone size, dx and j
-                        cell_x = this.x + right_dx * (right_zone_size + j);
+                        cell_x = this.center_x + right_dx * (right_zone_size + j);
 
                         //Y depends of zone size, dy and i
-                        cell_y = this.y + right_dy * (right_zone_size - i);
+                        cell_y = this.center_y + right_dy * (right_zone_size - i);
                     }
                     //If begin is North or South
                     else{
                         //X depends of zone size, dx and i
-                        cell_x = this.x + right_dx * (right_zone_size - i);
+                        cell_x = this.center_x + right_dx * (right_zone_size - i);
 
                         //Y depends of front zone size, dy and j
-                        cell_y = this.y + right_dy * (right_zone_size + j);
+                        cell_y = this.center_y + right_dy * (right_zone_size + j);
                     }
 
                     //Add cell to the future way
@@ -261,15 +279,15 @@ public class Intersection extends Infrastructure {
                 if(this.indonesian_cross){
                     n_in = begin_zone_size - 1;
                     n_out = left_zone_size - 1;
-                    tmp.add(new Cell(this.x, this.y + dy));
-                    tmp.add(new Cell(this.x + left_dx, this.y));
+                    tmp.add(new Cell(this.center_x, this.center_y + dy));
+                    tmp.add(new Cell(this.center_x + left_dx, this.center_y));
                 }
                 else{
                     n_in = begin_zone_size;
                     n_out = left_zone_size;
-                    tmp.add(new Cell(this.x + dx, this.y));
-                    tmp.add(new Cell(this.x + dx, this.y + left_dy));
-                    tmp.add(new Cell(this.x, this.y + left_dy));
+                    tmp.add(new Cell(this.center_x + dx, this.center_y));
+                    tmp.add(new Cell(this.center_x + dx, this.center_y + left_dy));
+                    tmp.add(new Cell(this.center_x, this.center_y + left_dy));
                 }
                 
                 for(int j = 0 ; j < n_in ; j++){
@@ -279,17 +297,17 @@ public class Intersection extends Infrastructure {
 
                     if(begin.isHorizontal()){
                         // X depends of begin zone size, j and dx
-                        cell_x = this.x + dx * (begin_zone_size - j);
+                        cell_x = this.center_x + dx * (begin_zone_size - j);
 
                         // Y depends of zone size, i and dy
-                        cell_y = this.y + dy * (zone_size - i);
+                        cell_y = this.center_y + dy * (zone_size - i);
                     }
                     else{
                         // X depends of zone size, i and dx
-                        cell_x = this.x + dx * (zone_size - i);
+                        cell_x = this.center_x + dx * (zone_size - i);
 
                         // Y depends of begin zone size, j and dy
-                        cell_y = this.y + dy * (begin_zone_size - j);
+                        cell_y = this.center_y + dy * (begin_zone_size - j);
                     }
 
                     //Add cell to the future way
@@ -306,17 +324,17 @@ public class Intersection extends Infrastructure {
 
                     if(left.isHorizontal()){
                         // X depends of begin zone size, j and dx
-                        cell_x = this.x + left_dx * (left_zone_size - j);
+                        cell_x = this.center_x + left_dx * (left_zone_size - j);
 
                         // Y depends of zone size, i and dy
-                        cell_y = this.y + left_dy * (left_zone_size - i);
+                        cell_y = this.center_y + left_dy * (left_zone_size - i);
                     }
                     else{
                         // X depends of zone size, i and dx
-                        cell_x = this.x + left_dx * (left_zone_size - i);
+                        cell_x = this.center_x + left_dx * (left_zone_size - i);
 
                         // Y depends of begin zone size, j and dy
-                        cell_y = this.y + left_dy * (left_zone_size - j);
+                        cell_y = this.center_y + left_dy * (left_zone_size - j);
                     }
 
                     //Add cell to the future way
@@ -333,18 +351,18 @@ public class Intersection extends Infrastructure {
                     //If begin is West or East
                     if(left.isHorizontal()){
                         //X depends of front zone size, dx and j
-                        cell_x = this.x + left_dx * (left_zone_size + j);
+                        cell_x = this.center_x + left_dx * (left_zone_size + j);
 
                         //Y depends of zone size, dy and i
-                        cell_y = this.y + left_dy * (left_zone_size - i);
+                        cell_y = this.center_y + left_dy * (left_zone_size - i);
                     }
                     //If begin is North or South
                     else{
                         //X depends of zone size, dx and i
-                        cell_x = this.x + left_dx * (left_zone_size - i);
+                        cell_x = this.center_x + left_dx * (left_zone_size - i);
 
                         //Y depends of front zone size, dy and j
-                        cell_y = this.y + left_dy * (left_zone_size + j);
+                        cell_y = this.center_y + left_dy * (left_zone_size + j);
                     }
 
                     //Add cell to the future way
@@ -376,17 +394,17 @@ public class Intersection extends Infrastructure {
 
                     if(begin.isHorizontal()){
                         // X depends of begin zone size, j and dx
-                        cell_x = this.x + dx * (begin_zone_size - j);
+                        cell_x = this.center_x + dx * (begin_zone_size - j);
 
                         // Y depends of zone size, i and dy
-                        cell_y = this.y + dy * (zone_size - i);
+                        cell_y = this.center_y + dy * (zone_size - i);
                     }
                     else{
                         // X depends of zone size, i and dx
-                        cell_x = this.x + dx * (zone_size - i);
+                        cell_x = this.center_x + dx * (zone_size - i);
 
                         // Y depends of begin zone size, j and dy
-                        cell_y = this.y + dy * (begin_zone_size - j);
+                        cell_y = this.center_y + dy * (begin_zone_size - j);
                     }
 
                     //Add cell to the future way
@@ -403,19 +421,19 @@ public class Intersection extends Infrastructure {
                     //If begin is West or East
                     if(begin.isHorizontal()){
                         //X depends of front zone size, dx and j
-                        cell_x = this.x - dx * (front_zone_size + j);
+                        cell_x = this.center_x - dx * (front_zone_size + j);
 
                         //Y depends of zone size, dy and i
-                        cell_y = this.y + dy * (zone_size - i);
+                        cell_y = this.center_y + dy * (zone_size - i);
                     }
                     
                     //If begin is North or South
                     else{
                         //X depends of zone size, dx and i
-                        cell_x = this.x + dx * (zone_size - i);
+                        cell_x = this.center_x + dx * (zone_size - i);
 
                         //Y depends of front zone size, dy and j
-                        cell_y = this.y - dy * (front_zone_size + j);
+                        cell_y = this.center_y - dy * (front_zone_size + j);
                     }
 
                     //Add cell to the future way

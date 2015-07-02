@@ -5,26 +5,23 @@
  */
 package View;
 
-import Model.CCS_Creator_Model;
-import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
  *
- * @author avzgui
+ * @author Antoine "Avzgui" Richard
  */
-public class CCS_Creator_Panel extends JPanel implements MouseListener, MouseMotionListener {
+public class CCS_Creator_Panel extends JPanel{
 
     private final CCS_Creator_View view;
     
+    private Infrastructure default_infrastructure;
     private int cell_size;
     
     /**
@@ -32,12 +29,8 @@ public class CCS_Creator_Panel extends JPanel implements MouseListener, MouseMot
      * @param view
      * @param cell_size 
      */
-    CCS_Creator_Panel(CCS_Creator_View view, int cell_size){
+    CCS_Creator_Panel(CCS_Creator_View view, int cell_size, Infrastructure infrastructure){
         super();
-        
-        //Initialise as a mouse listener
-        addMouseMotionListener(this);
-        addMouseListener(this);
         
         //Init link to the view
         this.view = view;
@@ -45,9 +38,23 @@ public class CCS_Creator_Panel extends JPanel implements MouseListener, MouseMot
         //Init cell size
         this.cell_size = cell_size;
         
-        setPreferredSize(new Dimension(1000, 1000));
-        setDoubleBuffered(true);
+        //Init the default infrastructure
+        this.default_infrastructure = infrastructure;
+        
+        //Init properties
+        setPreferredSize(new Dimension(800, 600));
         setLayout(null);
+        int width = this.default_infrastructure.getWidth()*this.cell_size;
+        int height = this.default_infrastructure.getHeight()*this.cell_size;
+        JButton button = new CCS_Creator_Panel_Button(10, 10, width, height, this);
+        this.add(button);
+        
+        //Intersection initial in the center
+        /*CCS_Creator_Model model = this.view.getModel();
+        model.addIntersection(400 / this.cell_size,
+                                300 / this.cell_size, 
+                                this.view.getIntersection_nb_ways(),
+                                this.view.getIntersection_ways_size(), true);*/
     }
 
     /**
@@ -65,6 +72,22 @@ public class CCS_Creator_Panel extends JPanel implements MouseListener, MouseMot
     public void setCell_size(int cell_size) {
         this.cell_size = cell_size;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    public Infrastructure getDefault_infrastructure() {
+        return default_infrastructure;
+    }
+
+    /**
+     * 
+     * @param default_infrastructure 
+     */
+    public void setDefault_infrastructure(Infrastructure default_infrastructure) {
+        this.default_infrastructure = default_infrastructure;
+    }
     
     @Override
     public void paintComponent(Graphics g) {
@@ -72,48 +95,8 @@ public class CCS_Creator_Panel extends JPanel implements MouseListener, MouseMot
         //Cast Graphics g to a Graphics2D object
         Graphics2D g2 = (Graphics2D) g;
         
-        //For each Infrastructure
-        for(Infrastructure infrastructure : this.view.getModel().getEnvironment().values()){
-            //For each cell
-            for(Cell cell : infrastructure.getCells()){
-                g2.setColor(Color.DARK_GRAY);
-                g2.fillRect(cell.getX()*this.cell_size + 1, cell.getY()*this.cell_size + 1, this.cell_size - 2, this.cell_size - 2);
-            }
-        }
-    }
-    
-    @Override
-    public void mouseDragged(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent me) {
-    }   
-
-    @Override
-    public void mouseClicked(MouseEvent me) {
-        
-        CCS_Creator_Model model = this.view.getModel();
-        model.addIntersection(me.getX() / this.cell_size, me.getY() / this.cell_size, 
-                                this.view.getIntersection_nb_ways(),
-                                this.view.getIntersection_ways_size());
-        
-        repaint();
-    }
-
-    @Override
-    public void mousePressed(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent me) {
+        //Set the background of the panel
+        g2.setColor(Color.LIGHT_GRAY);
+        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 }

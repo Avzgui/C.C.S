@@ -17,6 +17,8 @@ public class Infrastructure {
     protected int x;
     protected int y;
     protected Table<CardinalPoint, Integer, Way> ways;
+    protected int height;
+    protected int width;
     
     /**
      * Infrastructure's Constructor
@@ -52,6 +54,38 @@ public class Infrastructure {
      */
     public int getY() {
         return y;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * 
+     * @param height 
+     */
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * 
+     * @param width 
+     */
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     /**

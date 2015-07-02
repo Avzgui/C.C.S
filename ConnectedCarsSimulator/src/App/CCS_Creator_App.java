@@ -19,6 +19,6 @@ public class CCS_Creator_App {
     public static void main(String[] args) {
         CCS_Creator_Model model = new CCS_Creator_Model();
         CCS_Creator_View view = new CCS_Creator_View(800, 600, model);
-        view.start();
+        //view.start();
     }
 }

@@ -8,6 +8,7 @@ package View;
 import Model.CCS_Creator_Model;
 import Model.Environment.CardinalPoint;
 import Model.Environment.Flow;
+import Model.Environment.Intersection;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.awt.BorderLayout;
@@ -15,7 +16,6 @@ import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
@@ -30,9 +30,6 @@ public class CCS_Creator_View extends Thread {
     private final CCS_Creator_Panel panel;
     private final JToolBar tools;
     
-    private Table<Flow, CardinalPoint, Integer> intersection_nb_ways;
-    private Table<Flow, CardinalPoint, Integer> intersection_ways_size;
-    
     public CCS_Creator_View(int height, int width, CCS_Creator_Model model){
         super();
         
@@ -40,29 +37,31 @@ public class CCS_Creator_View extends Thread {
         this.model = model;
         
         //Init datum for intersection
-        this.intersection_nb_ways = HashBasedTable.create();
-        int nb_ways = 3;
-        this.intersection_nb_ways.put(Flow.IN, CardinalPoint.EAST, nb_ways);
-        this.intersection_nb_ways.put(Flow.IN, CardinalPoint.WEST, nb_ways);
-        this.intersection_nb_ways.put(Flow.IN, CardinalPoint.NORTH, nb_ways);
-        this.intersection_nb_ways.put(Flow.IN, CardinalPoint.SOUTH, nb_ways);
+        Table<Flow, CardinalPoint, Integer> nb_ways = HashBasedTable.create();
+        int nb = 3;
+        nb_ways.put(Flow.IN, CardinalPoint.EAST, nb);
+        nb_ways.put(Flow.IN, CardinalPoint.WEST, nb);
+        nb_ways.put(Flow.IN, CardinalPoint.NORTH, nb);
+        nb_ways.put(Flow.IN, CardinalPoint.SOUTH, nb);
         
-        this.intersection_nb_ways.put(Flow.OUT, CardinalPoint.EAST, nb_ways);
-        this.intersection_nb_ways.put(Flow.OUT, CardinalPoint.WEST, nb_ways);
-        this.intersection_nb_ways.put(Flow.OUT, CardinalPoint.NORTH, nb_ways);
-        this.intersection_nb_ways.put(Flow.OUT, CardinalPoint.SOUTH, nb_ways);
+        nb_ways.put(Flow.OUT, CardinalPoint.EAST, nb);
+        nb_ways.put(Flow.OUT, CardinalPoint.WEST, nb);
+        nb_ways.put(Flow.OUT, CardinalPoint.NORTH, nb);
+        nb_ways.put(Flow.OUT, CardinalPoint.SOUTH, nb);
         
-        this.intersection_ways_size = HashBasedTable.create();
-        int way_size = 8;
-        this.intersection_ways_size.put(Flow.IN, CardinalPoint.EAST, way_size);
-        this.intersection_ways_size.put(Flow.IN, CardinalPoint.WEST, way_size);
-        this.intersection_ways_size.put(Flow.IN, CardinalPoint.NORTH, way_size);
-        this.intersection_ways_size.put(Flow.IN, CardinalPoint.SOUTH, way_size);
+        Table<Flow, CardinalPoint, Integer> ways_size = HashBasedTable.create();
+        int size = 8;
+        ways_size.put(Flow.IN, CardinalPoint.EAST, size);
+        ways_size.put(Flow.IN, CardinalPoint.WEST, size);
+        ways_size.put(Flow.IN, CardinalPoint.NORTH, size);
+        ways_size.put(Flow.IN, CardinalPoint.SOUTH, size);
         
-        this.intersection_ways_size.put(Flow.OUT, CardinalPoint.EAST, way_size);
-        this.intersection_ways_size.put(Flow.OUT, CardinalPoint.WEST, way_size);
-        this.intersection_ways_size.put(Flow.OUT, CardinalPoint.NORTH, way_size);
-        this.intersection_ways_size.put(Flow.OUT, CardinalPoint.SOUTH, way_size);
+        ways_size.put(Flow.OUT, CardinalPoint.EAST, size);
+        ways_size.put(Flow.OUT, CardinalPoint.WEST, size);
+        ways_size.put(Flow.OUT, CardinalPoint.NORTH, size);
+        ways_size.put(Flow.OUT, CardinalPoint.SOUTH, size);
+        
+        Intersection intersection = new Intersection(0, 0, nb_ways, ways_size, true);
         
         //Frame initialization
         this.frame = new JFrame("CCS Creator");
@@ -71,14 +70,14 @@ public class CCS_Creator_View extends Thread {
         this.frame.setResizable(true);
         
         //Panel initialization
-        this.panel = new CCS_Creator_Panel(this, 10);
+        this.panel = new CCS_Creator_Panel(this, 10, intersection);
         
         //Make the central panel scrollable
         JScrollPane scrollPane = new JScrollPane(this.panel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBounds(0, 0, height, width);
-        
+
         //ToolBar initialization
         this.tools = new JToolBar();
         
@@ -107,14 +106,6 @@ public class CCS_Creator_View extends Thread {
     public JToolBar getTools() {
         return tools;
     }
-
-    public Table<Flow, CardinalPoint, Integer> getIntersection_nb_ways() {
-        return intersection_nb_ways;
-    }
-
-    public Table<Flow, CardinalPoint, Integer> getIntersection_ways_size() {
-        return intersection_ways_size;
-    }
     
     @Override
     public void run(){
@@ -126,8 +117,6 @@ public class CCS_Creator_View extends Thread {
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_Creator_View.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            this.panel.repaint();
         }
     }
 }
