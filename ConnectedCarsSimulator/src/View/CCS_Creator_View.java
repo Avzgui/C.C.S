@@ -5,8 +5,8 @@
  */
 package View;
 
-import Model.Environment.CardinalPoint;
-import Model.Environment.Flow;
+import Utility.CardinalPoint;
+import Utility.Flow;
 import Model.Environment.Intersection;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;

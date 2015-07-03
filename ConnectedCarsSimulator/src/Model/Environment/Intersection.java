@@ -5,10 +5,12 @@
  */
 package Model.Environment;
 
-import static Model.Environment.CardinalPoint.EAST;
-import static Model.Environment.CardinalPoint.NORTH;
-import static Model.Environment.CardinalPoint.SOUTH;
-import static Model.Environment.CardinalPoint.WEST;
+import Utility.Flow;
+import Utility.CardinalPoint;
+import static Utility.CardinalPoint.EAST;
+import static Utility.CardinalPoint.NORTH;
+import static Utility.CardinalPoint.SOUTH;
+import static Utility.CardinalPoint.WEST;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.util.ArrayList;

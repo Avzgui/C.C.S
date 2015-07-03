@@ -5,9 +5,9 @@
  */
 package View;
 
-import Model.Environment.CardinalPoint;
+import Utility.CardinalPoint;
 import Model.Environment.Cell;
-import Model.Environment.Flow;
+import Utility.Flow;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import java.awt.Color;

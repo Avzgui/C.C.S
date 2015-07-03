@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Elements' definition -->
+<!ELEMENT network (intersection|road)+>
+<!ELEMENT intersection (indonesian, cardinal, cardinal, cardinal, cardinal)>
+<!ELEMENT road (cardinal, cardinal)>
+<!ELEMENT indonesian (#PCDATA)>
+<!ELEMENT cardinal (flow, flow)>
+<!ELEMENT flow (ways, size)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT ways (#PCDATA)>
+
+<!-- Elements' attributes -->
+<!ATTLIST intersection 
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+>
+
+<!ATTLIST road 
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+>
+
+<!ATTLIST cardinal 
+    type (north|east|south|west) #REQUIRED
+>
+
+<!ATTLIST flow 
+    type (in|out) #REQUIRED
+>
