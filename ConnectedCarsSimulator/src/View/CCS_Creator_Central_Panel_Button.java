@@ -113,7 +113,9 @@ public class CCS_Creator_Central_Panel_Button extends JButton implements ActionL
      * @param infrastructure 
      */
     public void setInfrastructure(Infrastructure infrastructure) {
-        this.infrastructure = new Infrastructure(infrastructure);
+        if(infrastructure instanceof Intersection)
+            this.infrastructure = new Intersection((Intersection) infrastructure);
+        //else for Roads
     }
     
     /**

@@ -9,6 +9,7 @@ import static Model.Environment.CardinalPoint.EAST;
 import static Model.Environment.CardinalPoint.NORTH;
 import static Model.Environment.CardinalPoint.SOUTH;
 import static Model.Environment.CardinalPoint.WEST;
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,8 +60,8 @@ public class Intersection extends Infrastructure {
     public Intersection(Intersection other) {
         
         super(other);
-        this.nb_ways = other.nb_ways;
-        this.ways_size = other.ways_size;
+        this.nb_ways = HashBasedTable.create(other.nb_ways);
+        this.ways_size = HashBasedTable.create(other.ways_size);
         this.conflict_zone_size = new HashMap<>(other.conflict_zone_size);
         this.indonesian_cross = other.indonesian_cross;
         

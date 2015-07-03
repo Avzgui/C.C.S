@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 /**
  * @author Antoine "Avzgui" Richard
  */
-public class Infrastructure {
+abstract public class Infrastructure {
     
     protected int x;
     protected int y;
