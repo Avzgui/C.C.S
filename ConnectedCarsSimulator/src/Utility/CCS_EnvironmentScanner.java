@@ -7,7 +7,7 @@ package Utility;
 
 /**
  *
- * @author avzgui
+ * @author Antoine "Avzgui" Richard
  */
 public class CCS_EnvironmentScanner {
     /**

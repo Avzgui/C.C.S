@@ -8,22 +8,29 @@ package View;
 import Utility.CardinalPoint;
 import Utility.Flow;
 import Model.Environment.Intersection;
-import Model.Environment.Way;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
+import java.io.File;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  *
@@ -68,7 +75,7 @@ public class CCS_Creator_Left_Panel extends JPanel {
         //Set propertities
         this.setPreferredSize(new Dimension(200, 600));
         
-        JSpinner spin = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+        JSpinner spin = new JSpinner(new SpinnerNumberModel(3, 0, 5, 1));
         spin.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent ce) {
@@ -78,7 +85,7 @@ public class CCS_Creator_Left_Panel extends JPanel {
         });
         this.nb_ways.put(Flow.IN, CardinalPoint.NORTH, spin);
         
-        spin = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+        spin = new JSpinner(new SpinnerNumberModel(3, 0, 5, 1));
         spin.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent ce) {
@@ -88,7 +95,7 @@ public class CCS_Creator_Left_Panel extends JPanel {
         });
         this.nb_ways.put(Flow.IN, CardinalPoint.SOUTH, spin);
         
-        spin = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+        spin = new JSpinner(new SpinnerNumberModel(3, 0, 5, 1));
         spin.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent ce) {
@@ -98,7 +105,7 @@ public class CCS_Creator_Left_Panel extends JPanel {
         });
         this.nb_ways.put(Flow.IN, CardinalPoint.WEST, spin);
         
-        spin = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+        spin = new JSpinner(new SpinnerNumberModel(3, 0, 5, 1));
         spin.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent ce) {
@@ -108,7 +115,7 @@ public class CCS_Creator_Left_Panel extends JPanel {
         });
         this.nb_ways.put(Flow.IN, CardinalPoint.EAST, spin);
         
-        spin = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+        spin = new JSpinner(new SpinnerNumberModel(3, 0, 5, 1));
         spin.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent ce) {
@@ -118,7 +125,7 @@ public class CCS_Creator_Left_Panel extends JPanel {
         });
         this.nb_ways.put(Flow.OUT, CardinalPoint.NORTH, spin);
         
-        spin = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+        spin = new JSpinner(new SpinnerNumberModel(3, 0, 5, 1));
         spin.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent ce) {
@@ -128,7 +135,7 @@ public class CCS_Creator_Left_Panel extends JPanel {
         });
         this.nb_ways.put(Flow.OUT, CardinalPoint.SOUTH, spin);
         
-        spin = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+        spin = new JSpinner(new SpinnerNumberModel(3, 0, 5, 1));
         spin.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent ce) {
@@ -138,7 +145,7 @@ public class CCS_Creator_Left_Panel extends JPanel {
         });
         this.nb_ways.put(Flow.OUT, CardinalPoint.WEST, spin);
         
-        spin = new JSpinner(new SpinnerNumberModel(3, 1, 5, 1));
+        spin = new JSpinner(new SpinnerNumberModel(3, 0, 5, 1));
         spin.addChangeListener(new ChangeListener(){
             @Override
             public void stateChanged(ChangeEvent ce) {
@@ -321,5 +328,4 @@ public class CCS_Creator_Left_Panel extends JPanel {
         spin = this.ways_size.get(Flow.OUT, CardinalPoint.SOUTH);
         spin.setValue(intersection.getWays_size().get(Flow.OUT, CardinalPoint.SOUTH));
     }
-    
 }

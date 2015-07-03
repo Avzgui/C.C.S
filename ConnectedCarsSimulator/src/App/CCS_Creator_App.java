@@ -6,6 +6,10 @@
 package App;
 
 import View.CCS_Creator_View;
+import java.io.File;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
@@ -17,6 +21,6 @@ public class CCS_Creator_App {
      */
     public static void main(String[] args) {
         CCS_Creator_View view = new CCS_Creator_View(800, 600);
-        //view.start();
+        view.loadFromXML(new File("save/environments/Grid3x3.xml"));
     }
 }

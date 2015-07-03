@@ -116,6 +116,8 @@ public class CCS_Creator_Central_Panel_Button extends JButton implements ActionL
         if(infrastructure instanceof Intersection)
             this.infrastructure = new Intersection((Intersection) infrastructure);
         //else for Roads
+        
+        this.repaint();
     }
     
     /**
@@ -197,6 +199,7 @@ public class CCS_Creator_Central_Panel_Button extends JButton implements ActionL
             if(this.container.getDefault_infrastructure() instanceof Intersection)
                 this.infrastructure = new Intersection((Intersection) this.container.getDefault_infrastructure());
             this.container.addInfrastructure(this.getX(), this.getY(), this.x_map, this.y_map);
+            this.container.repaint();
         }
         
         this.container.getView().getLeft_panel().setSelectedIntersection(this.x_map, this.y_map, (Intersection) this.infrastructure);

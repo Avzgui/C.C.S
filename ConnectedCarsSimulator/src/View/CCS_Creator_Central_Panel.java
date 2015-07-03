@@ -127,5 +127,52 @@ public class CCS_Creator_Central_Panel extends JPanel{
             this.add(buttonWest);
             this.map.put(x_map-1, y_map, (CCS_Creator_Central_Panel_Button) buttonWest);
         }
+        
+        this.repaint();
+    }
+    
+    public void addInfrastructure(int x_map, int y_map, Infrastructure infrastructure){
+        int width = infrastructure.getWidth()*this.cell_size;
+        int height = infrastructure.getHeight()*this.cell_size;
+        int x = 400-(width/2)*(x_map+1);
+        int y = 300-(height/2)*(y_map+1);
+        
+        System.out.println("Add x : " + x_map + " y : " + y_map);
+        
+        //Place the intersection
+        if(!this.map.contains(x_map, y_map)){
+            JButton button = new CCS_Creator_Central_Panel_Button(x_map, y_map, x, y, infrastructure, this);
+            this.add(button);
+            this.map.put(x_map, y_map, (CCS_Creator_Central_Panel_Button) button);
+        }
+        else{
+            this.map.get(x_map, y_map).setInfrastructure(infrastructure);
+        }
+        
+        if(!this.map.contains(x_map, y_map-1)){
+            JButton buttonNorth = new CCS_Creator_Central_Panel_Button(x_map, y_map-1, x, y-height, width, height, this);
+            this.add(buttonNorth);
+            this.map.put(x_map, y_map-1, (CCS_Creator_Central_Panel_Button) buttonNorth);
+        }
+        
+        if(!this.map.contains(x_map+1, y_map)){
+            JButton buttonEast = new CCS_Creator_Central_Panel_Button(x_map+1, y_map, x+width, y, width, height, this);
+            this.add(buttonEast);
+            this.map.put(x_map+1, y_map, (CCS_Creator_Central_Panel_Button) buttonEast);
+        }
+        
+        if(!this.map.contains(x_map, y_map+1)){
+            JButton buttonSouth = new CCS_Creator_Central_Panel_Button(x_map, y_map+1, x, y+height, width, height, this);
+            this.add(buttonSouth);
+            this.map.put(x_map, y_map+1, (CCS_Creator_Central_Panel_Button) buttonSouth);
+        }
+        
+        if(!this.map.contains(x_map-1, y_map)){
+            JButton buttonWest = new CCS_Creator_Central_Panel_Button(x_map-1, y_map, x-width, y, width, height, this);
+            this.add(buttonWest);
+            this.map.put(x_map-1, y_map, (CCS_Creator_Central_Panel_Button) buttonWest);
+        }
+        
+        this.repaint();
     }
 }

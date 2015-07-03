@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE network SYSTEM "../../Utility/CCS_Environment.dtd">
+<!DOCTYPE network SYSTEM "../../src/Utility/CCS_Environment.dtd">
 
 <network>
     <intersection x="0" y="0">
