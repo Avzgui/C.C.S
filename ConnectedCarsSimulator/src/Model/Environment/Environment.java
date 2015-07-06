@@ -33,7 +33,7 @@ import java.util.Map.Entry;
 public class Environment {
 
     private Table<Integer, Integer, Infrastructure> map;
-    // private ArrayList<Vehiclar_Body>
+    // private ArrayList<Vehicle_Body>
 
     /**
      * Environment's constructor

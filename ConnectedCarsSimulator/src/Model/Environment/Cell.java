@@ -31,8 +31,8 @@ public class Cell {
     /**
      * Constructor
      * 
-     * @param x coordinate x of the cell in the environnment
-     * @param y coordinate y of the cell in the environnment
+     * @param x coordinate x of the cell in the environnment.
+     * @param y coordinate y of the cell in the environnment.
      */
     public Cell(int x, int y) {
         this.x = x;
@@ -42,7 +42,7 @@ public class Cell {
     /**
      * Copy Constructor
      * 
-     * @param other an another cell
+     * @param other an another cell.
      */
     public Cell(Cell other){
         this.x = other.getX();
@@ -50,36 +50,36 @@ public class Cell {
     }
 
     /**
-     * Returns the coordinates x of the current Cell
+     * Returns the coordinates x of the current Cell.
      * 
-     * @return the coordinates x
+     * @return the coordinate x.
      */
     public int getX() {
         return x;
     }
 
     /**
-     * Change the value of the coordinate x of the current Cell
+     * Change the value of the coordinate x of the current Cell.
      * 
-     * @param x coordinate x in the environment
+     * @param x coordinate x in the environment.
      */
     public void setX(int x) {
         this.x = x;
     }
 
     /**
-     * Returns the coordinates y of the current Cell
+     * Returns the coordinates y of the current Cell.
      * 
-     * @return the coordinates y
+     * @return the coordinates y.
      */
     public int getY() {
         return y;
     }
 
     /**
-     * Change the value of the coordinate y of the current Cell
+     * Change the value of the coordinate y of the current Cell.
      * 
-     * @param y coordinate y in the environment
+     * @param y coordinate y in the environment.
      */
     public void setY(int y) {
         this.y = y;

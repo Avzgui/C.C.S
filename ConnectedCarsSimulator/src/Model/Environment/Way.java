@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- *
+ * The class Way represents the differents ways that can take a vehicle, in an
+ * Infrastructure. A Way is composed of several cells.
+ * 
  * @author Antoine "Avzgui" Richard
  */
 public class Way {
@@ -30,15 +32,16 @@ public class Way {
     private ArrayList<Cell> cells;
 
     /**
-     * Way's Constructor
+     * Constructor
      */
     public Way() {
         this.cells = new ArrayList<>();
     }
     
     /**
-     * Way's copy constructor
-     * @param other 
+     * Copy Constructor
+     * 
+     * @param other an another way.
      */
     public Way(Way other){
         this.cells = new ArrayList<>();
@@ -47,24 +50,27 @@ public class Way {
     }
 
     /**
+     * Returns the array of all cells who compose the way.
      * 
-     * @return 
+     * @return an array of cells.
      */
     public ArrayList<Cell> getCells() {
         return cells;
     }
 
     /**
+     * Change the array of cells who compose the way.
      * 
-     * @param cells 
+     * @param cells an array of cells.
      */
     public void setCells(ArrayList<Cell> cells) {
         this.cells = cells;
     }
     
     /**
+     * Add a cell to the array of cells.
      * 
-     * @param cell 
+     * @param cell a new cell for the way.
      */
     public void addCell(Cell cell){
         if(!this.cells.contains(cell))
@@ -72,8 +78,9 @@ public class Way {
     }
     
     /**
+     * Remove a cell in the array of cells.
      * 
-     * @param cell 
+     * @param cell a cell to remove.
      */
     public void removeCell(Cell cell){
        if(this.cells.contains(cell))
