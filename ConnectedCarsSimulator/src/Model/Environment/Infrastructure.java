@@ -171,6 +171,16 @@ abstract public class Infrastructure {
        
        return cells;
     }
+    
+    /**
+     * 
+     * @param position
+     * @param width
+     * @param height
+     * @return 
+     */
+    abstract public Cell getCellForAnotherInfrastructure(
+            CardinalPoint position, int width, int height);
 
     @Override
     public int hashCode() {

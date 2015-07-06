@@ -5,6 +5,8 @@
  */
 package Model.Environment;
 
+import Utility.CardinalPoint;
+
 /**
  *
  * @author Antoine "Avzgui" Richard
@@ -18,6 +20,11 @@ public class Road extends Infrastructure{
      */
     public Road(int x, int y) {
         super(x, y);
+    }
+
+    @Override
+    public Cell getCellForAnotherInfrastructure(CardinalPoint position, int width, int height) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -56,7 +56,7 @@ public class Intersection extends Infrastructure {
     }
     
     /**
-     * 
+     * Intersection's Copy Constructor
      * @param other 
      */
     public Intersection(Intersection other) {
@@ -71,6 +71,9 @@ public class Intersection extends Infrastructure {
         updateIntersection();
     }
     
+    /**
+     * 
+     */
     private void updateIntersection(){
         
         //Initialize conflict zone
@@ -480,7 +483,7 @@ public class Intersection extends Infrastructure {
                 //If exist
                 if(this.nb_ways.get(flow, point) != null){
                     //Get value
-                    int value = this.nb_ways.get(flow, point);
+                    int value = this.nb_ways.get(flow, point);  
                     
                     //Get the zone to test (a little ugly)
                     CardinalPoint zone = getZone(point, flow);
@@ -597,5 +600,36 @@ public class Intersection extends Infrastructure {
         }
         
         return 0;
+    }
+
+    @Override
+    public Cell getCellForAnotherInfrastructure(CardinalPoint position, int width, int height) {
+        int x = 0;
+        int y = 0;
+        
+        //Switch the position of the another infrastructure
+        switch(position){
+            case NORTH :
+                x = this.x;
+                y = this.y - height;
+            break;
+            case EAST :
+                x = this.center_x + this.conflict_zone_size.get(CardinalPoint.EAST)
+                        + this.ways_size.get(Flow.OUT, CardinalPoint.EAST) + 1;
+                y = this.y;
+            break;
+            case SOUTH :
+                x = this.x;
+                y = this.center_y + this.conflict_zone_size.get(CardinalPoint.SOUTH)
+                        + this.ways_size.get(Flow.OUT, CardinalPoint.SOUTH) + 1;
+            break;
+            case WEST :
+                x = this.center_x - this.conflict_zone_size.get(CardinalPoint.WEST)
+                        - this.ways_size.get(Flow.OUT, CardinalPoint.WEST) - width;
+                y = this.y;
+            break;
+        }
+        
+        return new Cell(x, y);
     }
 }
