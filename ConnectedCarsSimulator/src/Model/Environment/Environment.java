@@ -27,44 +27,42 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
- *
+ * The class Environment represents the environment layer of the SMA.
+ * It have the map of the differents infrastructures and the bodies of
+ * the differents agents. The environment guarantees the functioning of its 
+ * physical.
+ * 
  * @author Antoine "Avzgui" Richard
+ * @see Infrastructure
  */
 public class Environment {
 
-    private Table<Integer, Integer, Infrastructure> map;
+    private final Table<Integer, Integer, Infrastructure> map;
     // private ArrayList<Vehicle_Body>
 
     /**
-     * Environment's constructor
+     * Constructor
      */
     public Environment() {
         this.map = TreeBasedTable.create();
     }
 
     /**
-     *
-     * @return
+     * Returns the map of the infrastructures.
+     * @return the map of infrastructure.
      */
     public Table<Integer, Integer, Infrastructure> getMap() {
         return map;
     }
 
     /**
-     *
-     * @param map
-     */
-    public void setMap(Table<Integer, Integer, Infrastructure> map) {
-        this.map = map;
-    }
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @param nb_ways
-     * @param ways_size
-     * @param indonesian_cross
+     * Add an Infrastructure, of type Intersection, to the map.
+     * 
+     * @param x coordinate x on the map of the new Intersection.
+     * @param y coordinate x on the map of the new Intersection.
+     * @param nb_ways numbers of ways of the new Intersection.
+     * @param ways_size sizes of ways of the new Intersection.
+     * @param indonesian_cross type of the new Intersection.
      */
     public void addIntersection(int x, int y,
             Table<Flow, CardinalPoint, Integer> nb_ways,
@@ -125,8 +123,9 @@ public class Environment {
     }
 
     /**
-     *
-     * @return An array of all the cells in the map
+     * Returns all cells of all infrastructure in the map.
+     * 
+     * @return the array of all the cells in the map.
      */
     public ArrayList<Cell> getCells() {
         ArrayList<Cell> cells = new ArrayList<>();
@@ -141,7 +140,7 @@ public class Environment {
     }
 
     /**
-     *
+     * Remove all infrastructures and bodies in the environment
      */
     public void removeAll() {
         this.map.clear();
