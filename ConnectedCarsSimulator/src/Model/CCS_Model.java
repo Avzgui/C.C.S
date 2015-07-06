@@ -24,8 +24,11 @@ import Utility.Flow;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.io.File;
+import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,28 +38,37 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- *
+ * The model class of the MVC design.
+ * 
+ * Initialize the environment and the agents of the SMA.
+ * Update the agents and get some statistics.
+ * 
  * @author Antoine "Avzgui" Richard
  */
 public class CCS_Model {
 
     private final Environment env;
 
+    /**
+     * Constructor
+     */
     public CCS_Model() {
         this.env = new Environment();
     }
 
     /**
+     * Returns the link to the environment.
      * 
-     * @return 
+     * @return a the link to the environment.
      */
     public Environment getEnvironment() {
         return this.env;
     }
 
     /**
+     * XML parser to load an environment's save.
      * 
-     * @param file 
+     * @param file a xml file
      */
     public void loadEnvironmentFromXML(File file) {
         try {
@@ -68,18 +80,14 @@ public class CCS_Model {
             dBuilder.setErrorHandler(new ErrorHandler() {
                 @Override
                 public void error(SAXParseException exception) throws SAXException {
-                    // do something more useful in each of these handlers
-                    exception.printStackTrace();
                 }
 
                 @Override
                 public void fatalError(SAXParseException exception) throws SAXException {
-                    exception.printStackTrace();
                 }
 
                 @Override
                 public void warning(SAXParseException exception) throws SAXException {
-                    exception.printStackTrace();
                 }
             });
             Document doc = dBuilder.parse(file);
@@ -162,7 +170,7 @@ public class CCS_Model {
                     this.env.addIntersection(x, y, nb_ways, ways_size, indonesian);
                 }
             }
-        } catch (Exception e) {
+        } catch (ParserConfigurationException | SAXException | IOException | NumberFormatException | DOMException e) {
             System.out.println(e.getMessage());
         }
     }

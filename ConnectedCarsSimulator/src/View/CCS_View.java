@@ -32,7 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * The view class of the MVC design
+ * The view class of the MVC design.
  * 
  * @author Antoine "Avzgui" Richard
  */
