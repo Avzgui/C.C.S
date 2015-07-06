@@ -96,7 +96,7 @@ public class Environment {
                     //If cell is null, affect c
                     if(cell == null)
                         cell = c;
-                    else if(c != cell)
+                    else if(c.getX() != cell.getX() && c.getY() != cell.getY())
                         System.out.println("The intersection you want to add in"
                                 + " position [" + x + ", " + y 
                                 + "] haven't good size");
