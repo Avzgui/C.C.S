@@ -21,15 +21,22 @@ package Model.Environment;
 import Utility.CardinalPoint;
 
 /**
- *
+ * The class Road, inherited of Infrastructure, is the environment's 
+ * representation of a road between two intersections.
+ * 
+ * (TODO)
+ * 
  * @author Antoine "Avzgui" Richard
+ * 
+ * @see Infrastructure
  */
 public class Road extends Infrastructure{
 
     /**
-     * Road's Constructor
-     * @param x
-     * @param y 
+     * Constructor
+     * 
+     * @param x coordinate x
+     * @param y coordinate y
      */
     public Road(int x, int y) {
         super(x, y);
