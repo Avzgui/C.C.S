@@ -3,7 +3,7 @@
 ## Description
 
 This project was made in collaboration with Matthis GACIARZ and Samir AKNINE
-of the University Claud Bernard Lyon 1 (FRANCE).
+of the University Claude Bernard Lyon 1 (FRANCE).
 
 It's a Java application made to simulate the behavior of connected cars moving
 in a road network.
