@@ -23,7 +23,8 @@ import View.CCS_View;
 import java.io.File;
 
 /**
- *
+ * The main class of the application.
+ * 
  * @author Antoine "Avzgui" Richard
  */
 public class CCS_App {
