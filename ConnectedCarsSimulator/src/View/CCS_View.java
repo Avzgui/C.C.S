@@ -32,18 +32,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- *
+ * The view class of the MVC design
+ * 
  * @author Antoine "Avzgui" Richard
  */
 public class CCS_View extends Thread {
     
     private final CCS_Model model;
     private final JPanel central_panel;
-    private int cell_size;
+    private final int cell_size;
     
     /**
+     * Constructor
      * 
-     * @param model 
+     * @param model link to the model.
+     * @param cell_size size of the cells to draw.
      */
     public CCS_View(final CCS_Model model, final int cell_size){
         //Init link to the model
