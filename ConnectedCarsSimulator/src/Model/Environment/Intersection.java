@@ -30,8 +30,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * The class Intersection, inherited of Infrastructure, is the environment's 
+ * representation of an intersection. Composed by maximum eight input and output.
+ * Generate each ways during construction and updates.
  * 
  * @author Antoine "Avzgui" Richard
+ * 
+ * @see Utility.Flow
+ * @see Utility.CardinalPoint
  */
 public class Intersection extends Infrastructure {
 
@@ -44,12 +50,13 @@ public class Intersection extends Infrastructure {
     private boolean indonesian_cross;
     
     /**
-     * Intersection's Constructor
-     * @param x
-     * @param y
-     * @param nb_ways
-     * @param ways_size
-     * @param indonesian_cross
+     * Constructor
+     * 
+     * @param x coordinate x
+     * @param y coordinate y
+     * @param nb_ways numbers of ways for each input and output of the intersection.
+     * @param ways_size sizes of ways for each input and output of the intersection.
+     * @param indonesian_cross to know the type of the intersection.
      */
     @SuppressWarnings("empty-statement")
     public Intersection(int x, int y, 
@@ -64,13 +71,14 @@ public class Intersection extends Infrastructure {
         this.indonesian_cross = indonesian_cross;
         
         //Initialize conflict zone, ways and sizes
-        updateIntersection();
+        update();
         
     }
     
     /**
-     * Intersection's Copy Constructor
-     * @param other 
+     * Copy Constructor
+     * 
+     * @param other an another intersection 
      */
     public Intersection(Intersection other) {
         
@@ -81,13 +89,11 @@ public class Intersection extends Infrastructure {
         this.indonesian_cross = other.indonesian_cross;
         
         //Initialize conflict zone, ways and sizes
-        updateIntersection();
+        update();
     }
     
-    /**
-     * 
-     */
-    private void updateIntersection(){
+    @Override
+    protected void update(){
         
         //Initialize conflict zone
         updateConflictZone();
@@ -122,99 +128,115 @@ public class Intersection extends Infrastructure {
     @Override
     public void setX(int x){
         this.x = x;
-        updateIntersection();
+        update();
     }
     
     @Override
     public void setY(int y){
         this.y = y;
-        updateIntersection();
+        update();
     }
     
     @Override
     public void setPosition(int x, int y){
         this.x = x;
         this.y = y;
-        updateIntersection();
+        update();
     }
 
     /**
+     * Returns the numbers of ways for each input and output.
      * 
-     * @return 
+     * @return the table of numbers of ways.
      */
     public Table<Flow, CardinalPoint, Integer> getNb_ways() {
         return nb_ways;
     }
 
     /**
+     * Changes the numbers of ways for each input and output.
      * 
-     * @param nb_ways 
+     * @param nb_ways a table of numbers of ways
      */
     public void setNb_ways(Table<Flow, CardinalPoint, Integer> nb_ways) {
         this.nb_ways = nb_ways;
-        updateIntersection();
+        update();
     }
     
     /**
+     * Changes a number of ways.
      * 
-     * @param flow
-     * @param point
-     * @param nb_way 
+     * @param flow flow key of the number of way.
+     * @param point cardinal point of the number of way.
+     * @param nb_way number of way to set.
      */
     public void setNb_way(Flow flow, CardinalPoint point, int nb_way) {
         this.nb_ways.put(flow, point, nb_way);
-        updateIntersection();
+        update();
     }
 
     /**
+     * Returns the sizes of the ways for each input and output.
      * 
-     * @return 
+     * @return the table of sizes of the ways.
      */
     public Table<Flow, CardinalPoint, Integer> getWays_size() {
         return ways_size;
     }
 
     /**
+     * Changes the sizes of the ways for each input and output.
      * 
-     * @param ways_size 
+     * @param ways_size a table of size for each intput and output
      */
     public void setWays_size(Table<Flow, CardinalPoint, Integer> ways_size) {
         this.ways_size = ways_size;
-        updateIntersection();
+        update();
     }
     
     /**
+     * Changes a number of ways.
      * 
-     * @param flow
-     * @param point
-     * @param size 
+     * @param flow flow key of the number of way.
+     * @param point cardinal point of the number of way.
+     * @param size the size to set.
      */
     public void setWay_Size(Flow flow, CardinalPoint point, int size) {
         this.ways_size.put(flow, point, size);
-        updateIntersection();
+        update();
     }
 
     /**
+     * Returns if the intersection is an indonesian intersection or not.
      * 
-     * @return 
+     * @return the type of the intersection.
+     */
+    /*
+     * indonesian | not indonesian
+     *   |        |       |
+     *   |        |       |
+     *   -->      |       |<-
+     *   ---      |       | |
+     *   <--      |       ->|
+     *      |     |         |
+     *      |     |         |
      */
     public boolean isIndonesian_cross() {
         return indonesian_cross;
     }
 
     /**
+     * Changes the type of the intersection.
      * 
-     * @param indonesian_cross 
+     * @param indonesian_cross the new type of the intersection.
      */
     public void setIndonesian_cross(boolean indonesian_cross) {
         this.indonesian_cross = indonesian_cross;
-        updateIntersection();
+        update();
     }
     
-    /**
-     * 
-     * @param begin 
-     */
+    
+    @Override
     protected void createWays(CardinalPoint begin){
        
         //Clear all the ways
@@ -500,7 +522,7 @@ public class Intersection extends Infrastructure {
     }
     
     /**
-     * 
+     * Private method to update the size of the conflict zone.
      */
     protected void updateConflictZone(){
         //Initialize conflict zone
@@ -530,10 +552,12 @@ public class Intersection extends Infrastructure {
     
    
     /**
+     * Private method to know where is an intput/output compared 
+     * to the conflict zone.
      * 
-     * @param point
-     * @param flow
-     * @return 
+     * @param point cardinal point of the input/output.
+     * @param flow flow of the input/output.
+     * @return the zone of the input/output in the conflict zone.
      */
     protected CardinalPoint getZone(CardinalPoint point, Flow flow){
         if(flow == Flow.IN){
@@ -565,10 +589,12 @@ public class Intersection extends Infrastructure {
     }
     
     /**
+     * Private method to know the dx of an intput/output compared 
+     * to the conflict zone.
      * 
-     * @param point
-     * @param flow
-     * @return 
+     * @param point cardinal point of the input/output.
+     * @param flow flow of the input/output.
+     * @return the dx of the input/output in the conflict zone.
      */
     protected int getDX(CardinalPoint point, Flow flow){
         if(flow == Flow.IN){
@@ -600,10 +626,12 @@ public class Intersection extends Infrastructure {
     }
     
     /**
+     * Private method to know the dy of an intput/output compared 
+     * to the conflict zone.
      * 
-     * @param point
-     * @param flow
-     * @return 
+     * @param point cardinal point of the input/output.
+     * @param flow flow of the input/output.
+     * @return the dy of the input/output in the conflict zone.
      */
     protected int getDY(CardinalPoint point, Flow flow){
         if(flow == Flow.IN){
@@ -636,32 +664,32 @@ public class Intersection extends Infrastructure {
 
     @Override
     public Cell getCellForAnotherInfrastructure(CardinalPoint position, int width, int height) {
-        int x = 0;
-        int y = 0;
+        int cell_x = 0;
+        int cell_y = 0;
         
         //Switch the position of the another infrastructure
         switch(position){
             case NORTH :
-                x = this.x;
-                y = this.y - height;
+                cell_x = this.x;
+                cell_y = this.y - height;
             break;
             case EAST :
-                x = this.center_x + this.conflict_zone_size.get(CardinalPoint.EAST)
+                cell_x = this.center_x + this.conflict_zone_size.get(CardinalPoint.EAST)
                         + this.ways_size.get(Flow.OUT, CardinalPoint.EAST) + 1;
-                y = this.y;
+                cell_y = this.y;
             break;
             case SOUTH :
-                x = this.x;
-                y = this.center_y + this.conflict_zone_size.get(CardinalPoint.SOUTH)
+                cell_x = this.x;
+                cell_y = this.center_y + this.conflict_zone_size.get(CardinalPoint.SOUTH)
                         + this.ways_size.get(Flow.OUT, CardinalPoint.SOUTH) + 1;
             break;
             case WEST :
-                x = this.center_x - this.conflict_zone_size.get(CardinalPoint.WEST)
+                cell_x = this.center_x - this.conflict_zone_size.get(CardinalPoint.WEST)
                         - this.ways_size.get(Flow.OUT, CardinalPoint.WEST) - width;
-                y = this.y;
+                cell_y = this.y;
             break;
         }
         
-        return new Cell(x, y);
+        return new Cell(cell_x, cell_y);
     }
 }

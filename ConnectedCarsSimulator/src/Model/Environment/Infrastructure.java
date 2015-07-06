@@ -139,7 +139,7 @@ abstract public class Infrastructure {
      * 
      * @param height a new height for the infrastructure.
      * 
-     * @deprecated
+     * @deprecated use {@link #update() update}
      */
     public void setHeight(int height) {
         this.height = height;
@@ -159,7 +159,7 @@ abstract public class Infrastructure {
      * 
      * @param width a new width for the infrastructure.
      * 
-     * @deprecated
+     * @deprecated use {@link #update() update}
      */
     public void setWidth(int width) {
         this.width = width;
@@ -237,6 +237,20 @@ abstract public class Infrastructure {
      */
     abstract public Cell getCellForAnotherInfrastructure(
             CardinalPoint position, int width, int height);
+    
+    /**
+     * Private method to update the infrastructure after any changement.
+     * 
+     * Update the ways, the height and the width of the infrastructure.
+     */
+    abstract protected void update();
+    
+    /**
+     * Private method to create all the ways who begins at the cardinal point.
+     * 
+     * @param begin cardinal point where begins the ways to create.
+     */
+    abstract protected void createWays(CardinalPoint begin);
 
     @Override
     public int hashCode() {
