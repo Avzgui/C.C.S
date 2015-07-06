@@ -19,18 +19,20 @@
 package Model.Environment;
 
 /**
- *
+ * The class Cell is the smallest element who compose the Environment.
+ * 
  * @author Antoine "Avzgui" Richard
  */
 public class Cell {
     
-    protected int x;
-    protected int y;
+    private int x;
+    private int y;
 
     /**
-     * Cell's Constructor
-     * @param x
-     * @param y 
+     * Constructor
+     * 
+     * @param x coordinate x of the cell in the environnment
+     * @param y coordinate y of the cell in the environnment
      */
     public Cell(int x, int y) {
         this.x = x;
@@ -38,8 +40,9 @@ public class Cell {
     }
     
     /**
-     * Cell's Copy Constructor
-     * @param other 
+     * Copy Constructor
+     * 
+     * @param other an another cell
      */
     public Cell(Cell other){
         this.x = other.getX();
@@ -47,32 +50,36 @@ public class Cell {
     }
 
     /**
+     * Returns the coordinates x of the current Cell
      * 
-     * @return 
+     * @return the coordinates x
      */
     public int getX() {
         return x;
     }
 
     /**
+     * Change the value of the coordinate x of the current Cell
      * 
-     * @param x 
+     * @param x coordinate x in the environment
      */
     public void setX(int x) {
         this.x = x;
     }
 
     /**
+     * Returns the coordinates y of the current Cell
      * 
-     * @return 
+     * @return the coordinates y
      */
     public int getY() {
         return y;
     }
 
     /**
+     * Change the value of the coordinate y of the current Cell
      * 
-     * @param y 
+     * @param y coordinate y in the environment
      */
     public void setY(int y) {
         this.y = y;

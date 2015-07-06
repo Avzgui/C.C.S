@@ -29,9 +29,9 @@ public enum Flow {
     OUT;
     
     /**
-     * blablabla
+     * Returns the opposite of the current Flow.
      * 
-     * @return 
+     * @return the opposite Flow
      */
     public Flow getOpposite(){
         switch(this){
@@ -44,8 +44,9 @@ public enum Flow {
     }
     
     /**
+     * Returns the current Flow on his String format.
      * 
-     * @return 
+     * @return the string format of the current flow
      */
     public String toString(){
         switch(this){

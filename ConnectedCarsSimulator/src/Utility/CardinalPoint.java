@@ -19,7 +19,10 @@
 package Utility;
 
 /**
- *
+ * The enumeration CardinalPoint is used to know the position of
+ * an Environment's element compared to an another, or to know 
+ * a zone in an Infrastructure.
+ * 
  * @author Antoine "Avzgui" Richard
  */
 public enum CardinalPoint {
@@ -29,7 +32,10 @@ public enum CardinalPoint {
     WEST;
     
     /**
-     * @return The cardinal point at the left of this
+     * Returns the cardinal point at the left of the
+     * current cardinal point.
+     * 
+     * @return The cardinal point at the left
      */
     public CardinalPoint getLeft(){
         switch(this){
@@ -46,7 +52,10 @@ public enum CardinalPoint {
     }
     
     /**
-     * @return The cardinal point at the right of this
+     * Returns the cardinal point at the right of the
+     * current cardinal point.
+     * 
+     * @return The cardinal point at the right
      */
     public CardinalPoint getRight(){
         switch(this){
@@ -63,7 +72,10 @@ public enum CardinalPoint {
     }
     
     /**
-     * @return The cardinal point at the front of this
+     * Returns the cardinal point at the front of the
+     * current cardinal point.
+     * 
+     * @return The cardinal point at the front
      */
     public CardinalPoint getFront(){
         switch(this){
@@ -80,24 +92,27 @@ public enum CardinalPoint {
     }
     
     /**
+     * Returns if the current cardinal point is vertical or not.
      * 
-     * @return 
+     * @return if it's vertical or not
      */
     public boolean isVertical(){
         return (this == NORTH || this == SOUTH);
     }
     
     /**
+     * Returns if the current cardinal point is horizontal or not.
      * 
-     * @return 
+     * @return if it's horizontal or not 
      */
     public boolean isHorizontal(){
         return (this == EAST || this == WEST);
     }
     
     /**
+     * Returns the current CardinalPoint on his String format.
      * 
-     * @return 
+     * @return the string format of the current cardinal point
      */
     public String toString(){
         switch(this){
