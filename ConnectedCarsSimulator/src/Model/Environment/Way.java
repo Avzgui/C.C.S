@@ -59,7 +59,7 @@ public class Way {
     }
 
     /**
-     * Change the array of cells who compose the way.
+     * Changes the array of cells who compose the way.
      * 
      * @param cells an array of cells.
      */
@@ -68,7 +68,7 @@ public class Way {
     }
     
     /**
-     * Add a cell to the array of cells.
+     * Adds a cell to the array of cells.
      * 
      * @param cell a new cell for the way.
      */
@@ -78,7 +78,7 @@ public class Way {
     }
     
     /**
-     * Remove a cell in the array of cells.
+     * Removes a cell in the array of cells.
      * 
      * @param cell a cell to remove.
      */

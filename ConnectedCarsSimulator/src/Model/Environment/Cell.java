@@ -59,7 +59,7 @@ public class Cell {
     }
 
     /**
-     * Change the value of the coordinate x of the current Cell.
+     * Changes the value of the coordinate x of the current Cell.
      * 
      * @param x coordinate x in the environment.
      */
@@ -77,7 +77,7 @@ public class Cell {
     }
 
     /**
-     * Change the value of the coordinate y of the current Cell.
+     * Changes the value of the coordinate y of the current Cell.
      * 
      * @param y coordinate y in the environment.
      */

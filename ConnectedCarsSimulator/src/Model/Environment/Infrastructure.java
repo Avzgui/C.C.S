@@ -25,7 +25,16 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 /**
+ * The abstract class Infrastructure is the environment's representation of an
+ * infrastructure (road or intersection). It groups all of the attributes and
+ * methods in common between his children class.
+ * 
+ * An infrastructure is composed by several ways, each way being ranked by 
+ * an input CardinalPoint and an ID.
+ * 
  * @author Antoine "Avzgui" Richard
+ * 
+ * @see Utility.CardinalPoint
  */
 abstract public class Infrastructure {
     
@@ -36,10 +45,10 @@ abstract public class Infrastructure {
     protected int width;
     
     /**
-     * Infrastructure's Constructor
+     * Constructor
      * 
-     * @param x
-     * @param y
+     * @param x coordinate x of the infrastructure.
+     * @param y coordinate y of the infrastructure.
      */
     public Infrastructure(int x, int y){
         this.x = x;
@@ -48,8 +57,9 @@ abstract public class Infrastructure {
     }
     
     /**
-     * Infrastructure's Copy Constructeur
-     * @param other 
+     * Copy Constructor
+     * 
+     * @param other an another infrastructure.
      */
     public Infrastructure(Infrastructure other){
         this.x = other.getX();
@@ -69,73 +79,46 @@ abstract public class Infrastructure {
     }
 
     /**
+     * Returns the coordinate x of the infrastructure.
      * 
-     * @return x coordinate
+     * @return the coordinate x.
      */
     public int getX() {
         return x;
     }
 
     /**
+     * Changes the coordinate x of the infrastructure.
      * 
-     * @param x 
+     * @param x a new coordinate x.
      */
     public void setX(int x) {
         this.x = x;
     }
 
     /**
+     * Returns the coordinate y of the infrastructure.
      * 
-     * @return y coordinate
+     * @return the coordinate y.
      */
     public int getY() {
         return y;
     }
-
+    
     /**
+     * Changes the coordinate x of the infrastructure.
      * 
-     * @return 
-     */
-    public int getHeight() {
-        return height;
-    }
-
-    /**
-     * 
-     * @param height 
-     */
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * 
-     * @param width 
-     */
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    /**
-     * 
-     * @param y 
+     * @param y a new coordinate y.
      */
     public void setY(int y) {
         this.y = y;
     }
     
     /**
+     * Changes the coordinates x and y of the infrastructure.
      * 
-     * @param x
-     * @param y 
+     * @param x a new coordinate x.
+     * @param y a new coordinate y.
      */
     public void setPosition(int x, int y){
         this.x = x;
@@ -143,44 +126,92 @@ abstract public class Infrastructure {
     }
 
     /**
+     * Returns the height of the infrastructure. determinated during construction.
      * 
-     * @return 
+     * @return the height of the infrastructure.
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * Changes the height of the infrastructure.
+     * 
+     * @param height a new height for the infrastructure.
+     * 
+     * @deprecated
+     */
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    /**
+     * Returns the width of the infrastructure. determinated during construction.
+     * 
+     * @return the width of the infrastructure.
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * Changes the width of the infrastructure.
+     * 
+     * @param width a new width for the infrastructure.
+     * 
+     * @deprecated
+     */
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    /**
+     * Returns the ways of the infrastructure. Ranked by their input cardinal
+     * point and their ID.
+     * 
+     * @return the table of ways of the infrastructure.
      */
     public Table<CardinalPoint, Integer, Way> getWays() {
         return ways;
     }
 
     /**
+     * Changes the ways of the infrastructure.
      * 
      * @param ways 
+     * 
+     * @deprecated use {@link #addWay(CardinalPoint, int, Way) addWay} and {@link #removeWay(CardinalPoint, int) removeWay}
      */
     public void setWays(Table<CardinalPoint, Integer, Way> ways) {
         this.ways = ways;
     }
     
     /**
+     * Adds a way to the table of ways.
      * 
-     * @param begin
-     * @param end
-     * @param way 
+     * @param begin the input cardinal point of the way.
+     * @param id the id of the way.
+     * @param way the way to add.
      */
-    public void addWay(CardinalPoint begin, Integer id, Way way){
+    public void addWay(CardinalPoint begin, int id, Way way){
         this.ways.put(begin, id, way);
     }
     
     /**
+     * Removes a way of the table of ways.
      * 
-     * @param begin
-     * @param end 
+     * @param begin the input cardinal point of the way.
+     * @param id the id of the way.
      */
-    public void removeWay(CardinalPoint begin, Integer id){
+    public void removeWay(CardinalPoint begin, int id){
         if(this.ways.contains(begin, id))
             this.ways.remove(begin, id);
     }
     
     /**
+     * Returns all the cells who compose the infrastructure.
      * 
-     * @return 
+     * @return an array of cells.
      */
     public ArrayList<Cell> getCells(){
        ArrayList<Cell> cells = new ArrayList<>();
@@ -196,11 +227,13 @@ abstract public class Infrastructure {
     }
     
     /**
+     * Returns a position where build an another infrastructure.
      * 
-     * @param position
-     * @param width
-     * @param height
-     * @return 
+     * @param position cardinal point where the other infrastructure should to be build.
+     * @param width width of the other infrastructure.
+     * @param height height of the other infrastructure.
+     * 
+     * @return a cell where build the other infrastructure. 
      */
     abstract public Cell getCellForAnotherInfrastructure(
             CardinalPoint position, int width, int height);

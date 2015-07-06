@@ -27,8 +27,6 @@ import Utility.CardinalPoint;
  * (TODO)
  * 
  * @author Antoine "Avzgui" Richard
- * 
- * @see Infrastructure
  */
 public class Road extends Infrastructure{
 

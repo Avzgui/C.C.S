@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * 
  * @author Antoine "Avzgui" Richard
  */
 public class Intersection extends Infrastructure {
