@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
- * The class Environment represents the environment layer of the SMA.
+ * The class Environment represents the environment layer of the MAS.
  * It have the map of the differents infrastructures and the bodies of
  * the differents agents. The environment guarantees the functioning of its 
  * physical.

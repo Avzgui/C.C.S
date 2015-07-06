@@ -40,7 +40,7 @@ import org.xml.sax.SAXParseException;
 /**
  * The model class of the MVC design.
  * 
- * Initialize the environment and the agents of the SMA.
+ * Initialize the environment and the agents of the MAS.
  * Update the agents and get some statistics.
  * 
  * @author Antoine "Avzgui" Richard
