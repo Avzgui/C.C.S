@@ -7,7 +7,14 @@ package View;
 
 /**
  *
- * @author avzgui
+ * @author Antoine "Avzgui" Richard
  */
-public class CCS_View {
+public class CCS_View extends Thread {
+    
+    CCS_View(){
+    }
+    
+    @Override
+    public void run(){
+    }
 }

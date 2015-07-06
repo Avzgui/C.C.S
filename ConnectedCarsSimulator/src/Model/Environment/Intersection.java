@@ -105,6 +105,25 @@ public class Intersection extends Infrastructure {
         createWays(CardinalPoint.WEST);
         createWays(CardinalPoint.EAST);
     }
+    
+    @Override
+    public void setX(int x){
+        this.x = x;
+        updateIntersection();
+    }
+    
+    @Override
+    public void setY(int y){
+        this.y = y;
+        updateIntersection();
+    }
+    
+    @Override
+    public void setPosition(int x, int y){
+        this.x = x;
+        this.y = y;
+        updateIntersection();
+    }
 
     /**
      * 

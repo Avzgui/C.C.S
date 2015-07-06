@@ -118,6 +118,16 @@ abstract public class Infrastructure {
     public void setY(int y) {
         this.y = y;
     }
+    
+    /**
+     * 
+     * @param x
+     * @param y 
+     */
+    public void setPosition(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
 
     /**
      * 
