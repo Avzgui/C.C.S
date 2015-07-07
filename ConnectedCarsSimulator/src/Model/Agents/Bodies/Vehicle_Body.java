@@ -43,7 +43,7 @@ public class Vehicle_Body extends A_Body {
      * @param brain brain of the agent.
      * @param max_speed the max speed of the vehicle.
      */
-    public Vehicle_Body(int id, Environment env, Vehicle_Brain brain, int max_speed) {
+    public Vehicle_Body(int id, Environment env, Vehicle_Brain brain, double max_speed) {
         super(id, env, brain);
         this.position = null;
         this.direction = null;

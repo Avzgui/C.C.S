@@ -32,7 +32,7 @@ abstract public class A_Body {
     
     protected final int id;
     protected final Environment env;
-    protected final A_Brain brain;
+    protected A_Brain brain;
     
     /**
      * Constructor
@@ -60,6 +60,15 @@ abstract public class A_Body {
      */
     public A_Brain getBrain() {
         return brain;
+    }
+
+    /**
+     * Changes the brain linked to the body.
+     * 
+     * @param brain the new brain to link to body.
+     */
+    public void setBrain(A_Brain brain) {
+        this.brain = brain;
     }
     
     /**

@@ -15,39 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package Model.Agents.Brains;
+package Model.Agents;
 
 import Model.Agents.Bodies.Vehicle_Body;
-import Model.Environment.Way;
+import Model.Agents.Brains.Vehicle_Brain;
+import Model.Environment.Environment;
+import java.util.ArrayList;
 
 /**
- * The class Vehicle_Brain represents the behavior layer of a vehicle agent.
+ * The A_Vehicle is the model's representation of a vehicle agent.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class Vehicle_Brain extends A_Brain {
+public class A_Vehicle extends Agent {
 
-    protected Way way;
-    
-    /**
-     * 
-     * @param id
-     * @param body 
-     */
-    public Vehicle_Brain(int id, Vehicle_Body body) {
-        super(id, body);
-        this.way = null;
-    }
-
-    public Way getWay() {
-        return way;
-    }
-
-    public void setWay(Way way) {
-        this.way = way;
+    public A_Vehicle(int id, Environment env) {
+        super(id, new Vehicle_Body(id, env, null, 1.0), new Vehicle_Brain(id, null));
+        this.body.setBrain(this.brain);
+        this.brain.setBody(this.body);
     }
 
     @Override
-    public void run(){
+    public ArrayList getStatistics() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

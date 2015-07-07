@@ -19,6 +19,7 @@ package Model.Agents;
 
 import Model.Agents.Bodies.A_Body;
 import Model.Agents.Brains.A_Brain;
+import Model.Environment.Environment;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;

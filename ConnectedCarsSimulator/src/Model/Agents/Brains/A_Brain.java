@@ -33,7 +33,7 @@ abstract public class A_Brain extends Thread {
  
     protected final int id;
     
-    protected final A_Body body;
+    protected A_Body body;
     
     protected final ArrayList<Class<? extends Message>> messages_memory;
     
@@ -61,6 +61,15 @@ abstract public class A_Brain extends Thread {
      */
     public A_Body getBody(){
         return body;
+    }
+
+    /**
+     * Changes the body linked to the brain.
+     * 
+     * @param body the new body to link to the brain.
+     */
+    public void setBody(A_Body body) {
+        this.body = body;
     }
 
     /**
