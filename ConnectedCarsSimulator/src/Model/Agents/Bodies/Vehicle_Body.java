@@ -17,7 +17,7 @@
  */
 package Model.Agents.Bodies;
 
-import Model.Agents.Brains.A_Brain;
+import Model.Agents.Brains.Vehicle_Brain;
 import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Messages.Message;
@@ -32,7 +32,7 @@ public class Vehicle_Body extends A_Body {
     
     protected Cell position;
     protected Cell direction;
-    
+    protected final double max_speed;
     protected double speed;
     
     /**
@@ -41,13 +41,14 @@ public class Vehicle_Body extends A_Body {
      * @param id ID of the body (by default, the same as the agent).
      * @param env environment of the agent.
      * @param brain brain of the agent.
-     * @param speed speed of the vehicle.
+     * @param max_speed the max speed of the vehicle.
      */
-    public Vehicle_Body(int id, Environment env, A_Brain brain, int speed) {
+    public Vehicle_Body(int id, Environment env, Vehicle_Brain brain, int max_speed) {
         super(id, env, brain);
         this.position = null;
         this.direction = null;
-        this.speed = 1.0;
+        this.max_speed = max_speed;
+        this.speed = 0.0;
     }
 
     /**
@@ -84,6 +85,15 @@ public class Vehicle_Body extends A_Body {
      */
     public void setDirection(Cell direction) {
         this.direction = direction;
+    }
+
+    /**
+     * Returns the speed maximum of the vehicle.
+     * 
+     * @return the max speed of the vehicle.
+     */
+    public double getMax_speed() {
+        return max_speed;
     }
 
     /**
