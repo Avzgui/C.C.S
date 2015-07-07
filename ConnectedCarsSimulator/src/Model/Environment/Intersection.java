@@ -671,7 +671,8 @@ public class Intersection extends Infrastructure {
         switch(position){
             case NORTH :
                 cell_x = this.x;
-                cell_y = this.y - height;
+                cell_y = this.center_y - this.conflict_zone_size.get(CardinalPoint.NORTH)
+                        - this.ways_size.get(Flow.OUT, CardinalPoint.NORTH) - height;
             break;
             case EAST :
                 cell_x = this.center_x + this.conflict_zone_size.get(CardinalPoint.EAST)
