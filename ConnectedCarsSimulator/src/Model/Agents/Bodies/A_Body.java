@@ -2,6 +2,7 @@ package Model.Agents.Bodies;
 
 import Model.Agents.Brains.A_Brain;
 import Model.Environment.Infrastructure;
+import Model.Messages.Message;
 
 /*
  * Copyright (C) 2015 Antoine "Avzgui" Richard
@@ -30,39 +31,16 @@ import Model.Environment.Infrastructure;
 abstract public class A_Body {
     
     protected final A_Brain brain;
-    protected Infrastructure current;
     
     /**
      * Constructor
      * 
      * @param brain link to the behavior of the agent.
-     * @param infrastructure the infrastructure with the body is connected.
      */
-    public A_Body(A_Brain brain, Infrastructure infrastructure){
+    public A_Body(A_Brain brain){
         
         //Init link to the brain
         this.brain = brain;
-        
-        //Init link to the current infrastructure
-        this.current = infrastructure;
-    }
-
-    /**
-     * Returns the current infrastructure associate to the body of the agent.
-     * 
-     * @return the current infrastructure with the body is linked.
-     */
-    public Infrastructure getCurrent() {
-        return this.current;
-    }
-
-    /**
-     * Changes the current infrastructure.
-     * 
-     * @param infrastructure the new infrastructure to link to the body.
-     */
-    public void setCurrent(Infrastructure infrastructure) {
-        this.current = infrastructure;
     }
 
     /**
@@ -73,4 +51,20 @@ abstract public class A_Body {
     public A_Brain getBrain() {
         return brain;
     }
+    
+    /**
+     * Sensor function of the body to receive a message from the other agents.
+     * 
+     * @param mess message received.
+     */
+    public void receiveMessage(Class<? extends Message> mess){
+        this.brain.storeMessage(mess);
+    }
+    
+    /**
+     * Motor function of the body to send a message to an other agent.
+     * 
+     * @param mess message to send.
+     */
+    abstract public void sendMessage(Class<? extends Message> mess);
 }

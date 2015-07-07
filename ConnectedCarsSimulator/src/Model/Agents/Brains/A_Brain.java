@@ -17,6 +17,10 @@
  */
 package Model.Agents.Brains;
 
+import Model.Agents.Bodies.A_Body;
+import Model.Messages.Message;
+import java.util.ArrayList;
+
 /**
  * The class A_Brain represents the behavior layer of an agent construction.
  * 
@@ -26,5 +30,54 @@ package Model.Agents.Brains;
  * @author Antoine "Avzgui" Richard
  */
 abstract public class A_Brain {
+ 
+    protected final A_Body body;
     
+    protected final ArrayList<Class<? extends Message>> messages_memory;
+    
+    /**
+     * Constructor
+     * 
+     * @param body link to the body of the agent
+     */
+    public A_Brain(A_Body body){
+        //Init link to the body
+        this.body = body;
+        
+        //Init the messages memory
+        this.messages_memory = new ArrayList<>();
+    }
+
+    /**
+     * Returns the link to the body of the agent.
+     * 
+     * @return the body linked to the brain.
+     */
+    public A_Body getBody(){
+        return body;
+    }
+
+    /**
+     * Returns the array of message stored in the memory of the agent.
+     * 
+     * @return the messages stored in memory.
+     */
+    public ArrayList<Class<? extends Message>> getMessages_memory() {
+        return messages_memory;
+    }
+    
+    /**
+     * Stores a message in memory.
+     * 
+     * By default all the messages are unsupported.
+     * 
+     * For store a type of message, the children of A_Brain
+     * needs to surchage this method.
+     * 
+     * @param mess message to store.
+     */
+    public void storeMessage(Class<? extends Message> mess){
+        System.out.println("Message of class " + mess.getClass() 
+                + " is unsupported by A_Brain::storeMessage");
+    }
 }
