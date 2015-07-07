@@ -206,5 +206,6 @@ public class Environment {
      */
     public void removeAll() {
         this.map.clear();
+        this.vehicles.clear();
     }
 }

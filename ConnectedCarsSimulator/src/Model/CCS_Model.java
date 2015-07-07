@@ -18,6 +18,9 @@
 
 package Model;
 
+import Model.Agents.A_Vehicle;
+import Model.Agents.Bodies.Vehicle_Body;
+import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Utility.CardinalPoint;
 import Utility.Flow;
@@ -25,6 +28,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -45,15 +49,19 @@ import org.xml.sax.SAXParseException;
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class CCS_Model {
+public class CCS_Model extends Thread {
 
     private final Environment env;
-
+    private final ArrayList<A_Vehicle> vehicles;
+    private int nb_agents;
+    
     /**
      * Constructor
      */
     public CCS_Model() {
         this.env = new Environment();
+        this.vehicles = new ArrayList<>();
+        this.nb_agents = 0;
     }
 
     /**
@@ -61,8 +69,25 @@ public class CCS_Model {
      * 
      * @return a the link to the environment.
      */
-    public Environment getEnvironment() {
+    public Environment getEnvironment(){
         return this.env;
+    }
+
+    /**
+     * Returns the array of vehicle agents in the MSA.
+     * 
+     * @return the array of vehicles.
+     */
+    public ArrayList<A_Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    /**
+     * Returns the number of agents in the MSA.
+     * @return the number of agents in the MSA.
+     */
+    public int getNb_agents() {
+        return nb_agents;
     }
 
     /**
@@ -94,6 +119,9 @@ public class CCS_Model {
 
             //Clear environment
             this.env.removeAll();
+            
+            //Clear vehicles
+            this.vehicles.clear();
             
             //For each intersection
             NodeList intersectionList = doc.getElementsByTagName("intersection");
@@ -173,5 +201,17 @@ public class CCS_Model {
         } catch (ParserConfigurationException | SAXException | IOException | NumberFormatException | DOMException e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+    @Override
+    public void run(){
+        //Add some vehicles
+        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env);
+        this.env.addVehicle(new Cell(0, 10), (Vehicle_Body) vehicle.getBody());
+        this.vehicles.add(vehicle);
+        
+        vehicle = new A_Vehicle(++this.nb_agents, this.env);
+        this.env.addVehicle(new Cell(3, 9), (Vehicle_Body) vehicle.getBody());
+        this.vehicles.add(vehicle);
     }
 }

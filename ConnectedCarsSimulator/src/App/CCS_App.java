@@ -35,9 +35,10 @@ public class CCS_App {
         //Init model
         CCS_Model model = new CCS_Model();
         model.loadEnvironmentFromXML(new File("save/environments/ASimpleIntersection.xml"));
+        model.start();
         
         //Init view
-        CCS_View view = new CCS_View(model, 8);
+        CCS_View view = new CCS_View(model, 15);
         view.start();
     }
 }

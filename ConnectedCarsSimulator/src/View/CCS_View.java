@@ -26,6 +26,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -41,7 +42,6 @@ public class CCS_View extends Thread {
     private final CCS_Model model;
     private final JPanel central_panel;
     private final int cell_size;
-    
     /**
      * Constructor
      * 
@@ -49,6 +49,7 @@ public class CCS_View extends Thread {
      * @param cell_size size of the cells to draw.
      */
     public CCS_View(final CCS_Model model, final int cell_size){
+        
         //Init link to the model
         this.model = model;
 
@@ -81,6 +82,13 @@ public class CCS_View extends Thread {
                   g2.setColor(Color.GRAY);
                   g2.fillRect(mid_x + cell.getX()*cell_size + 1, mid_y + cell.getY()*cell_size + 1, cell_size - 2, cell_size - 2);
               }
+              
+              //Paint the vehicules
+              Random rand = new Random();
+              for(Cell cell : env.getVehiclesPosition()){
+                  g2.setColor(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+                  g2.fillOval(mid_x + cell.getX()*cell_size + 1, mid_y + cell.getY()*cell_size + 1, cell_size - 2, cell_size - 2);
+              }
           }
         };
         this.central_panel.setPreferredSize(new Dimension(800, 600));
@@ -102,12 +110,15 @@ public class CCS_View extends Thread {
     
     @Override
     public void run(){
-        try {
-            sleep(100);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
-        this.central_panel.repaint();
+        while(true){
+            try {
+                sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            this.central_panel.repaint();
+        }
     }
 }

@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  */
 abstract public class Agent {
     
-    protected int id;
+    protected final int id;
     protected final A_Body body;
     protected final A_Brain brain;
     
@@ -49,6 +49,33 @@ abstract public class Agent {
        this.id = id;
        this.body = body;
        this.brain = brain;
+    }
+
+    /**
+     * Returns the ID of the agent.
+     * 
+     * @return the ID of the agent.
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Returns the body of the agent.
+     * 
+     * @return the body of the agent.
+     */
+    public A_Body getBody() {
+        return body;
+    }
+
+    /**
+     * Returns the brain of the agent.
+     * 
+     * @return the brain of the agent.
+     */
+    public A_Brain getBrain() {
+        return brain;
     }
     
     /**
