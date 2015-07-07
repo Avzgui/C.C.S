@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * 
  * @author Antoine "Avzgui" Richard
  */
-abstract public class A_Brain {
+abstract public class A_Brain extends Thread {
  
     protected final A_Body body;
     
@@ -80,4 +80,7 @@ abstract public class A_Brain {
         System.out.println("Message of class " + mess.getClass() 
                 + " is unsupported by A_Brain::storeMessage");
     }
+    
+    @Override
+    abstract public void run();
 }

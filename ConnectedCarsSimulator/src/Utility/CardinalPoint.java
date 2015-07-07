@@ -108,12 +108,8 @@ public enum CardinalPoint {
     public boolean isHorizontal(){
         return (this == EAST || this == WEST);
     }
-    
-    /**
-     * Returns the current CardinalPoint on his String format.
-     * 
-     * @return the string format of the current cardinal point
-     */
+   
+    @Override
     public String toString(){
         switch(this){
             case NORTH :

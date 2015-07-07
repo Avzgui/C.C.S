@@ -43,11 +43,7 @@ public enum Flow {
         return null;
     }
     
-    /**
-     * Returns the current Flow on his String format.
-     * 
-     * @return the string format of the current flow
-     */
+    @Override
     public String toString(){
         switch(this){
             case IN :
