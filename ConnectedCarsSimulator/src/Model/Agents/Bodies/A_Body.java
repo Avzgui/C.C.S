@@ -1,7 +1,6 @@
 package Model.Agents.Bodies;
 
 import Model.Agents.Brains.A_Brain;
-import Model.Environment.Infrastructure;
 import Model.Messages.Message;
 
 /*

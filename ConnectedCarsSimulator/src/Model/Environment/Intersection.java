@@ -242,6 +242,12 @@ public class Intersection extends Infrastructure {
         //Clear all the ways
         this.ways.row(begin).clear();
         
+        //Set all flows as not available
+        this.available_flows.put(begin, CardinalPoint.NORTH, false);
+        this.available_flows.put(begin, CardinalPoint.EAST, false);
+        this.available_flows.put(begin, CardinalPoint.SOUTH, false);
+        this.available_flows.put(begin, CardinalPoint.WEST, false);
+        
         //For each way beginning at the Cardinal Point
         for(int i = 0 ; i < this.nb_ways.get(Flow.IN, begin) ; i++){
             
@@ -330,6 +336,9 @@ public class Intersection extends Infrastructure {
                 
                 //Add the way to the array of ways
                 this.ways.put(begin, this.nb_ways.get(Flow.IN, begin)+i, right_way);
+                
+                //Set the flow begin -> right as available
+                this.available_flows.put(begin, right, true);
             }
             //*/
             
@@ -445,6 +454,9 @@ public class Intersection extends Infrastructure {
                 
                 //Add the way to the array of ways
                 this.ways.put(begin, this.nb_ways.get(Flow.IN, begin)+i, left_way);
+                
+                //Set the flow begin -> left as available
+                this.available_flows.put(begin, left, true);
             }
             //*/
             
@@ -518,6 +530,9 @@ public class Intersection extends Infrastructure {
             
             //Add the way to the array of ways
             this.ways.put(begin, i, way);
+            
+            //Set the flow begin -> front as available
+            this.available_flows.put(begin, begin.getFront(), true);
         }
     }
     

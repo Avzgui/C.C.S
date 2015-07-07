@@ -40,7 +40,8 @@ abstract public class Infrastructure {
     
     protected int x;
     protected int y;
-    protected Table<CardinalPoint, Integer, Way> ways;
+    protected final Table<CardinalPoint, Integer, Way> ways;
+    protected final Table<CardinalPoint, CardinalPoint, Boolean> available_flows;
     protected int height;
     protected int width;
     
@@ -54,6 +55,29 @@ abstract public class Infrastructure {
         this.x = x;
         this.y = y;
         this.ways = HashBasedTable.create();
+        
+        //Init the available flows
+        this.available_flows = HashBasedTable.create();
+        
+        this.available_flows.put(CardinalPoint.NORTH, CardinalPoint.NORTH, false);
+        this.available_flows.put(CardinalPoint.NORTH, CardinalPoint.EAST, false);
+        this.available_flows.put(CardinalPoint.NORTH, CardinalPoint.SOUTH, false);
+        this.available_flows.put(CardinalPoint.NORTH, CardinalPoint.WEST, false);
+        
+        this.available_flows.put(CardinalPoint.EAST, CardinalPoint.NORTH, false);
+        this.available_flows.put(CardinalPoint.EAST, CardinalPoint.EAST, false);
+        this.available_flows.put(CardinalPoint.EAST, CardinalPoint.SOUTH, false);
+        this.available_flows.put(CardinalPoint.EAST, CardinalPoint.WEST, false);
+        
+        this.available_flows.put(CardinalPoint.SOUTH, CardinalPoint.NORTH, false);
+        this.available_flows.put(CardinalPoint.SOUTH, CardinalPoint.EAST, false);
+        this.available_flows.put(CardinalPoint.SOUTH, CardinalPoint.SOUTH, false);
+        this.available_flows.put(CardinalPoint.SOUTH, CardinalPoint.WEST, false);
+        
+        this.available_flows.put(CardinalPoint.WEST, CardinalPoint.NORTH, false);
+        this.available_flows.put(CardinalPoint.WEST, CardinalPoint.EAST, false);
+        this.available_flows.put(CardinalPoint.WEST, CardinalPoint.SOUTH, false);
+        this.available_flows.put(CardinalPoint.WEST, CardinalPoint.WEST, false);
     }
     
     /**
@@ -73,6 +97,19 @@ abstract public class Infrastructure {
                     && !this.ways.contains(point, entry.getKey()))
                 {
                     this.ways.put(point, entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        
+        this.available_flows = HashBasedTable.create();
+        
+        Table<CardinalPoint, CardinalPoint, Boolean> tmp2 = other.getAvailable_flows();
+        for(CardinalPoint point : tmp2.rowKeySet()){
+            for(Entry<CardinalPoint, Boolean> entry : tmp2.row(point).entrySet()){
+                if(tmp2.contains(point, entry.getKey())
+                    && !this.available_flows.contains(point, entry.getKey()))
+                {
+                    this.available_flows.put(point, entry.getKey(), entry.getValue());
                 }
             }
         }
@@ -172,18 +209,28 @@ abstract public class Infrastructure {
      * @return the table of ways of the infrastructure.
      */
     public Table<CardinalPoint, Integer, Way> getWays() {
-        return ways;
+        return this.ways;
     }
 
     /**
-     * Changes the ways of the infrastructure.
+     * Returns the table of available flows in the infrastructure
      * 
-     * @param ways 
-     * 
-     * @deprecated use {@link #addWay(CardinalPoint, int, Way) addWay} and {@link #removeWay(CardinalPoint, int) removeWay}
+     * @return the table of flows available
+     * @deprecated use {@link #isAnAvailableFlow(CardinalPoint, CardinalPoint) isAnAvailableFlow}
      */
-    public void setWays(Table<CardinalPoint, Integer, Way> ways) {
-        this.ways = ways;
+    public Table<CardinalPoint, CardinalPoint, Boolean> getAvailable_flows() {
+        return this.available_flows;
+    }
+    
+    /**
+     * Returns if the flow begin -> end is available for this infrastructure.
+     * 
+     * @param begin cardinal point where the flow begin.
+     * @param end cardinal point where the flow finish.
+     * @return the availability of the flow begin->end for this infrastructure.
+     */
+    public boolean isAnAvailableFlow(CardinalPoint begin, CardinalPoint end){
+        return this.available_flows.get(begin, end);
     }
     
     /**
