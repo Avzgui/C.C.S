@@ -1,8 +1,3 @@
-package Model.Agents.Bodies;
-
-import Model.Agents.Brains.A_Brain;
-import Model.Messages.Message;
-
 /*
  * Copyright (C) 2015 Antoine "Avzgui" Richard
  *
@@ -21,6 +16,12 @@ import Model.Messages.Message;
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package Model.Agents.Bodies;
+
+import Model.Agents.Brains.A_Brain;
+import Model.Environment.Environment;
+import Model.Messages.Message;
+
 /**
  * The class A_Body represent the body of an agents in the MSA, the interaction
  * layer. Used by the environment who only know the agents by their bodies. 
@@ -29,14 +30,19 @@ import Model.Messages.Message;
  */
 abstract public class A_Body {
     
+    protected final Environment env;
     protected final A_Brain brain;
     
     /**
      * Constructor
      * 
+     * @param env link to the environment of the agent.
      * @param brain link to the behavior of the agent.
      */
-    public A_Body(A_Brain brain){
+    public A_Body(Environment env, A_Brain brain){
+        
+        //Init link to the environment
+        this.env = env;
         
         //Init link to the brain
         this.brain = brain;
@@ -49,6 +55,15 @@ abstract public class A_Body {
      */
     public A_Brain getBrain() {
         return brain;
+    }
+    
+    /**
+     * Returns the environment with which the body is linked.
+     * 
+     * @return the link to the environment.
+     */
+    public Environment getEnvironment(){
+        return this.env;
     }
     
     /**
