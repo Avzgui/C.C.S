@@ -24,8 +24,10 @@ import Utility.Flow;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * The class Environment represents the environment layer of the MAS.
@@ -41,14 +43,14 @@ import java.util.Map.Entry;
 public class Environment {
 
     private final Table<Integer, Integer, Infrastructure> map;
-    private final ArrayList<Vehicle_Body> vehicles;
+    private final HashMap<Cell, Vehicle_Body> vehicles;
 
     /**
      * Constructor
      */
     public Environment() {
         this.map = TreeBasedTable.create();
-        this.vehicles = new ArrayList<>();
+        this.vehicles = new HashMap<>();
     }
 
     /**
@@ -125,8 +127,62 @@ public class Environment {
             }
         }
     }
+
+    /**
+     * Returns the collection of the bodies of the vehicle agents.
+     * 
+     * @return the collection of the vehicles' bodies.
+     */
+    public Collection<Vehicle_Body> getVehicles() {
+        return vehicles.values();
+    }
     
+    /**
+     * Returns the set of the positions of the vehicles' bodies
+     * 
+     * @return the set of the position of the vehicles.
+     */
+    public Set<Cell> getVehiclesPosition(){
+        return vehicles.keySet();
+    }
     
+    /**
+     * Adds a vehicle's body in the environment.
+     * 
+     * @param position the position where to put the vehicle.
+     * @param vehicle the vehicle to add.
+     */
+    public void addVehicle(Cell position, Vehicle_Body vehicle){
+        //If there is no vehicle already in this position
+        if(!this.vehicles.containsKey(position)){
+            boolean ok = false;
+            //For each infrastructure of the environment
+            for(Infrastructure i : this.map.values()){
+                for(Cell c : i.getCells()){
+                    //If the cell exist
+                    if(c.getX() == position.getX() && c.getY() == position.getY()){
+                        ok = true;
+                        break;
+                    }
+                }
+                if(ok) break;
+            }
+            
+            if(ok){
+                //Then add the vehicle
+                this.vehicles.put(position, vehicle);
+                
+                //Set the position of the vehicle
+                vehicle.setPosition(position);
+            }
+            else
+                System.out.println("The position [" + position.getX() + ", " 
+                        + position.getY() + "]" + "doesn't exist");
+        }
+        else
+            System.out.println("A vehicle already exist in position ["
+                    + position.getX() + ", " + position.getY() + "]");
+    }
 
     /**
      * Returns all cells of all infrastructure in the map.
