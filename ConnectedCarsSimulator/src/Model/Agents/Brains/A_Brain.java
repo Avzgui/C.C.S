@@ -31,6 +31,8 @@ import java.util.ArrayList;
  */
 abstract public class A_Brain extends Thread {
  
+    protected final int id;
+    
     protected final A_Body body;
     
     protected final ArrayList<Class<? extends Message>> messages_memory;
@@ -38,9 +40,13 @@ abstract public class A_Brain extends Thread {
     /**
      * Constructor
      * 
-     * @param body link to the body of the agent
+     * @param id ID of the brain (by default, the same as the agent).
+     * @param body link to the body of the agent.
      */
-    public A_Brain(A_Body body){
+    public A_Brain(int id, A_Body body){
+        //Init id
+        this.id = id;
+        
         //Init link to the body
         this.body = body;
         

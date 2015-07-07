@@ -18,6 +18,7 @@
 
 package Model.Environment;
 
+import Model.Agents.Bodies.Vehicle_Body;
 import Utility.CardinalPoint;
 import Utility.Flow;
 import com.google.common.collect.Table;
@@ -40,13 +41,14 @@ import java.util.Map.Entry;
 public class Environment {
 
     private final Table<Integer, Integer, Infrastructure> map;
-    // private ArrayList<Vehicle_Body>
+    private final ArrayList<Vehicle_Body> vehicles;
 
     /**
      * Constructor
      */
     public Environment() {
         this.map = TreeBasedTable.create();
+        this.vehicles = new ArrayList<>();
     }
 
     /**
@@ -123,6 +125,8 @@ public class Environment {
             }
         }
     }
+    
+    
 
     /**
      * Returns all cells of all infrastructure in the map.

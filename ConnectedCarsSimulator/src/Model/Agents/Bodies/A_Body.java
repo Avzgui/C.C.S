@@ -30,16 +30,21 @@ import Model.Messages.Message;
  */
 abstract public class A_Body {
     
+    protected final int id;
     protected final Environment env;
     protected final A_Brain brain;
     
     /**
      * Constructor
      * 
+     * @param id ID of the body (by default, the same as the agent).
      * @param env link to the environment of the agent.
      * @param brain link to the behavior of the agent.
      */
-    public A_Body(Environment env, A_Brain brain){
+    public A_Body(int id, Environment env, A_Brain brain){
+        
+        //Init id
+        this.id = id;
         
         //Init link to the environment
         this.env = env;
