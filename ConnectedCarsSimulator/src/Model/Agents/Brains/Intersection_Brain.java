@@ -27,6 +27,12 @@ import Model.Agents.Bodies.Intersection_Body;
  */
 public class Intersection_Brain extends Infrastructure_Brain {
 
+    /**
+     * Constructor
+     * 
+     * @param id ID of the brain (by default, the same as the agent)
+     * @param body the body of the agent.
+     */
     public Intersection_Brain(int id, Intersection_Body body) {
         super(id, body);
     }

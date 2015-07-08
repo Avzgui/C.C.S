@@ -27,6 +27,12 @@ import Model.Agents.Bodies.Infrastructure_Body;
  */
 abstract public class Infrastructure_Brain extends A_Brain {
 
+    /**
+     * Constructor
+     * 
+     * @param id ID of the brain (by default, the same as the agent)
+     * @param body the body of the agent.
+     */
     public Infrastructure_Brain(int id, Infrastructure_Body body) {
         super(id, body);
     }

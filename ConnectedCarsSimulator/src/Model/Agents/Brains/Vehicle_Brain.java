@@ -30,19 +30,30 @@ public class Vehicle_Brain extends A_Brain {
     protected Way way;
     
     /**
+     * Constructor
      * 
-     * @param id
-     * @param body 
+     * @param id ID of the brain (by default, the same as the agent).
+     * @param body the body of the agent.
      */
     public Vehicle_Brain(int id, Vehicle_Body body) {
         super(id, body);
         this.way = null;
     }
 
+    /**
+     * Returns the way the agent have to follow.
+     * 
+     * @return the way of the agent.
+     */
     public Way getWay() {
         return way;
     }
 
+    /**
+     * Changes the way of the agent.
+     * 
+     * @param way the new way to set.
+     */
     public void setWay(Way way) {
         this.way = way;
     }
