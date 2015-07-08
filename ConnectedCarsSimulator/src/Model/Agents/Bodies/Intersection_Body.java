@@ -18,8 +18,11 @@
 package Model.Agents.Bodies;
 
 import Model.Agents.Brains.Intersection_Brain;
+import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Environment.Intersection;
+import Model.Environment.Way;
+import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 
 /**
@@ -38,11 +41,26 @@ public class Intersection_Body extends Infrastructure_Body {
 
     @Override
     public void addVehicle(Vehicle_Body vehicle) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Not good, have to change this
+        //Define the way to send to the vehicle
+        Intersection intersection = (Intersection) this.infrastructure;
+        
+        for(Way way : intersection.getWays().values()){
+                if(way.getCells().contains(vehicle.getPosition())){
+                    sendMessage(new M_Welcome(this.id, vehicle.getId(), way));
+                    break;
+                }
+        }
+        
+        this.vehicles.add(vehicle);
+        
     }
 
     @Override
-    public void sendMessage(Class<? extends Message> mess) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void sendMessage(Message mess) {
+        for(Vehicle_Body vehicle : this.vehicles){
+            if(vehicle.getId() == mess.getReceiver_id())
+                vehicle.receiveMessage(mess);
+        }
     }
 }

@@ -55,6 +55,15 @@ abstract public class A_Brain extends Thread {
     }
 
     /**
+     * Returns the ID of the brain.
+     * 
+     * @return the ID of the brain.
+     */
+    public int getID() {
+        return this.id;
+    }
+
+    /**
      * Returns the link to the body of the agent.
      * 
      * @return the body linked to the brain.

@@ -29,7 +29,7 @@ abstract public class Message {
     
     protected final int sender_id;
     protected final int receiver_id;
-    protected final ArrayList<Class<?>> datum;
+    protected final ArrayList datum;
     
     /**
      * Constructor
@@ -66,7 +66,7 @@ abstract public class Message {
      * 
      * @return the datum of the message in an array.
      */
-    public ArrayList<Class<?>> getDatum(){
+    public ArrayList getDatum(){
         return this.datum;
     }
 }

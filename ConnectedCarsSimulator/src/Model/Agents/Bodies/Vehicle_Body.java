@@ -137,7 +137,7 @@ public class Vehicle_Body extends A_Body {
     }
 
     @Override
-    public void sendMessage(Class<? extends Message> mess) {
+    public void sendMessage(Message mess) {
         this.infrastructure.receiveMessage(mess);
     }
 }

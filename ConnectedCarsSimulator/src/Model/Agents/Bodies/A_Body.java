@@ -54,6 +54,15 @@ abstract public class A_Body {
     }
 
     /**
+     * Returns the ID of the body.
+     * 
+     * @return the ID of the body.
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
      * Returns the link to the brain associate to the body.
      * 
      * @return the brain associate to the body.
@@ -91,7 +100,7 @@ abstract public class A_Body {
      * 
      * @param mess message received.
      */
-    public void receiveMessage(Class<? extends Message> mess){
+    public void receiveMessage(Message mess){
         throw new UnsupportedOperationException("Message of type : " 
                 + mess.getClass() + ", is unsupported.");
     }
@@ -101,5 +110,5 @@ abstract public class A_Body {
      * 
      * @param mess message to send.
      */
-    abstract public void sendMessage(Class<? extends Message> mess);
+    abstract public void sendMessage(Message mess);
 }
