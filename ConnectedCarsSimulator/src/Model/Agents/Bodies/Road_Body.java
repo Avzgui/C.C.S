@@ -38,12 +38,12 @@ public class Road_Body extends Infrastructure_Body {
 
     @Override
     public void addVehicle(Vehicle_Body vehicle) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void sendMessage(Class<? extends Message> mess) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

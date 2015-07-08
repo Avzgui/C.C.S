@@ -84,14 +84,24 @@ abstract public class A_Brain extends Thread {
     /**
      * Stores a message in memory.
      * 
-     * By default all the messages are unsupported.
-     * 
-     * For store a type of message, the children of A_Brain
-     * needs to surchage this method.
-     * 
      * @param mess message to store.
      */
     public void storeMessage(Class<? extends Message> mess){
+        this.messages_memory.add(mess);
+    }
+    
+    /**
+     * Process a message of the message memory.
+     * 
+     * By default all messages are unsupported.
+     * 
+     * Children classes should surchage this methods
+     * to could processa type of message, and how they 
+     * process it.
+     * 
+     * @param mess 
+     */
+    public void processMessage(Class<? extends Message> mess){
         throw new UnsupportedOperationException("Message of type : " 
                 + mess.getClass() + ", is unsupported.");
     }
