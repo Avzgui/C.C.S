@@ -20,6 +20,7 @@ package Model.Agents.Bodies;
 import Model.Agents.Brains.Infrastructure_Brain;
 import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
+import java.util.ArrayList;
 
 /**
  * The class Infrastructure_Body represents the body of an infrastructure agent.
@@ -29,6 +30,8 @@ import Model.Environment.Infrastructure;
 abstract public class Infrastructure_Body extends A_Body {
 
     protected final Infrastructure infrastructure;
+    protected final ArrayList<Vehicle_Body> vehicles;
+    protected final ArrayList<Infrastructure_Body> neighbors;
     
     /**
      * Constructor
@@ -42,6 +45,8 @@ abstract public class Infrastructure_Body extends A_Body {
             Infrastructure_Brain brain, Infrastructure infrastructure) {
         super(id, env, brain);
         this.infrastructure = infrastructure;
+        this.vehicles = new ArrayList<>();
+        this.neighbors = new ArrayList<>();
     }
 
     /**
@@ -52,5 +57,40 @@ abstract public class Infrastructure_Body extends A_Body {
     public Infrastructure getInfrastructure() {
         return infrastructure;
     }
+
+    /**
+     * Returns the array of vehicles in dialog with the infrastructure.
+     * 
+     * @return the array of vehicles.
+     */
+    public ArrayList<Vehicle_Body> getVehicles() {
+        return vehicles;
+    }
     
+    /**
+     * Adds a vehicle to the array of the vehicles int dialog with infrastructure.
+     * 
+     * Needs to be surcharged by the children class.
+     * 
+     * @param vehicle the new vehicle to add.
+     */
+    abstract public void addVehicle(Vehicle_Body vehicle);
+
+    /**
+     * Returns the array of the neighbors of the infrastructure.
+     * 
+     * @return the array of neighbors.
+     */
+    public ArrayList<Infrastructure_Body> getNeighbors() {
+        return neighbors;
+    }
+    
+    /**
+     * Adds a infrastructure to the array of neighbors.
+     * 
+     * @param neighbor the new neighbor of the infrastructure.
+     */
+    public void addNeighbor(Infrastructure_Body neighbor){
+        this.neighbors.add(neighbor);
+    }
 }

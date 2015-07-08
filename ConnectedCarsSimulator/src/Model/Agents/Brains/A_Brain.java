@@ -92,8 +92,8 @@ abstract public class A_Brain extends Thread {
      * @param mess message to store.
      */
     public void storeMessage(Class<? extends Message> mess){
-        System.out.println("Message of class " + mess.getClass() 
-                + " is unsupported by A_Brain::storeMessage");
+        throw new UnsupportedOperationException("Message of type : " 
+                + mess.getClass() + ", is unsupported.");
     }
     
     @Override

@@ -30,6 +30,7 @@ import Model.Messages.Message;
  */
 public class Vehicle_Body extends A_Body {
     
+    protected Infrastructure_Body infrastructure;
     protected Cell position;
     protected Cell direction;
     protected final double max_speed;
@@ -45,10 +46,31 @@ public class Vehicle_Body extends A_Body {
      */
     public Vehicle_Body(int id, Environment env, Vehicle_Brain brain, double max_speed) {
         super(id, env, brain);
+        
+        //Init attributes
+        this.infrastructure = null;
         this.position = null;
         this.direction = null;
         this.max_speed = max_speed;
         this.speed = 0.0;
+    }
+
+    /**
+     * Returns the current infrastructure in dialog with the vehicle.
+     * 
+     * @return the infrastructure in dialog with the vehicle.
+     */
+    public Infrastructure_Body getInfrastructure() {
+        return infrastructure;
+    }
+
+    /**
+     * Changes the current infrastructure.
+     * 
+     * @param infrastructure the new infrastructure
+     */
+    public void setInfrastructure(Infrastructure_Body infrastructure) {
+        this.infrastructure = infrastructure;
     }
 
     /**
@@ -116,6 +138,6 @@ public class Vehicle_Body extends A_Body {
 
     @Override
     public void sendMessage(Class<? extends Message> mess) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.infrastructure.receiveMessage(mess);
     }
 }

@@ -202,10 +202,26 @@ public class Environment {
     }
 
     /**
-     * Remove all infrastructures and bodies in the environment
+     * Removes all infrastructures and bodies in the environment
      */
     public void removeAll() {
         this.map.clear();
         this.vehicles.clear();
+    }
+    
+    /**
+     * Updates the state of the environment and his bodies.
+     * 
+     * Physical gestion.
+     */
+    public void update(){
+        //Move vehicules
+        for(Vehicle_Body body : this.vehicles.values()){
+            Cell position = body.getPosition();
+            Cell direction = body.getDirection();
+            if(direction != null){
+                //update the vehicles' position
+            }
+        }
     }
 }

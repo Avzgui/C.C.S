@@ -84,6 +84,16 @@ public class Cell {
     public void setY(int y) {
         this.y = y;
     }
+    
+    /**
+     * Returns the euclidian distance between the current cell and another.
+     * 
+     * @return the euclidian distance between two cells.
+     */
+    public double getDistance(Cell other){
+        return Math.sqrt(Math.pow(this.x - other.x, 2.0) 
+                        + Math.pow(this.y - other.y, 2.0));
+    }
 
     @Override
     public int hashCode() {
