@@ -18,6 +18,7 @@
 
 package Model.Environment;
 
+import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Utility.CardinalPoint;
 import Utility.Flow;
@@ -39,11 +40,14 @@ import java.util.Set;
  * 
  * @author Antoine "Avzgui" Richard
  * @see Infrastructure
+ * @see Model.Agents.Bodies.Vehicle_Body
+ * @see Model.Agents.Bodies.Infrastructure_Body
  */
 public class Environment {
 
     private final Table<Integer, Integer, Infrastructure> map;
     private final HashMap<Cell, Vehicle_Body> vehicles;
+    private final ArrayList<Infrastructure_Body> infrastructures;
 
     /**
      * Constructor
@@ -51,6 +55,7 @@ public class Environment {
     public Environment() {
         this.map = TreeBasedTable.create();
         this.vehicles = new HashMap<>();
+        this.infrastructures = new ArrayList<>();
     }
 
     /**
@@ -59,6 +64,23 @@ public class Environment {
      */
     public Table<Integer, Integer, Infrastructure> getMap() {
         return map;
+    }
+    
+    /**
+     * Returns all cells of all infrastructure in the map.
+     * 
+     * @return the array of all the cells in the map.
+     */
+    public ArrayList<Cell> getCells() {
+        ArrayList<Cell> cells = new ArrayList<>();
+
+        //For each infrastructure in the map
+        for (Infrastructure i : this.map.values()) {
+            //Add cells
+            cells.addAll(i.getCells());
+        }
+
+        return cells;
     }
 
     /**
@@ -185,20 +207,21 @@ public class Environment {
     }
 
     /**
-     * Returns all cells of all infrastructure in the map.
+     * Returns the array of infrastructures in the environment.
      * 
-     * @return the array of all the cells in the map.
+     * @return the array of infrastructure.
      */
-    public ArrayList<Cell> getCells() {
-        ArrayList<Cell> cells = new ArrayList<>();
-
-        //For each infrastructure in the map
-        for (Infrastructure i : this.map.values()) {
-            //Add cells
-            cells.addAll(i.getCells());
-        }
-
-        return cells;
+    public ArrayList<Infrastructure_Body> getInfrastructures() {
+        return this.infrastructures;
+    }
+    
+    /**
+     * Adds an infrastructure to the array.
+     * 
+     * @param infrastructure
+     */
+    public void addInfrastructure(Infrastructure_Body infrastructure){
+        this.infrastructures.add(infrastructure);
     }
 
     /**
@@ -207,6 +230,7 @@ public class Environment {
     public void removeAll() {
         this.map.clear();
         this.vehicles.clear();
+        this.infrastructures.clear();
     }
     
     /**
@@ -219,8 +243,10 @@ public class Environment {
         for(Vehicle_Body body : this.vehicles.values()){
             Cell position = body.getPosition();
             Cell direction = body.getDirection();
-            if(direction != null){
-                //update the vehicles' position
+            if(direction != null && body.getSpeed() > 0){
+                //update the vehicle's position
+                position = new Cell(direction);
+                direction = null;
             }
         }
     }
