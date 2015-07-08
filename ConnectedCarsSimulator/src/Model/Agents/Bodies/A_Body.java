@@ -83,10 +83,17 @@ abstract public class A_Body {
     /**
      * Sensor function of the body to receive a message from the other agents.
      * 
+     * By default all messages are unsupported.
+     * 
+     * Children classes should surchage this message to tell
+     * which messages a body can receive (with this sensor),
+     * and how he receive it, whats happens next.
+     * 
      * @param mess message received.
      */
     public void receiveMessage(Class<? extends Message> mess){
-        this.brain.storeMessage(mess);
+        throw new UnsupportedOperationException("Message of type : " 
+                + mess.getClass() + ", is unsupported.");
     }
     
     /**

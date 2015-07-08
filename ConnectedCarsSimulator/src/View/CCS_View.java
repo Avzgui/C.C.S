@@ -89,6 +89,10 @@ public class CCS_View extends Thread {
                   g2.setColor(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
                   g2.fillOval(mid_x + cell.getX()*cell_size + 1, mid_y + cell.getY()*cell_size + 1, cell_size - 2, cell_size - 2);
               }
+              
+              //Paint ticks
+              g2.setColor(Color.RED);
+              g2.drawString("tick : "+model.getTicks(), 10, 20);
           }
         };
         this.central_panel.setPreferredSize(new Dimension(800, 600));
