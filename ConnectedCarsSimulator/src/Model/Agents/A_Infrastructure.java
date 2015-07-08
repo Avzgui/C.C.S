@@ -15,34 +15,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package Model.Agents;
 
-import Model.Agents.Bodies.Vehicle_Body;
-import Model.Agents.Brains.Vehicle_Brain;
-import Model.Environment.Environment;
+import Model.Agents.Bodies.Infrastructure_Body;
+import Model.Agents.Brains.Infrastructure_Brain;
 import java.util.ArrayList;
 
 /**
- * The class A_Vehicle is the model's representation of a vehicle agent.
+ * The class A_Infrastructure is the model's representation
+ * of an infrastructure agent.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class A_Vehicle extends Agent {
+abstract public class A_Infrastructure extends Agent {
 
     /**
      * Constructor
      * 
      * @param id ID of the agent.
-     * @param env Environment of the agent.
+     * @param body Body of the agent.
+     * @param brain Behavior of the agent.
      */
-    public A_Vehicle(int id, Environment env) {
-        super(id, new Vehicle_Body(id, env, null, 1.0), new Vehicle_Brain(id, null));
-        this.body.setBrain(this.brain);
-        this.brain.setBody(this.body);
-    }
-
-    @Override
-    public ArrayList getStatistics() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public A_Infrastructure(int id, Infrastructure_Body body, 
+            Infrastructure_Brain brain) {
+        super(id, body, brain);
     }
 }

@@ -17,32 +17,35 @@
  */
 package Model.Agents;
 
-import Model.Agents.Bodies.Vehicle_Body;
-import Model.Agents.Brains.Vehicle_Brain;
+import Model.Agents.Bodies.Road_Body;
+import Model.Agents.Brains.Road_Brain;
 import Model.Environment.Environment;
+import Model.Environment.Road;
 import java.util.ArrayList;
 
 /**
- * The class A_Vehicle is the model's representation of a vehicle agent.
+ * The class A_Road is the model's representation of a road agent.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class A_Vehicle extends Agent {
+public class A_Road extends A_Infrastructure {
 
     /**
      * Constructor
      * 
-     * @param id ID of the agent.
-     * @param env Environment of the agent.
+     * @param id ID of the intersection.
+     * @param env environment of the agent.
+     * @param road road linked to the body of the agent.
      */
-    public A_Vehicle(int id, Environment env) {
-        super(id, new Vehicle_Body(id, env, null, 1.0), new Vehicle_Brain(id, null));
+    public A_Road(int id, Environment env, Road road) {
+        super(id, new Road_Body(id, env, null, road), new Road_Brain(id, null));
         this.body.setBrain(this.brain);
         this.brain.setBody(this.body);
     }
-
+    
     @Override
     public ArrayList getStatistics() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
 }

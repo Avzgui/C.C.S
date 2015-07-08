@@ -17,32 +17,36 @@
  */
 package Model.Agents;
 
-import Model.Agents.Bodies.Vehicle_Body;
-import Model.Agents.Brains.Vehicle_Brain;
+import Model.Agents.Bodies.Intersection_Body;
+import Model.Agents.Brains.Intersection_Brain;
 import Model.Environment.Environment;
+import Model.Environment.Intersection;
 import java.util.ArrayList;
 
 /**
- * The class A_Vehicle is the model's representation of a vehicle agent.
+ * The class A_Intersection is the model's representation
+ * of an intersection agent.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class A_Vehicle extends Agent {
+public class A_Intersection extends A_Infrastructure {
 
     /**
      * Constructor
      * 
-     * @param id ID of the agent.
-     * @param env Environment of the agent.
+     * @param id ID of the intersection.
+     * @param env environment of the agent.
+     * @param intersection intersection linked to the body of the agent.
      */
-    public A_Vehicle(int id, Environment env) {
-        super(id, new Vehicle_Body(id, env, null, 1.0), new Vehicle_Brain(id, null));
+    public A_Intersection(int id, Environment env, Intersection intersection) {
+        super(id, new Intersection_Body(id, env, null, intersection), new Intersection_Brain(id, null));
         this.body.setBrain(this.brain);
         this.brain.setBody(this.body);
     }
 
     @Override
     public ArrayList getStatistics() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
+    
 }

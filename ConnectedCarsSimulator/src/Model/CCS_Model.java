@@ -230,6 +230,10 @@ public class CCS_Model extends Thread {
         this.env.addVehicle(new Cell(0, 13), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
         
+        vehicle = new A_Vehicle(++this.nb_agents, this.env);
+        this.env.addVehicle(new Cell(0, 12), (Vehicle_Body) vehicle.getBody());
+        this.vehicles.add(vehicle);
+        
         //Run the simulation
         while(true){
             try {
