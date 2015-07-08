@@ -24,6 +24,7 @@ import Model.Environment.Intersection;
 import Model.Environment.Way;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
+import Utility.CardinalPoint;
 
 /**
  * The class Intersection_Body, inherited by Infrastructure_Body,
@@ -33,6 +34,14 @@ import Model.Messages.Message;
  */
 public class Intersection_Body extends Infrastructure_Body {
 
+    /**
+     * Constructor
+     * 
+     * @param id ID of the body (by default, the same as the agent).
+     * @param env Environment of the agent.
+     * @param brain brain of the agent.
+     * @param intersection intersection linked to the agent.
+     */
     public Intersection_Body(int id, Environment env, Intersection_Brain brain,
             Intersection intersection) {
         super(id, env, brain, intersection);
@@ -41,19 +50,14 @@ public class Intersection_Body extends Infrastructure_Body {
 
     @Override
     public void addVehicle(Vehicle_Body vehicle) {
-        //Not good, have to change this
-        //Define the way to send to the vehicle
-        Intersection intersection = (Intersection) this.infrastructure;
-        
-        for(Way way : intersection.getWays().values()){
-                if(way.getCells().contains(vehicle.getPosition())){
-                    sendMessage(new M_Welcome(this.id, vehicle.getId(), way));
-                    break;
-                }
-        }
         
         this.vehicles.add(vehicle);
         
+        //Not good, i have to change this
+        //Define the way to send to the vehicle
+        Intersection intersection = (Intersection) this.infrastructure;
+        
+        sendMessage(new M_Welcome(this.id, vehicle.getId(), intersection.getWays().get(CardinalPoint.WEST, 0)));
     }
 
     @Override

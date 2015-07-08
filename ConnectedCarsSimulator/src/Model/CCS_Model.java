@@ -22,6 +22,7 @@ import Model.Agents.A_Infrastructure;
 import Model.Agents.A_Intersection;
 import Model.Agents.A_Vehicle;
 import Model.Agents.Bodies.Infrastructure_Body;
+import Model.Agents.Bodies.Intersection_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Environment;
@@ -253,7 +254,11 @@ public class CCS_Model extends Thread {
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env);
         this.env.addVehicle(new Cell(0, 14), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
+        //Link
+        Intersection_Body inter = (Intersection_Body) this.infrastructures.get(0).getBody();
+        inter.addVehicle((Vehicle_Body) vehicle.getBody());
         
+        /*
         vehicle = new A_Vehicle(++this.nb_agents, this.env);
         this.env.addVehicle(new Cell(0, 13), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
@@ -261,6 +266,7 @@ public class CCS_Model extends Thread {
         vehicle = new A_Vehicle(++this.nb_agents, this.env);
         this.env.addVehicle(new Cell(0, 12), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
+        //*/
         
         //Run the simulation
         while(true){
@@ -269,8 +275,19 @@ public class CCS_Model extends Thread {
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            //Update the infrastructures
+            for(A_Infrastructure i : this.infrastructures)
+                i.update();
+            
+            //Update the vehicles
+            for(A_Vehicle v : this.vehicles)
+                v.update();
 
+            //Update the environment
             this.env.update();
+            
+            //Increment the ticks
             this.ticks++;
         }
     }

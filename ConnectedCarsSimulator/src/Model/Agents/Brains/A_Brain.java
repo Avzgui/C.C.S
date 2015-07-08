@@ -29,13 +29,13 @@ import java.util.ArrayList;
  * 
  * @author Antoine "Avzgui" Richard
  */
-abstract public class A_Brain extends Thread {
+abstract public class A_Brain {
  
     protected final int id;
     
     protected A_Body body;
     
-    protected final ArrayList<Class<? extends Message>> messages_memory;
+    protected final ArrayList<Message> messages_memory;
     
     /**
      * Constructor
@@ -59,7 +59,7 @@ abstract public class A_Brain extends Thread {
      * 
      * @return the ID of the brain.
      */
-    public int getID() {
+    public int getId() {
         return this.id;
     }
 
@@ -86,7 +86,7 @@ abstract public class A_Brain extends Thread {
      * 
      * @return the messages stored in memory.
      */
-    public ArrayList<Class<? extends Message>> getMessages_memory() {
+    public ArrayList<Message> getMessages_memory() {
         return messages_memory;
     }
     
@@ -95,7 +95,7 @@ abstract public class A_Brain extends Thread {
      * 
      * @param mess message to store.
      */
-    public void storeMessage(Class<? extends Message> mess){
+    public void storeMessage(Message mess){
         this.messages_memory.add(mess);
     }
     
@@ -110,11 +110,10 @@ abstract public class A_Brain extends Thread {
      * 
      * @param mess 
      */
-    public void processMessage(Class<? extends Message> mess){
+    public void processMessage(Message mess){
         throw new UnsupportedOperationException("Message of type : " 
                 + mess.getClass() + ", is unsupported.");
     }
     
-    @Override
     abstract public void run();
 }

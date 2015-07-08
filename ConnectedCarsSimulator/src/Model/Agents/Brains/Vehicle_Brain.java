@@ -18,7 +18,10 @@
 package Model.Agents.Brains;
 
 import Model.Agents.Bodies.Vehicle_Body;
+import Model.Environment.Cell;
 import Model.Environment.Way;
+import Model.Messages.M_Welcome;
+import Model.Messages.Message;
 
 /**
  * The class Vehicle_Brain represents the behavior layer of a vehicle agent.
@@ -57,8 +60,30 @@ public class Vehicle_Brain extends A_Brain {
     public void setWay(Way way) {
         this.way = way;
     }
+    
+    @Override
+    public void processMessage(Message mess){
+        if(mess instanceof M_Welcome){
+            M_Welcome m = (M_Welcome) mess;
+            this.way = new Way((Way) m.getDatum().get(0));
+            this.way.pop();
+            
+            Vehicle_Body v_body = (Vehicle_Body) this.body;
+            v_body.setSpeed(1.0);
+        }
+    }
 
     @Override
     public void run(){
+        //Process all the messages
+        while(!this.messages_memory.isEmpty()){
+            processMessage(this.messages_memory.get(0));
+            this.messages_memory.remove(0);
+        }
+        
+        //Update direction
+        Vehicle_Body v_body = (Vehicle_Body) this.body;
+        if(v_body.getDirection() == null && !this.way.isEmpty())
+            v_body.setDirection(this.way.pop());
     }
 }

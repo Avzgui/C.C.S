@@ -85,12 +85,7 @@ abstract public class Agent {
      */
     public void update(){
         if(this.brain != null){
-            this.brain.start();
-            try {
-                this.brain.join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            this.brain.run();
         }
     }
     

@@ -85,9 +85,15 @@ public class Cell {
         this.y = y;
     }
     
+    @Override
+    public String toString(){
+        return "[" + this.x + ", " + this.y + "]";
+    }
+    
     /**
      * Returns the euclidian distance between the current cell and another.
      * 
+     * @param other the other cell.
      * @return the euclidian distance between two cells.
      */
     public double getDistance(Cell other){

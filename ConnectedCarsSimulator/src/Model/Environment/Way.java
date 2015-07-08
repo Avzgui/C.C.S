@@ -86,6 +86,34 @@ public class Way {
        if(this.cells.contains(cell))
            this.cells.remove(cell);
     }
+    
+    /**
+     * Returns and removes the first cell of the way.
+     * 
+     * @return the first cell of the way.
+     */
+    public Cell pop(){
+        Cell c = this.cells.get(0);
+        this.cells.remove(0);
+        return c;
+    }
+    
+    /**
+     * Returns if the way have no more cells or not.
+     * 
+     * @return if the way is empty or not.
+     */
+    public boolean isEmpty(){
+        return this.cells.isEmpty();
+    }
+    
+    @Override
+    public String toString(){
+        String s = "";
+        for(Cell c : this.cells)
+            s += c;
+        return s;
+    }
 
     @Override
     public int hashCode() {

@@ -20,6 +20,7 @@ package Model.Agents.Bodies;
 import Model.Agents.Brains.Vehicle_Brain;
 import Model.Environment.Cell;
 import Model.Environment.Environment;
+import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 
 /**
@@ -139,5 +140,11 @@ public class Vehicle_Body extends A_Body {
     @Override
     public void sendMessage(Message mess) {
         this.infrastructure.receiveMessage(mess);
+    }
+    
+    @Override
+    public void receiveMessage(Message mess){
+        System.out.println("Vehicle receive M_Welcome");
+        this.brain.storeMessage(mess);
     }
 }
