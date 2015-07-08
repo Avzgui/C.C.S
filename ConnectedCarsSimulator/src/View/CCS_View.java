@@ -90,6 +90,12 @@ public class CCS_View extends Thread {
                   g2.fillOval(mid_x + cell.getX()*cell_size + 1, mid_y + cell.getY()*cell_size + 1, cell_size - 2, cell_size - 2);
               }
               
+              //Paint the infrastructure agents
+              for(Cell cell : env.getInfrastructuresPosition()){
+                  g2.setColor(Color.BLUE);
+                  g2.fillRect(mid_x + cell.getX()*cell_size, mid_y + cell.getY()*cell_size, cell_size, cell_size);
+              }
+              
               //Paint ticks
               g2.setColor(Color.RED);
               g2.drawString("tick : "+model.getTicks(), 10, 20);

@@ -18,10 +18,14 @@
 
 package Model;
 
+import Model.Agents.A_Infrastructure;
+import Model.Agents.A_Intersection;
 import Model.Agents.A_Vehicle;
+import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Environment;
+import Model.Environment.Intersection;
 import Utility.CardinalPoint;
 import Utility.Flow;
 import View.CCS_View;
@@ -57,6 +61,7 @@ public class CCS_Model extends Thread {
 
     private final Environment env;
     private final ArrayList<A_Vehicle> vehicles;
+    private final ArrayList<A_Infrastructure> infrastructures;
     private int nb_agents;
     private int ticks;
     
@@ -66,6 +71,7 @@ public class CCS_Model extends Thread {
     public CCS_Model() {
         this.env = new Environment();
         this.vehicles = new ArrayList<>();
+        this.infrastructures = new ArrayList<>();
         this.nb_agents = 0;
         this.ticks = 0;
     }
@@ -86,6 +92,15 @@ public class CCS_Model extends Thread {
      */
     public ArrayList<A_Vehicle> getVehicles() {
         return vehicles;
+    }
+
+    /**
+     * Returns the array of infrastructure agents in the MSA.
+     * 
+     * @return the array of infrastructures.
+     */
+    public ArrayList<A_Infrastructure> getInfrastructures() {
+        return infrastructures;
     }
 
     /**
@@ -136,8 +151,11 @@ public class CCS_Model extends Thread {
             //Clear environment
             this.env.removeAll();
             
-            //Clear vehicles
+            //Clear agents
+            this.ticks = 0;
+            this.nb_agents = 0;
             this.vehicles.clear();
+            this.infrastructures.clear();
             
             //For each intersection
             NodeList intersectionList = doc.getElementsByTagName("intersection");
@@ -212,6 +230,16 @@ public class CCS_Model extends Thread {
                     
                     //Add the intersection to the environment
                     this.env.addIntersection(x, y, nb_ways, ways_size, indonesian);
+                    
+                    //Create a new intersection agent
+                    A_Intersection agent = new A_Intersection(++this.nb_agents, this.env, 
+                                            (Intersection) this.env.getMap().get(x, y));
+                    
+                    //Add the body of this agent in the environment.
+                    this.env.addInfrastructure((Infrastructure_Body) agent.getBody());
+                    
+                    //Add the agent the array of infrastructure agent.
+                    this.infrastructures.add(agent);
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException | NumberFormatException | DOMException e) {

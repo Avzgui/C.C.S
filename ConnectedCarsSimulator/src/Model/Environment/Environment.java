@@ -19,6 +19,7 @@
 package Model.Environment;
 
 import Model.Agents.Bodies.Infrastructure_Body;
+import Model.Agents.Bodies.Intersection_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Utility.CardinalPoint;
 import Utility.Flow;
@@ -222,6 +223,20 @@ public class Environment {
      */
     public void addInfrastructure(Infrastructure_Body infrastructure){
         this.infrastructures.add(infrastructure);
+    }
+    
+    /**
+     * Returns the array of the positions of the infrastructures' bodies
+     * 
+     * @return the array of the position of the infrastructures.
+     */
+    public ArrayList<Cell> getInfrastructuresPosition(){
+        ArrayList<Cell> pos = new ArrayList<>();
+        
+        for(Infrastructure_Body i : this.infrastructures)
+                pos.add(i.getPosition());
+        
+        return pos;
     }
 
     /**

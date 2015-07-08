@@ -143,6 +143,15 @@ public class Intersection extends Infrastructure {
         this.y = y;
         update();
     }
+    
+    /**
+     * Returns the cell in the center of the intersection.
+     * 
+     * @return the center cell.
+     */
+    public Cell getCenter(){
+        return new Cell(this.center_x, this.center_y);
+    }
 
     /**
      * Returns the numbers of ways for each input and output.

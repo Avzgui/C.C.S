@@ -33,6 +33,7 @@ public class Intersection_Body extends Infrastructure_Body {
     public Intersection_Body(int id, Environment env, Intersection_Brain brain,
             Intersection intersection) {
         super(id, env, brain, intersection);
+        this.position = intersection.getCenter();
     }
 
     @Override

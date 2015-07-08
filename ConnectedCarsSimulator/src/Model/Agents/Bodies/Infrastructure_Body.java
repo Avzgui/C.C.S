@@ -18,6 +18,7 @@
 package Model.Agents.Bodies;
 
 import Model.Agents.Brains.Infrastructure_Brain;
+import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
  */
 abstract public class Infrastructure_Body extends A_Body {
 
+    protected Cell position;
     protected final Infrastructure infrastructure;
     protected final ArrayList<Vehicle_Body> vehicles;
     protected final ArrayList<Infrastructure_Body> neighbors;
@@ -47,6 +49,25 @@ abstract public class Infrastructure_Body extends A_Body {
         this.infrastructure = infrastructure;
         this.vehicles = new ArrayList<>();
         this.neighbors = new ArrayList<>();
+        this.position = null;
+    }
+
+    /**
+     * Returns the position of the infrastructure agent in the environment.
+     * 
+     * @return the position of the infrastructure.
+     */
+    public Cell getPosition() {
+        return position;
+    }
+
+    /**
+     * Changes the position of the infrastructure agent in the environment.
+     * 
+     * @param position the new position.
+     */
+    public void setPosition(Cell position) {
+        this.position = position;
     }
 
     /**
