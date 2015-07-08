@@ -15,33 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package Model.Agents.Bodies;
+package Model.Agents.Brains;
 
-import Model.Agents.Brains.Intersection_Brain;
-import Model.Environment.Environment;
-import Model.Environment.Intersection;
-import Model.Messages.Message;
+import Model.Agents.Bodies.Intersection_Body;
 
 /**
- * The class Intersection_Body, inherited by Infrastructure_Body,
- * represents the body of an intersection agent.
+ * The class Intersection_Brain, inherited by Infrastructure_Brain,
+ * represents the behavior of an intersection agent.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class Intersection_Body extends Infrastructure_Body {
+public class Intersection_Brain extends Infrastructure_Brain {
 
-    public Intersection_Body(int id, Environment env, Intersection_Brain brain,
-            Intersection intersection) {
-        super(id, env, brain, intersection);
+    public Intersection_Brain(int id, Intersection_Body body) {
+        super(id, body);
     }
 
     @Override
-    public void addVehicle(Vehicle_Body vehicle) {
+    public void run() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public void sendMessage(Class<? extends Message> mess) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }
