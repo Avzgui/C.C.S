@@ -207,11 +207,11 @@ public class CCS_Model extends Thread {
     public void run(){
         //Add some vehicles
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env);
-        this.env.addVehicle(new Cell(0, 10), (Vehicle_Body) vehicle.getBody());
+        this.env.addVehicle(new Cell(0, 14), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
         
         vehicle = new A_Vehicle(++this.nb_agents, this.env);
-        this.env.addVehicle(new Cell(3, 9), (Vehicle_Body) vehicle.getBody());
+        this.env.addVehicle(new Cell(0, 13), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
     }
 }
