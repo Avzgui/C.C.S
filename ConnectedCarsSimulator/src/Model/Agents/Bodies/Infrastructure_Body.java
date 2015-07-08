@@ -17,7 +17,7 @@
  */
 package Model.Agents.Bodies;
 
-import Model.Agents.Brains.A_Brain;
+import Model.Agents.Brains.Infrastructure_Brain;
 import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
 
@@ -38,7 +38,8 @@ abstract public class Infrastructure_Body extends A_Body {
      * @param brain brain linked to the body.
      * @param infrastructure infrastructure that the infrastructure agent is responsible.
      */
-    public Infrastructure_Body(int id, Environment env, A_Brain brain, Infrastructure infrastructure) {
+    public Infrastructure_Body(int id, Environment env, 
+            Infrastructure_Brain brain, Infrastructure infrastructure) {
         super(id, env, brain);
         this.infrastructure = infrastructure;
     }
