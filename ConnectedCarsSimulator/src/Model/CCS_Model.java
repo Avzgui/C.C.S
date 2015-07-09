@@ -126,20 +126,19 @@ public class CCS_Model extends Thread {
      * Removes all vehicles that have reached their goal.
      */
     public void removeVehicles(){
-        ArrayList<Integer> index = new ArrayList<>();
+        ArrayList<A_Vehicle> index = new ArrayList<>();
         
         //For each vehicle
         for(A_Vehicle vehicle : this.vehicles){
             //If vehicle's goal reached, save his index and delete it of the env.
             if(vehicle.goalReached()){
-                index.add(this.vehicles.indexOf(vehicle));
+                index.add(vehicle);
                 this.env.removeVehicle((Vehicle_Body) vehicle.getBody());
             }
         }
         
         //Delete all vehicles indexed
-        for(int i : index)
-            this.vehicles.remove(i);
+        this.vehicles.removeAll(index);
     }
 
     /**
@@ -274,26 +273,19 @@ public class CCS_Model extends Thread {
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
         
-        //Link
-        Intersection_Body inter = (Intersection_Body) this.infrastructures.get(0).getBody();
-        inter.addVehicle((Vehicle_Body) vehicle.getBody());
-        
-        /*
-        vehicle = new A_Vehicle(++this.nb_agents, this.env);
-        this.env.addVehicle(new Cell(0, 13), (Vehicle_Body) vehicle.getBody());
+        //*
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 12), new Cell(12, 0));
         this.vehicles.add(vehicle);
-        
-        Intersection_Body inter = (Intersection_Body) this.infrastructures.get(0).getBody();
-        inter.addVehicle((Vehicle_Body) vehicle.getBody());
         //*/
         
-        /*
-        vehicle = new A_Vehicle(++this.nb_agents, this.env);
-        this.env.addVehicle(new Cell(0, 12), (Vehicle_Body) vehicle.getBody());
+        //*
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(10, 0), new Cell(22, 12));
         this.vehicles.add(vehicle);
+        //*/
         
-        Intersection_Body inter = (Intersection_Body) this.infrastructures.get(0).getBody();
-        inter.addVehicle((Vehicle_Body) vehicle.getBody());
+        //*
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 10), new Cell(10, 22));
+        this.vehicles.add(vehicle);
         //*/
         
         //Run the simulation while there is vehicles
