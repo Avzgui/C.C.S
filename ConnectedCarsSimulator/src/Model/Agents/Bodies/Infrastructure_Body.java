@@ -18,9 +18,10 @@
 package Model.Agents.Bodies;
 
 import Model.Agents.Brains.Infrastructure_Brain;
-import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
+import Model.Messages.M_Hello;
+import Model.Messages.Message;
 import java.util.ArrayList;
 
 /**
@@ -94,5 +95,15 @@ abstract public class Infrastructure_Body extends A_Body {
      */
     public void addNeighbor(Infrastructure_Body neighbor){
         this.neighbors.add(neighbor);
+    }
+    
+    @Override
+    public void receiveMessage(Message mess){
+        if(mess instanceof M_Hello){
+            System.out.println("Infrastructure receive M_Hello");
+            this.brain.storeMessage(mess);
+        }
+        else
+            super.receiveMessage(mess);
     }
 }

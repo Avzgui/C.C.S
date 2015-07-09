@@ -48,14 +48,7 @@ public class Intersection_Body extends Infrastructure_Body {
 
     @Override
     public void addVehicle(Vehicle_Body vehicle) {
-        
         this.vehicles.add(vehicle);
-        
-        //Not good, i have to change this
-        //Define the way to send to the vehicle
-        Intersection intersection = (Intersection) this.infrastructure;
-        
-        sendMessage(new M_Welcome(this.id, vehicle.getId(), intersection.getWays().get(CardinalPoint.SOUTH, 5)));
     }
 
     @Override

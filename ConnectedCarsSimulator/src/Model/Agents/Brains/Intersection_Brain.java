@@ -18,6 +18,16 @@
 package Model.Agents.Brains;
 
 import Model.Agents.Bodies.Intersection_Body;
+import Model.Environment.Cell;
+import Model.Environment.Intersection;
+import Model.Environment.Way;
+import Model.Messages.M_Hello;
+import Model.Messages.M_Welcome;
+import Model.Messages.Message;
+import Utility.CardinalPoint;
+import Utility.Flow;
+import com.google.common.collect.Table;
+import java.util.Map.Entry;
 
 /**
  * The class Intersection_Brain, inherited by Infrastructure_Brain,
@@ -36,9 +46,72 @@ public class Intersection_Brain extends Infrastructure_Brain {
     public Intersection_Brain(int id, Intersection_Body body) {
         super(id, body);
     }
+    
+    
+    @Override
+    public void processMessage(Message mess){
+        if(mess instanceof M_Hello){
+            //Check the id
+            if(mess.getReceiver_id() == this.id){
+                System.out.println("Intersection process M_Hello");
+                M_Hello m = (M_Hello) mess;
+                Cell pos = (Cell) m.getDatum().get(0);
+                CardinalPoint goal = (CardinalPoint) m.getDatum().get(1);
+                
+                //Get the good way.
+                Intersection_Body i_body = (Intersection_Body) this.body;
+                Intersection inter = (Intersection) i_body.getInfrastructure();
+                Table<CardinalPoint, Integer, Way> ways = inter.getWays();
+                Way way = null;
+                
+                boolean ok = false;
+                for(CardinalPoint c : ways.rowKeySet()){
+                    for(Entry<Integer, Way> entry : ways.row(c).entrySet()){
+                        int id = entry.getKey();
+                        Way w = entry.getValue();
+                        //If the way contains the position
+                        if(w.getCells().contains(pos)){
+                            if(id >= 0 && id < inter.getNb_ways().get(Flow.IN, c)){
+                                if(c.getFront() == goal){
+                                    way = w;
+                                    ok = true;
+                                }
+                            }
+                            else if(id == inter.getNb_ways().get(Flow.IN, c)){
+                                if(c.getRight() == goal){
+                                    way = w;
+                                    ok = true;
+                                }
+                            }
+                            else{
+                                if(c.getLeft() == goal){
+                                    way = w;
+                                    ok = true;
+                                }
+                            }
+                        }
+                    }
+                    if(ok) break;
+                }
+                
+                //Send the way to the vehicle
+                this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(), way));
+            }
+            else{
+                //Redirected the message, maybe for coalition later.
+            }
+        }
+        else
+            super.processMessage(mess);
+    }
 
     @Override
     public void run() {
+        //Process all the messages
+        while(!this.messages_memory.isEmpty()){
+            processMessage(this.messages_memory.get(0));
+            this.messages_memory.remove(0);
+        }
     }
     
 }

@@ -159,18 +159,22 @@ public class Vehicle_Brain extends A_Brain {
     @SuppressWarnings("empty-statement")
     public void processMessage(Message mess){
         if(mess instanceof M_Welcome){
+            System.out.println("Vehicle process M_Welcome");
+            
             //Get the message
             M_Welcome m = (M_Welcome) mess;
             Vehicle_Body v_body = (Vehicle_Body) this.body;
             
             //Get the way
-            this.way = new Way((Way) m.getDatum().get(0));
-            while(!this.way.isEmpty() 
-                    && !v_body.getPosition().equals(this.way.pop()));
-            
-            //Set speed to one
-            if(!this.way.isEmpty())
-                v_body.setSpeed(1.0);
+            if(m.getDatum().get(0) != null){
+                this.way = new Way((Way) m.getDatum().get(0));
+                while(!this.way.isEmpty() 
+                        && !v_body.getPosition().equals(this.way.pop()));
+
+                //Set speed to one
+                if(!this.way.isEmpty())
+                    v_body.setSpeed(1.0);
+            }
         }
         else
             super.processMessage(mess);
@@ -185,8 +189,10 @@ public class Vehicle_Brain extends A_Brain {
         }
         
         //Update direction
-        Vehicle_Body v_body = (Vehicle_Body) this.body;
-        if(v_body.getDirection() == null && !this.way.isEmpty())
-            v_body.setDirection(this.way.pop());
+        if(this.way != null){
+            Vehicle_Body v_body = (Vehicle_Body) this.body;
+            if(v_body.getDirection() == null && !this.way.isEmpty())
+                v_body.setDirection(this.way.pop());
+        }
     }
 }
