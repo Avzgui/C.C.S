@@ -18,7 +18,6 @@
 package Model.Agents.Brains;
 
 import Model.Agents.Bodies.Vehicle_Body;
-import Model.Environment.Cell;
 import Model.Environment.Way;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
@@ -62,14 +61,17 @@ public class Vehicle_Brain extends A_Brain {
     }
     
     @Override
+    @SuppressWarnings("empty-statement")
     public void processMessage(Message mess){
         if(mess instanceof M_Welcome){
             M_Welcome m = (M_Welcome) mess;
-            this.way = new Way((Way) m.getDatum().get(0));
-            this.way.pop();
-            
             Vehicle_Body v_body = (Vehicle_Body) this.body;
-            v_body.setSpeed(1.0);
+            this.way = new Way((Way) m.getDatum().get(0));
+            while(!this.way.isEmpty() 
+                    && !v_body.getPosition().equals(this.way.pop()));
+            
+            if(!this.way.isEmpty())
+                v_body.setSpeed(1.0);
         }
     }
 

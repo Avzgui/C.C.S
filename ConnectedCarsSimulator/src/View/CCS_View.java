@@ -18,6 +18,7 @@
 
 package View;
 
+import Model.Agents.Bodies.Vehicle_Body;
 import Model.CCS_Model;
 import Model.Environment.Cell;
 import Model.Environment.Environment;
@@ -85,9 +86,9 @@ public class CCS_View extends Thread {
               
               //Paint the vehicules
               Random rand = new Random();
-              for(Cell cell : env.getVehiclesPosition()){
-                  g2.setColor(new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-                  g2.fillOval(mid_x + cell.getX()*cell_size + 1, mid_y + cell.getY()*cell_size + 1, cell_size - 2, cell_size - 2);
+              for(Vehicle_Body body : env.getVehicles()){
+                  g2.setColor(new Color(body.getId()));
+                  g2.fillOval(mid_x + body.getPosition().getX()*cell_size + 1, mid_y + body.getPosition().getY()*cell_size + 1, cell_size - 2, cell_size - 2);
               }
               
               //Paint the infrastructure agents

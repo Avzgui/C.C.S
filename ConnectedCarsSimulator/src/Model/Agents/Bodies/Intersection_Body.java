@@ -18,10 +18,8 @@
 package Model.Agents.Bodies;
 
 import Model.Agents.Brains.Intersection_Brain;
-import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Environment.Intersection;
-import Model.Environment.Way;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
@@ -57,14 +55,14 @@ public class Intersection_Body extends Infrastructure_Body {
         //Define the way to send to the vehicle
         Intersection intersection = (Intersection) this.infrastructure;
         
-        sendMessage(new M_Welcome(this.id, vehicle.getId(), intersection.getWays().get(CardinalPoint.WEST, 0)));
+        sendMessage(new M_Welcome(this.id, vehicle.getId(), intersection.getWays().get(CardinalPoint.SOUTH, 5)));
     }
 
     @Override
     public void sendMessage(Message mess) {
         for(Vehicle_Body vehicle : this.vehicles){
             if(vehicle.getId() == mess.getReceiver_id())
-                vehicle.receiveMessage(mess);
+                vehicle.receiveMessage( mess);
         }
     }
 }

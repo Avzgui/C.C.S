@@ -371,15 +371,28 @@ public class Intersection extends Infrastructure {
                 if(this.indonesian_cross){
                     n_in = begin_zone_size - 1;
                     n_out = left_zone_size - 1;
-                    tmp.add(new Cell(this.center_x, this.center_y + dy));
-                    tmp.add(new Cell(this.center_x + left_dx, this.center_y));
+                    if(left.isHorizontal()){
+                        tmp.add(new Cell(this.center_x, this.center_y + dy));
+                        tmp.add(new Cell(this.center_x + left_dx, this.center_y));
+                    }
+                    else{
+                        tmp.add(new Cell(this.center_x + dx, this.center_y));
+                        tmp.add(new Cell(this.center_x, this.center_y + left_dy));
+                    }
                 }
                 else{
                     n_in = begin_zone_size;
                     n_out = left_zone_size;
-                    tmp.add(new Cell(this.center_x + dx, this.center_y));
-                    tmp.add(new Cell(this.center_x + dx, this.center_y + left_dy));
-                    tmp.add(new Cell(this.center_x, this.center_y + left_dy));
+                    if(left.isHorizontal()){
+                        tmp.add(new Cell(this.center_x + dx, this.center_y));
+                        tmp.add(new Cell(this.center_x + dx, this.center_y + left_dy));
+                        tmp.add(new Cell(this.center_x, this.center_y + left_dy));
+                    }
+                    else{
+                        tmp.add(new Cell(this.center_x, this.center_y + dy));
+                        tmp.add(new Cell(this.center_x + left_dx, this.center_y + dy));
+                        tmp.add(new Cell(this.center_x + left_dx, this.center_y));
+                    }
                 }
                 
                 for(int j = 0 ; j < n_in ; j++){

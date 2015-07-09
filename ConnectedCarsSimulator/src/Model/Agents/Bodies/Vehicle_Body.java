@@ -144,7 +144,13 @@ public class Vehicle_Body extends A_Body {
     
     @Override
     public void receiveMessage(Message mess){
-        System.out.println("Vehicle receive M_Welcome");
-        this.brain.storeMessage(mess);
+        /* It's ugly
+         * but i don't know how to do specialization with java's generics
+         * like we can do in 
+         */
+        if(mess instanceof M_Welcome){
+            System.out.println("Vehicle receive M_Welcome");
+            this.brain.storeMessage(mess);
+        }
     }
 }

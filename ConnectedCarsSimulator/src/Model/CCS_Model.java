@@ -252,7 +252,7 @@ public class CCS_Model extends Thread {
     public void run(){
         //Init agents
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env);
-        this.env.addVehicle(new Cell(0, 14), (Vehicle_Body) vehicle.getBody());
+        this.env.addVehicle(new Cell(12, 22), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
         //Link
         Intersection_Body inter = (Intersection_Body) this.infrastructures.get(0).getBody();
@@ -270,11 +270,13 @@ public class CCS_Model extends Thread {
         
         //Run the simulation
         while(true){
+            //*
             try {
                 sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
+            //*/
             
             //Update the infrastructures
             for(A_Infrastructure i : this.infrastructures)
