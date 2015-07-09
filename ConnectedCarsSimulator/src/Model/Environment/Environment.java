@@ -147,6 +147,26 @@ public class Environment {
             }
         }
     }
+    
+    /**
+     * Returns the infrastructure body who has the cell c.
+     * 
+     * @param c a cell.
+     * @return the infrastructure who has this cell.
+     */
+    public Infrastructure_Body getInfrastructureWithCell(Cell c){
+        
+        //For each infrastructure body in the environment
+        for(Infrastructure_Body body : this.infrastructures){
+            //if one have the cell c, return body
+            Infrastructure inf = body.getInfrastructure();
+            if(inf.getCells().contains(c))
+                return body;
+        }
+        
+        //Else return null
+        return null;
+    }
 
     /**
      * Returns the collection of the bodies of the vehicle agents.
@@ -194,9 +214,6 @@ public class Environment {
         if(ok){
             //Then add the vehicle
             this.vehicles.add(vehicle);
-
-            //Set the position of the vehicle
-            vehicle.setPosition(position);
         }
         else
             System.out.println("The position [" + position.getX() + ", " 

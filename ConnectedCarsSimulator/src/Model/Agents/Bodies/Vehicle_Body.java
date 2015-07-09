@@ -41,15 +41,16 @@ public class Vehicle_Body extends A_Body {
      * 
      * @param id ID of the body (by default, the same as the agent).
      * @param env environment of the agent.
+     * @param pos position of the agent.
      * @param brain brain of the agent.
      * @param max_speed the max speed of the vehicle.
      */
-    public Vehicle_Body(int id, Environment env, Vehicle_Brain brain, double max_speed) {
+    public Vehicle_Body(int id, Environment env, Cell pos, Vehicle_Brain brain, double max_speed) {
         super(id, env, brain);
         
         //Init attributes
-        this.infrastructure = null;
-        this.position = null;
+        this.position = pos;
+        this.infrastructure = this.env.getInfrastructureWithCell(pos);
         this.direction = null;
         this.max_speed = max_speed;
         this.speed = 0.0;

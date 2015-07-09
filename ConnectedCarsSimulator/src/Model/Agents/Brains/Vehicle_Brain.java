@@ -17,6 +17,8 @@
  */
 package Model.Agents.Brains;
 
+import Model.Agents.Bodies.A_Body;
+import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Way;
@@ -34,7 +36,7 @@ public class Vehicle_Brain extends A_Brain {
 
     protected Way way;
     protected final Cell final_goal;
-    protected final ArrayList<CardinalPoint> intermediate_goal;
+    protected final ArrayList<CardinalPoint> intermediate_goals;
     
     /**
      * Constructor
@@ -47,7 +49,16 @@ public class Vehicle_Brain extends A_Brain {
         super(id, body);
         this.way = null;
         this.final_goal = goal;
-        this.intermediate_goal = new ArrayList<>();
+        this.intermediate_goals = new ArrayList<>();
+    }
+    
+    @Override
+    public void setBody(A_Body body){
+        this.body = body;
+        
+        //Use the body to determinate the intermediate goals
+        Vehicle_Body v_body = (Vehicle_Body) this.body;
+        determineIntermediateGoals(v_body.getInfrastructure());
     }
 
     /**
@@ -82,8 +93,20 @@ public class Vehicle_Brain extends A_Brain {
      * 
      * @return the array of intermediate goals.
      */
-    public ArrayList<CardinalPoint> getIntermediate_goal() {
-        return intermediate_goal;
+    public ArrayList<CardinalPoint> getIntermediate_goals() {
+        return intermediate_goals;
+    }
+    
+    /**
+     * Private method used by the vehicle agent to determinate his w
+     */
+    private CardinalPoint determineIntermediateGoals(Infrastructure_Body current){
+        
+        if(current != null){
+        }
+                
+        //Default break point
+        return null;
     }
     
     @Override

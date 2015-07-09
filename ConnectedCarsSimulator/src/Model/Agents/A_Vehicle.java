@@ -35,10 +35,12 @@ public class A_Vehicle extends Agent {
      * 
      * @param id ID of the agent.
      * @param env Environment of the agent.
+     * @param pos Positon of the agent.
      * @param goal Goal of the agent.
      */
-    public A_Vehicle(int id, Environment env, Cell goal) {
-        super(id, new Vehicle_Body(id, env, null, 1.0), new Vehicle_Brain(id, null, goal));
+    public A_Vehicle(int id, Environment env, Cell pos, Cell goal) {
+        super(id, new Vehicle_Body(id, env, pos, null, 1.0), new Vehicle_Brain(id, null, goal));
+        env.addVehicle(pos, (Vehicle_Body) this.body);
         this.body.setBrain(this.brain);
         this.brain.setBody(this.body);
     }

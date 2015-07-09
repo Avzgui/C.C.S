@@ -271,8 +271,7 @@ public class CCS_Model extends Thread {
     @Override
     public void run(){
         //Init agents
-        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 10));
-        this.env.addVehicle(new Cell(12, 22), (Vehicle_Body) vehicle.getBody());
+        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
         
         //Link
