@@ -63,7 +63,8 @@ public class Vehicle_Brain extends A_Brain {
         //Use the body to determinate the intermediate goals
         Vehicle_Body v_body = (Vehicle_Body) this.body;
         determineIntermediateGoals(v_body.getInfrastructure(), v_body.getPosition());
-        System.out.println("Intermediate goals : " + this.intermediate_goals);
+        
+        //Send the creation
     }
 
     /**
@@ -103,7 +104,10 @@ public class Vehicle_Brain extends A_Brain {
     }
     
     /**
-     * Private method used by the vehicle agent to determinate his w
+     * Private method used by the vehicle agent to determinate his intermediate
+     * goals.
+     * 
+     * Warning !! Not finished !! Doesn't work for several infrastructure.
      */
     private CardinalPoint determineIntermediateGoals(Infrastructure_Body current, Cell pos){
         
@@ -135,7 +139,10 @@ public class Vehicle_Brain extends A_Brain {
                 }
             }
             else{
-                
+                //For each neighbors
+                for(Infrastructure_Body body : current.getNeighbors()){
+                    //TODO !!
+                }
             }
         }
                 
