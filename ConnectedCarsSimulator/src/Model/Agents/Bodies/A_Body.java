@@ -19,6 +19,7 @@
 package Model.Agents.Bodies;
 
 import Model.Agents.Brains.A_Brain;
+import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Messages.Message;
 
@@ -31,6 +32,7 @@ import Model.Messages.Message;
 abstract public class A_Body {
     
     protected final int id;
+    protected Cell position;
     protected final Environment env;
     protected A_Brain brain;
     
@@ -60,6 +62,24 @@ abstract public class A_Body {
      */
     public int getId() {
         return id;
+    }
+    
+    /**
+     * Returns the position of the agent in the environment.
+     * 
+     * @return the position of the agent.
+     */
+    public Cell getPosition() {
+        return position;
+    }
+    
+    /**
+     * Changes the position of the agent in the environment.
+     * 
+     * @param position the new position.
+     */
+    public void setPosition(Cell position) {
+        this.position = position;
     }
 
     /**

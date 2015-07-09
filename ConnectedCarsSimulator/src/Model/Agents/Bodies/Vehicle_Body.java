@@ -32,7 +32,6 @@ import Model.Messages.Message;
 public class Vehicle_Body extends A_Body {
     
     protected Infrastructure_Body infrastructure;
-    protected Cell position;
     protected Cell direction;
     protected final double max_speed;
     protected double speed;
@@ -72,24 +71,6 @@ public class Vehicle_Body extends A_Body {
      */
     public void setInfrastructure(Infrastructure_Body infrastructure) {
         this.infrastructure = infrastructure;
-    }
-
-    /**
-     * Returns the position of the vehicle in the environment.
-     * 
-     * @return the position of the position.
-     */
-    public Cell getPosition() {
-        return this.position;
-    }
-
-    /**
-     * Changes the position of the vehicle in the environment.
-     * 
-     * @param position the new position of environment.
-     */
-    public void setPosition(Cell position) {
-        this.position = position;
     }
 
     /**

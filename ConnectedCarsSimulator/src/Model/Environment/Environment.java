@@ -19,17 +19,14 @@
 package Model.Environment;
 
 import Model.Agents.Bodies.Infrastructure_Body;
-import Model.Agents.Bodies.Intersection_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Utility.CardinalPoint;
 import Utility.Flow;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * The class Environment represents the environment layer of the MAS.
@@ -204,6 +201,15 @@ public class Environment {
         else
             System.out.println("The position [" + position.getX() + ", " 
                     + position.getY() + "]" + "doesn't exist");
+    }
+    
+    /**
+     * Removes a vehicle in the array of vehicles.
+     * 
+     * @param vehicle the vehicle to remove.
+     */
+    public void removeVehicle(Vehicle_Body vehicle){
+        this.vehicles.remove(vehicle);
     }
 
     /**

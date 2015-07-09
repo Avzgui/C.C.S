@@ -18,9 +18,12 @@
 package Model.Agents.Brains;
 
 import Model.Agents.Bodies.Vehicle_Body;
+import Model.Environment.Cell;
 import Model.Environment.Way;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
+import Utility.CardinalPoint;
+import java.util.ArrayList;
 
 /**
  * The class Vehicle_Brain represents the behavior layer of a vehicle agent.
@@ -30,16 +33,21 @@ import Model.Messages.Message;
 public class Vehicle_Brain extends A_Brain {
 
     protected Way way;
+    protected final Cell final_goal;
+    protected final ArrayList<CardinalPoint> intermediate_goal;
     
     /**
      * Constructor
      * 
      * @param id ID of the brain (by default, the same as the agent).
      * @param body the body of the agent.
+     * @param goal the final goal of the agent.
      */
-    public Vehicle_Brain(int id, Vehicle_Body body) {
+    public Vehicle_Brain(int id, Vehicle_Body body, Cell goal) {
         super(id, body);
         this.way = null;
+        this.final_goal = goal;
+        this.intermediate_goal = new ArrayList<>();
     }
 
     /**
@@ -59,20 +67,44 @@ public class Vehicle_Brain extends A_Brain {
     public void setWay(Way way) {
         this.way = way;
     }
+
+    /**
+     * Returns the final goal of the agent.
+     * 
+     * @return the final goal of the agent.
+     */
+    public Cell getFinal_goal() {
+        return final_goal;
+    }
+
+    /**
+     * Returns the array of intermediate goals of the agent.
+     * 
+     * @return the array of intermediate goals.
+     */
+    public ArrayList<CardinalPoint> getIntermediate_goal() {
+        return intermediate_goal;
+    }
     
     @Override
     @SuppressWarnings("empty-statement")
     public void processMessage(Message mess){
         if(mess instanceof M_Welcome){
+            //Get the message
             M_Welcome m = (M_Welcome) mess;
             Vehicle_Body v_body = (Vehicle_Body) this.body;
+            
+            //Get the way
             this.way = new Way((Way) m.getDatum().get(0));
             while(!this.way.isEmpty() 
                     && !v_body.getPosition().equals(this.way.pop()));
             
+            //Set speed to one
             if(!this.way.isEmpty())
                 v_body.setSpeed(1.0);
         }
+        else
+            super.processMessage(mess);
     }
 
     @Override

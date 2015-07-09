@@ -121,6 +121,26 @@ public class CCS_Model extends Thread {
     public int getTicks() {
         return ticks;
     }
+    
+    /**
+     * Removes all vehicles that have reached their goal.
+     */
+    public void removeVehicles(){
+        ArrayList<Integer> index = new ArrayList<>();
+        
+        //For each vehicle
+        for(A_Vehicle vehicle : this.vehicles){
+            //If vehicle's goal reached, save his index and delete it of the env.
+            if(vehicle.goalReached()){
+                index.add(this.vehicles.indexOf(vehicle));
+                this.env.removeVehicle((Vehicle_Body) vehicle.getBody());
+            }
+        }
+        
+        //Delete all vehicles indexed
+        for(int i : index)
+            this.vehicles.remove(i);
+    }
 
     /**
      * XML parser to load an environment's save.
@@ -251,9 +271,10 @@ public class CCS_Model extends Thread {
     @Override
     public void run(){
         //Init agents
-        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env);
+        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 10));
         this.env.addVehicle(new Cell(12, 22), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
+        
         //Link
         Intersection_Body inter = (Intersection_Body) this.infrastructures.get(0).getBody();
         inter.addVehicle((Vehicle_Body) vehicle.getBody());
@@ -263,13 +284,21 @@ public class CCS_Model extends Thread {
         this.env.addVehicle(new Cell(0, 13), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
         
+        Intersection_Body inter = (Intersection_Body) this.infrastructures.get(0).getBody();
+        inter.addVehicle((Vehicle_Body) vehicle.getBody());
+        //*/
+        
+        /*
         vehicle = new A_Vehicle(++this.nb_agents, this.env);
         this.env.addVehicle(new Cell(0, 12), (Vehicle_Body) vehicle.getBody());
         this.vehicles.add(vehicle);
+        
+        Intersection_Body inter = (Intersection_Body) this.infrastructures.get(0).getBody();
+        inter.addVehicle((Vehicle_Body) vehicle.getBody());
         //*/
         
-        //Run the simulation
-        while(true){
+        //Run the simulation while there is vehicles
+        while(!this.vehicles.isEmpty() && this.ticks < 100){
             //*
             try {
                 sleep(100);
@@ -277,6 +306,11 @@ public class CCS_Model extends Thread {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
             //*/
+            
+            //Remove all the vehicles who was in their goal.
+            removeVehicles();
+            
+            //Generate new vehicles
             
             //Update the infrastructures
             for(A_Infrastructure i : this.infrastructures)

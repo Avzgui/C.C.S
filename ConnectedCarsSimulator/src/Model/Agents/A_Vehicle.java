@@ -19,6 +19,7 @@ package Model.Agents;
 
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Agents.Brains.Vehicle_Brain;
+import Model.Environment.Cell;
 import Model.Environment.Environment;
 import java.util.ArrayList;
 
@@ -34,11 +35,22 @@ public class A_Vehicle extends Agent {
      * 
      * @param id ID of the agent.
      * @param env Environment of the agent.
+     * @param goal Goal of the agent.
      */
-    public A_Vehicle(int id, Environment env) {
-        super(id, new Vehicle_Body(id, env, null, 1.0), new Vehicle_Brain(id, null));
+    public A_Vehicle(int id, Environment env, Cell goal) {
+        super(id, new Vehicle_Body(id, env, null, 1.0), new Vehicle_Brain(id, null, goal));
         this.body.setBrain(this.brain);
         this.brain.setBody(this.body);
+    }
+    
+    /**
+     * Returns if the vehicle has reached his goal or not.
+     * 
+     * @return if the goal of the vehicle is reached or not.
+     */
+    public boolean goalReached(){
+        Vehicle_Brain v_brain = (Vehicle_Brain) this.brain;
+        return this.body.getPosition().equals(v_brain.getFinal_goal());
     }
 
     @Override
