@@ -21,11 +21,15 @@ import Model.Agents.Bodies.A_Body;
 import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
+import Model.Environment.Intersection;
 import Model.Environment.Way;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
+import Utility.Flow;
+import com.google.common.collect.Table;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 /**
  * The class Vehicle_Brain represents the behavior layer of a vehicle agent.
@@ -58,7 +62,8 @@ public class Vehicle_Brain extends A_Brain {
         
         //Use the body to determinate the intermediate goals
         Vehicle_Body v_body = (Vehicle_Body) this.body;
-        determineIntermediateGoals(v_body.getInfrastructure());
+        determineIntermediateGoals(v_body.getInfrastructure(), v_body.getPosition());
+        System.out.println("Intermediate goals : " + this.intermediate_goals);
     }
 
     /**
@@ -100,9 +105,38 @@ public class Vehicle_Brain extends A_Brain {
     /**
      * Private method used by the vehicle agent to determinate his w
      */
-    private CardinalPoint determineIntermediateGoals(Infrastructure_Body current){
+    private CardinalPoint determineIntermediateGoals(Infrastructure_Body current, Cell pos){
         
         if(current != null){
+            //If Infrastructure contains the goal
+            Intersection inf = (Intersection) current.getInfrastructure();
+            if(inf.getCells().contains(this.final_goal)){
+                //Determine the good way
+                Table<CardinalPoint, Integer, Way> ways = inf.getWays();
+                for(CardinalPoint c : ways.rowKeySet()){
+                    for(Entry<Integer, Way> entry : ways.row(c).entrySet()){
+                        int id = entry.getKey();
+                        Way way = entry.getValue();
+                        
+                        //When the good way is determinate
+                        if(way.getCells().contains(pos) && way.getCells().contains(this.final_goal)){
+                            //Switch the id, add the good Cardinal point
+                            if(id >= 0 && id < inf.getNb_ways().get(Flow.IN, c))
+                                this.intermediate_goals.add(c.getFront());
+                            else if(id == inf.getNb_ways().get(Flow.IN, c))
+                                this.intermediate_goals.add(c.getRight());
+                            else
+                                this.intermediate_goals.add(c.getLeft());
+                            
+                            //Return the begin point
+                            return c.getFront();
+                        }
+                    }
+                }
+            }
+            else{
+                
+            }
         }
                 
         //Default break point
