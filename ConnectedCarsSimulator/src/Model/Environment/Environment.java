@@ -286,4 +286,46 @@ public class Environment {
             }
         }
     }
+    
+    /**
+     * Function to know if there is collisions or not.
+     * 
+     * 0 : everything is awesome.
+     * 1 : two vehicles on the same cell.
+     * 2 : loop of vehicles.
+     * 
+     * @return code of the collision.
+     */
+    public int collisionManager(){
+        
+        //Check if there is two vehicle is the same. 
+        for(Vehicle_Body v1 : this.vehicles){
+            for(Vehicle_Body v2 : this.vehicles){
+                if(!v1.equals(v2) && v1.getPosition().equals(v2.getPosition()))
+                    return 1;
+            }
+        }
+        
+        //Check if there is a loop of vehicle.
+        for(Vehicle_Body v1 : this.vehicles){
+            //Get the infrastructure of the vehicle
+            Infrastructure_Body infrastructure = v1.getInfrastructure();
+
+            //Get the direction
+            Cell direction = v1.getDirection();
+            
+            //While the direction is lock, get the vehicle who on the cell
+            while(infrastructure.getVehicleOnCell(direction) != null){
+                Vehicle_Body v2 = infrastructure.getVehicleOnCell(direction);
+                
+                //If a loop is dicovered
+                if(v2.equals(v1))
+                    return 2;
+                else
+                    direction = v2.getDirection();
+            }
+        }
+        
+        return 0;
+    }
 }

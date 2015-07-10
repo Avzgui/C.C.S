@@ -278,18 +278,20 @@ public class CCS_Model extends Thread {
         this.vehicles.add(vehicle);
         //*/
         
-        /*
+        //*
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(10, 0), new Cell(22, 12));
         this.vehicles.add(vehicle);
         //*/
         
-        /*
+        //*
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 10), new Cell(10, 22));
         this.vehicles.add(vehicle);
         //*/
         
         //Run the simulation while there is vehicles
-        while(!this.vehicles.isEmpty() && this.ticks < 100){
+        while(!this.vehicles.isEmpty() 
+                && this.ticks < 100
+                && this.env.collisionManager() == 0){
             //*
             try {
                 sleep(100);

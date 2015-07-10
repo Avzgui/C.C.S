@@ -72,6 +72,22 @@ abstract public class Infrastructure_Body extends A_Body {
     }
     
     /**
+     * Returns the vehicle on a cell.
+     * 
+     * @param c cell tested.
+     * @return the vehicle on a cell, null if there is no vehicle.
+     */
+    public Vehicle_Body getVehicleOnCell(Cell c){
+        
+        for(Vehicle_Body v : this.vehicles){
+            if(v.getPosition().equals(c))
+                return v;
+        }
+        
+        return null;
+    }
+    
+    /**
      * Adds a vehicle to the array of the vehicles int dialog with infrastructure.
      * 
      * Needs to be surcharged by the children class.
