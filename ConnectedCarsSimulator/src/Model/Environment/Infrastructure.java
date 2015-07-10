@@ -308,6 +308,7 @@ abstract public class Infrastructure {
      * @param begin cardinal point where begins the ways to create.
      */
     abstract protected void createWays(CardinalPoint begin);
+    
 
     @Override
     public int hashCode() {

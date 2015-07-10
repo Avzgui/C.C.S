@@ -18,16 +18,14 @@
 package Model.Agents.Brains;
 
 import Model.Agents.Bodies.A_Body;
-import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
-import Model.Environment.Intersection;
+import Model.Environment.Infrastructure;
 import Model.Environment.Way;
 import Model.Messages.M_Hello;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
-import Utility.Flow;
 import com.google.common.collect.Table;
 import java.util.ArrayList;
 import java.util.Map.Entry;
@@ -61,16 +59,41 @@ public class Vehicle_Brain extends A_Brain {
     public void setBody(A_Body body){
         this.body = body;
         
-        //Use the body to determinate the intermediate goals
-        Vehicle_Body v_body = (Vehicle_Body) this.body;
-        determineIntermediateGoals(v_body.getInfrastructure(), v_body.getPosition());
+        //Determine the infrastructure destination's coordinates
+        Table<Integer, Integer, Infrastructure> map = this.body.getEnvironment().getMap();
+        int dest_x = 0;
+        int dest_y = 0;
+        int x = 0;
+        int y = 0;
+        boolean ok = false;
+        for(int row : map.rowKeySet()){
+            for(Entry<Integer, Infrastructure> entry : map.row(row).entrySet()){
+                if(entry.getValue().haveCell(this.final_goal)){
+                    dest_x = entry.getKey();
+                    dest_y = row;
+                    ok = true;
+                }
+                else if(entry.getValue().haveCell(this.body.getPosition())){
+                    x = entry.getKey();
+                    y = row;
+                }
+            }
+        }
         
-        //Send the creation
-        if(!this.intermediate_goals.isEmpty()){
-            M_Hello mess = new M_Hello(this.id, v_body.getInfrastructure().getId(),
-                                        v_body.getPosition(),
-                                        this.intermediate_goals.get(this.intermediate_goals.size()-1));
-            this.body.sendMessage(mess);
+        //Destination founded
+        if(ok){
+            //Determine the intermediates goals
+            this.intermediate_goals.clear();
+            this.intermediate_goals.addAll(determineIntermediateGoals(CardinalPoint.SOUTH, x, y, dest_x, dest_y));
+
+            //Send the creation
+            if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
+                Vehicle_Body v_body = (Vehicle_Body) this.body;
+                M_Hello mess = new M_Hello(this.id, v_body.getInfrastructure().getId(),
+                                            v_body.getPosition(),
+                                            this.intermediate_goals.get(this.intermediate_goals.size()-1));
+                this.body.sendMessage(mess);
+            }
         }
     }
 
@@ -114,44 +137,24 @@ public class Vehicle_Brain extends A_Brain {
      * Private method used by the vehicle agent to determinate his intermediate
      * goals.
      * 
-     * Warning !! Not finished !! Doesn't work for several infrastructure.
+     * n.b : can be changed to an A*
      */
-    private CardinalPoint determineIntermediateGoals(Infrastructure_Body current, Cell pos){
+    private ArrayList<CardinalPoint> determineIntermediateGoals(CardinalPoint begin, int current_x, int current_y, int dest_x, int dest_y){
         
-        if(current != null){
-            //If Infrastructure contains the goal
-            Intersection inf = (Intersection) current.getInfrastructure();
-            if(inf.getCells().contains(this.final_goal)){
-                //Determine the good way
-                Table<CardinalPoint, Integer, Way> ways = inf.getWays();
-                for(CardinalPoint c : ways.rowKeySet()){
-                    for(Entry<Integer, Way> entry : ways.row(c).entrySet()){
-                        int id = entry.getKey();
-                        Way way = entry.getValue();
-                        
-                        //When the good way is determinate
-                        if(way.getCells().contains(pos) && way.getCells().contains(this.final_goal)){
-                            //Switch the id, add the good Cardinal point
-                            if(id >= 0 && id < inf.getNb_ways().get(Flow.IN, c))
-                                this.intermediate_goals.add(c.getFront());
-                            else if(id == inf.getNb_ways().get(Flow.IN, c))
-                                this.intermediate_goals.add(c.getRight());
-                            else
-                                this.intermediate_goals.add(c.getLeft());
-                            
-                            //Return the begin point
-                            return c.getFront();
-                        }
-                    }
-                }
-            }
-            else{
-                // TODO
-            }
+        ArrayList<CardinalPoint> goals = new ArrayList<>();
+        
+        //Get the current infrastructure
+        Infrastructure i = this.body.getEnvironment().getMap().get(current_x, current_y);
+        
+        //End
+        if(current_x == dest_x && current_y == dest_y){
+            //TODO
         }
-                
-        //Default break point
-        return null;
+        //Not the end
+        else{
+            //TODO
+        }
+        return goals;
     }
     
     @Override

@@ -28,6 +28,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * The class Intersection, inherited of Infrastructure, is the environment's 
