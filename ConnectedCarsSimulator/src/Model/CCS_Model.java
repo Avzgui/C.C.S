@@ -22,10 +22,10 @@ import Model.Agents.A_Infrastructure;
 import Model.Agents.A_Intersection;
 import Model.Agents.A_Vehicle;
 import Model.Agents.Bodies.Infrastructure_Body;
-import Model.Agents.Bodies.Intersection_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Environment;
+import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import Utility.CardinalPoint;
 import Utility.Flow;
@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -287,6 +288,98 @@ public class CCS_Model extends Thread {
                     this.infrastructures.add(agent);
                 }
             }
+            
+            //When all infrastructure are added to the environment, generate neighborhood.
+            for(int row : this.env.getMap().rowKeySet()){
+                for(Entry<Integer, Infrastructure> entry : this.env.getMap().row(row).entrySet()){
+                    int column = entry.getKey();
+                    Infrastructure i = entry.getValue();
+                    
+                    //Get the agent who has the infrastructure i
+                    Infrastructure_Body i_body = null;
+                    for(Infrastructure_Body body : this.env.getInfrastructures()){
+                        if(body.getInfrastructure() == i){
+                            i_body = body;
+                            break;
+                        }
+                    }
+                    
+                    //If the agent was found
+                    if(i_body != null){
+                        
+                        //Get is neighbors
+                        
+                        /* ---- NORTH ---- */
+                        if(this.env.getMap().contains(row, column-1)){
+                            //Get the agent who has the infrastructure i
+                            i = this.env.getMap().get(row, column-1);
+                            Infrastructure_Body north_body = null;
+                            for(Infrastructure_Body body : this.env.getInfrastructures()){
+                                if(body.getInfrastructure() == i){
+                                    north_body = body;
+                                    break;
+                                }
+                            }
+                            
+                            //If a north neighbor was found
+                            if(north_body != null)
+                                i_body.addNeighbor(CardinalPoint.NORTH, north_body);
+                        }
+                        
+                        /* ---- EAST ---- */
+                        if(this.env.getMap().contains(row+1, column)){
+                            //Get the agent who has the infrastructure i
+                            i = this.env.getMap().get(row+1, column);
+                            Infrastructure_Body east_body = null;
+                            for(Infrastructure_Body body : this.env.getInfrastructures()){
+                                if(body.getInfrastructure() == i){
+                                    east_body = body;
+                                    break;
+                                }
+                            }
+                            
+                            //If a north neighbor was found
+                            if(east_body != null)
+                                i_body.addNeighbor(CardinalPoint.EAST, east_body);
+                        }
+                        
+                        /* ---- SOUTH ---- */
+                        if(this.env.getMap().contains(row, column+1)){
+                            //Get the agent who has the infrastructure i
+                            i = this.env.getMap().get(row, column+1);
+                            Infrastructure_Body south_body = null;
+                            for(Infrastructure_Body body : this.env.getInfrastructures()){
+                                if(body.getInfrastructure() == i){
+                                    south_body = body;
+                                    break;
+                                }
+                            }
+                            
+                            //If a north neighbor was found
+                            if(south_body != null)
+                                i_body.addNeighbor(CardinalPoint.SOUTH, south_body);
+                        }
+                        
+                        /* ---- WEST ---- */
+                        if(this.env.getMap().contains(row-1, column)){
+                            //Get the agent who has the infrastructure i
+                            i = this.env.getMap().get(row-1, column);
+                            Infrastructure_Body west_body = null;
+                            for(Infrastructure_Body body : this.env.getInfrastructures()){
+                                if(body.getInfrastructure() == i){
+                                    west_body = body;
+                                    break;
+                                }
+                            }
+                            
+                            //If a north neighbor was found
+                            if(west_body != null)
+                                i_body.addNeighbor(CardinalPoint.WEST, west_body);
+                        }
+                    }
+                }
+            }
+            
         } catch (ParserConfigurationException | SAXException | IOException | NumberFormatException | DOMException e) {
             System.out.println(e.getMessage());
         }
@@ -309,10 +402,10 @@ public class CCS_Model extends Thread {
         
         
         //Init agents
-        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
+        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(32, 40), new Cell(35, -4));
         this.vehicles.add(vehicle);
         
-        //*
+        /*
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 12), new Cell(12, 0));
         this.vehicles.add(vehicle);
         //*/

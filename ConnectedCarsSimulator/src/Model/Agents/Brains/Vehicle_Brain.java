@@ -66,10 +66,12 @@ public class Vehicle_Brain extends A_Brain {
         determineIntermediateGoals(v_body.getInfrastructure(), v_body.getPosition());
         
         //Send the creation
-        M_Hello mess = new M_Hello(this.id, v_body.getInfrastructure().getId(),
-                                    v_body.getPosition(),
-                                    this.intermediate_goals.get(this.intermediate_goals.size()-1));
-        this.body.sendMessage(mess);
+        if(!this.intermediate_goals.isEmpty()){
+            M_Hello mess = new M_Hello(this.id, v_body.getInfrastructure().getId(),
+                                        v_body.getPosition(),
+                                        this.intermediate_goals.get(this.intermediate_goals.size()-1));
+            this.body.sendMessage(mess);
+        }
     }
 
     /**
