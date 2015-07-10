@@ -138,4 +138,18 @@ public class Vehicle_Body extends A_Body {
             this.brain.storeMessage(mess);
         }
     }
+    
+    /**
+     * Motor/Sensor method to look if a cell is free, or not.
+     * 
+     * n.b : i don't if it's a motor function (agent to envronment)
+     * or a sensor function (environment to agent). 'Cause it does
+     * the both : agent to environment and environment to agent.
+     * 
+     * @param c cell tested.
+     * @return if a cell looks free or not.
+     */
+    public boolean lookIfCellIsFree(Cell c){
+        return !this.infrastructure.haveVehicleOnCell(c);
+    }
 }
