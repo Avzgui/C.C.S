@@ -69,7 +69,7 @@ public class Vehicle_Brain extends A_Brain {
         int dest_y = 0;
         int x = 0;
         int y = 0;
-        CardinalPoint begin = CardinalPoint.NORTH;
+        CardinalPoint begin = null;
         boolean ok = false;
         for(int row : map.rowKeySet()){
             for(Entry<Integer, Infrastructure> entry : map.row(row).entrySet()){
@@ -78,7 +78,8 @@ public class Vehicle_Brain extends A_Brain {
                     dest_y = entry.getKey();
                     ok = true;
                 }
-                else if(entry.getValue().haveCell(this.body.getPosition())){
+                
+                if(entry.getValue().haveCell(this.body.getPosition())){
                     //Determine the position of the vehicule in the infrastructure
                     x = row;
                     y = entry.getKey();
@@ -94,11 +95,10 @@ public class Vehicle_Brain extends A_Brain {
         }
         
         //Destination founded
-        if(ok){
+        if(ok && begin != null){
             //Determine the intermediates goals
             this.intermediate_goals.clear();
             this.intermediate_goals.addAll(determineIntermediateGoals(0, begin, x, y, dest_x, dest_y));
-            System.out.println("Intermediate goals : " + this.intermediate_goals);
             //Send the creation
             //*
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
@@ -165,9 +165,7 @@ public class Vehicle_Brain extends A_Brain {
             for(Entry<Integer, Way> entry : i.getWays().row(begin).entrySet()){
                 int w_id = entry.getKey();
                 Way w = entry.getValue();
-                
                 if(w.getCells().contains(this.final_goal)){
-                    
                     if(i instanceof Intersection){
                         //Cast
                         Intersection inter = (Intersection) i;
@@ -237,7 +235,7 @@ public class Vehicle_Brain extends A_Brain {
     
     @Override
     @SuppressWarnings("empty-statement")
-    public void processMessage(Message mess){
+    protected void processMessage(Message mess){
         if(mess instanceof M_Welcome){
             System.out.println("Vehicle process M_Welcome");
             

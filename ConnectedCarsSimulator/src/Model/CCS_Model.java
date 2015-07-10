@@ -402,7 +402,7 @@ public class CCS_Model extends Thread {
         
         
         //Init agents
-        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(32, 40), new Cell(35, -4));
+        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
         
         /*

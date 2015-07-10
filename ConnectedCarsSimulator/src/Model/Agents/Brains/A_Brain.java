@@ -100,7 +100,7 @@ abstract public class A_Brain {
     }
     
     /**
-     * Process a message of the message memory.
+     * Reasonning layer's method to process a message of the message memory.
      * 
      * By default all messages are unsupported.
      * 
@@ -110,7 +110,7 @@ abstract public class A_Brain {
      * 
      * @param mess 
      */
-    public void processMessage(Message mess){
+    protected void processMessage(Message mess){
         throw new UnsupportedOperationException("Message of type : " 
                 + mess.getClass() + ", is unsupported.");
     }

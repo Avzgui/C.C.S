@@ -51,7 +51,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
     
     
     @Override
-    public void processMessage(Message mess){
+    protected void processMessage(Message mess){
         if(mess instanceof M_Hello){
             //Check the id
             if(mess.getReceiver_id() == this.id){
