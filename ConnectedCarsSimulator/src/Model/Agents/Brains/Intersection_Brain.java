@@ -23,6 +23,7 @@ import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import Model.Environment.Way;
+import Model.Messages.M_Bye;
 import Model.Messages.M_Hello;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
@@ -120,6 +121,23 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     //Send the way to the vehicle
                     this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(), way));
                 }
+            }
+        }
+        else if(mess instanceof M_Bye){
+            if(mess.getReceiver_id() == this.id){
+                System.out.println("Intersection process M_Bye");
+                //Search and remove the vehicle
+                Intersection_Body i_body = (Intersection_Body) this.body;
+                Vehicle_Body toRemove = null;
+                for(Vehicle_Body v : i_body.getVehicles()){
+                    if(v.getId() == mess.getSender_id()){
+                        toRemove = v;
+                        break;
+                    }
+                }
+                
+                if(toRemove != null)
+                    i_body.getVehicles().remove(toRemove);
             }
         }
         else

@@ -21,6 +21,7 @@ import Model.Agents.Brains.Infrastructure_Brain;
 import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
+import Model.Messages.M_Bye;
 import Model.Messages.M_Hello;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
@@ -137,6 +138,10 @@ abstract public class Infrastructure_Body extends A_Body {
     public void receiveMessage(Message mess){
         if(mess instanceof M_Hello){
             System.out.println("Infrastructure receive M_Hello");
+            this.brain.storeMessage(mess);
+        }
+        else if (mess instanceof M_Bye){
+            System.out.println("Infrastructure receive M_Bye");
             this.brain.storeMessage(mess);
         }
         else

@@ -24,6 +24,7 @@ import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import Model.Environment.Way;
+import Model.Messages.M_Bye;
 import Model.Messages.M_Hello;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
@@ -273,6 +274,9 @@ public class Vehicle_Brain extends A_Brain {
         //If vehicle not on the infrastructure anymore
         if(this.way != null && this.way.isEmpty()){
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
+                //Say bye to the current infrastructure
+                this.body.sendMessage(new M_Bye(this.id, v_body.getInfrastructure().getId()));
+                
                 //Get the current goal
                 CardinalPoint cp = this.intermediate_goals.get(this.intermediate_goals.size()-1);
 
@@ -284,7 +288,6 @@ public class Vehicle_Brain extends A_Brain {
 
                     //Remove the current goal
                     this.intermediate_goals.remove(this.intermediate_goals.size()-1);
-                    System.out.println("Intermediate goals : " + this.intermediate_goals);
 
                     //Send a message to the new infrastructure
                     M_Hello mess = new M_Hello(this.id, v_body.getInfrastructure().getId(),

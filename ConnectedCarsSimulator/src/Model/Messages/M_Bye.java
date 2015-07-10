@@ -15,30 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
-package App;
-
-import Model.CCS_Model;
-import View.CCS_View;
-import java.io.File;
+package Model.Messages;
 
 /**
- * The main class of the application.
+ * The class M_Bye, inherited by Message, is used by vehicule agent to other
+ * agent to inform them that he exit the dialog.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class CCS_App {
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        //Init model
-        CCS_Model model = new CCS_Model();
-        model.loadEnvironmentFromXML(new File("save/environments/Grid3x3.xml"));
-        model.start();
-        
-        //Init view
-        CCS_View view = new CCS_View(model, 10);
-        view.start();
+public class M_Bye extends Message {
+
+    public M_Bye(int sender_id, int receiver_id) {
+        super(sender_id, receiver_id);
     }
+    
 }
