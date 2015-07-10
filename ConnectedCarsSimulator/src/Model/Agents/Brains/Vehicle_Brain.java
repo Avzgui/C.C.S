@@ -18,6 +18,7 @@
 package Model.Agents.Brains;
 
 import Model.Agents.Bodies.A_Body;
+import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
@@ -94,8 +95,6 @@ public class Vehicle_Brain extends A_Brain {
         
         //Destination founded
         if(ok){
-            System.out.println("Final goal found in : [" + dest_x + ", " + dest_y + "]");
-            System.out.println("Pos found in : [" + x + ", " + y + "], begin in " + begin);
             //Determine the intermediates goals
             this.intermediate_goals.clear();
             this.intermediate_goals.addAll(determineIntermediateGoals(0, begin, x, y, dest_x, dest_y));
@@ -156,7 +155,6 @@ public class Vehicle_Brain extends A_Brain {
      * n.b : can be changed to an A*
      */
     private ArrayList<CardinalPoint> determineIntermediateGoals(int depth, CardinalPoint begin, int current_x, int current_y, int dest_x, int dest_y){
-        System.out.println("Test [" + current_x + ", " + current_y + "] begin in " + begin);
         ArrayList<CardinalPoint> goals = new ArrayList<>();
         
         //Get the current infrastructure
@@ -273,7 +271,31 @@ public class Vehicle_Brain extends A_Brain {
      * signal the coming in the agent and update goals.
      */
     private void updateInfrastructure(){
-        //TODO
+        Vehicle_Body v_body = (Vehicle_Body) this.body;
+        //If vehicle not on the infrastructure anymore
+        if(this.way != null && this.way.isEmpty()){
+            if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
+                //Get the current goal
+                CardinalPoint cp = this.intermediate_goals.get(this.intermediate_goals.size()-1);
+
+                //Get the neighbor infrastructure
+                Infrastructure_Body neighbor = v_body.getInfrastructure().getNeighbors().get(cp);
+                if(neighbor != null){
+                    //Set the next infrastructure
+                    v_body.setInfrastructure(neighbor);
+
+                    //Remove the current goal
+                    this.intermediate_goals.remove(this.intermediate_goals.size()-1);
+                    System.out.println("Intermediate goals : " + this.intermediate_goals);
+
+                    //Send a message to the new infrastructure
+                    M_Hello mess = new M_Hello(this.id, v_body.getInfrastructure().getId(),
+                                                v_body.getDirection(),
+                                                this.intermediate_goals.get(this.intermediate_goals.size()-1));
+                    this.body.sendMessage(mess);
+                }
+            }
+        }
     }
     
     /**
@@ -305,11 +327,11 @@ public class Vehicle_Brain extends A_Brain {
         //Process all the messages
         checkAllMessages();
         
-        //Update infrastructure
-        updateInfrastructure();
-        
         //Update direction
         updateDirection();
+        
+        //Update infrastructure
+        updateInfrastructure();
         
         //Update speed
         updateSpeed();

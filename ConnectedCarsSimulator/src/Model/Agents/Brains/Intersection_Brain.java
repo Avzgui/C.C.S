@@ -18,6 +18,7 @@
 package Model.Agents.Brains;
 
 import Model.Agents.Bodies.Intersection_Body;
+import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
@@ -97,20 +98,28 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     }
                     if(ok) break;
                 }
-                
-                //Get the first cell of the neighbor.
-                if(i_body.getNeighbors().containsKey(goal)){
-                    Infrastructure neighbor = i_body.getNeighbors().get(goal).getInfrastructure();
-                    Way w = neighbor.getWays().get(goal.getFront(), w_id);
-                    if(w != null && !w.isEmpty()){
-                        Cell next = w.getCells().get(0);
-                        if(next != null && way != null)
-                            way.addCell(next);
+                if(ok){
+                    for(Vehicle_Body v : i_body.getEnvironment().getVehicles()){
+                        if(v.getId() == m.getSender_id()){
+                            i_body.addVehicle(v);
+                            break;
+                        }
                     }
+                    //Get the first cell of the neighbor.
+                    //*
+                    if(i_body.getNeighbors().containsKey(goal)){
+                        Infrastructure neighbor = i_body.getNeighbors().get(goal).getInfrastructure();
+                        Way w = neighbor.getWays().get(goal.getFront(), w_id);
+                        if(w != null && !w.isEmpty()){
+                            Cell next = w.getCells().get(0);
+                            if(next != null && way != null)
+                                way.addCell(next);
+                        }
+                    }
+                    //*/
+                    //Send the way to the vehicle
+                    this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(), way));
                 }
-                
-                //Send the way to the vehicle
-                this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(), way));
             }
         }
         else

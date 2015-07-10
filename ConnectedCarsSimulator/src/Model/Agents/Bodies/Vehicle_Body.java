@@ -54,9 +54,6 @@ public class Vehicle_Body extends A_Body {
         this.direction = null;
         this.max_speed = max_speed;
         this.speed = 0.0;
-        
-        //Link to the infrastructure
-        this.infrastructure.addVehicle(this);
     }
 
     /**
