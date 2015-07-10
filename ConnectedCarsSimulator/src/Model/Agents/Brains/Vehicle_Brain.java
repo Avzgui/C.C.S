@@ -21,13 +21,16 @@ import Model.Agents.Bodies.A_Body;
 import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
+import Model.Environment.Intersection;
 import Model.Environment.Way;
 import Model.Messages.M_Hello;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
+import Utility.Flow;
 import com.google.common.collect.Table;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
@@ -65,28 +68,40 @@ public class Vehicle_Brain extends A_Brain {
         int dest_y = 0;
         int x = 0;
         int y = 0;
+        CardinalPoint begin = CardinalPoint.NORTH;
         boolean ok = false;
         for(int row : map.rowKeySet()){
             for(Entry<Integer, Infrastructure> entry : map.row(row).entrySet()){
                 if(entry.getValue().haveCell(this.final_goal)){
-                    dest_x = entry.getKey();
-                    dest_y = row;
+                    dest_x = row;
+                    dest_y = entry.getKey();
                     ok = true;
                 }
                 else if(entry.getValue().haveCell(this.body.getPosition())){
-                    x = entry.getKey();
-                    y = row;
+                    //Determine the position of the vehicule in the infrastructure
+                    x = row;
+                    y = entry.getKey();
+                    Infrastructure i = entry.getValue();
+                    for(CardinalPoint cp : i.getWays().rowKeySet()){
+                        for(Entry<Integer, Way> e : i.getWays().row(cp).entrySet()){
+                            if(e.getValue().getCells().get(0).equals(this.body.getPosition()))
+                                begin = cp;
+                        }
+                    }
                 }
             }
         }
         
         //Destination founded
         if(ok){
+            System.out.println("Final goal found in : [" + dest_x + ", " + dest_y + "]");
+            System.out.println("Pos found in : [" + x + ", " + y + "], begin in " + begin);
             //Determine the intermediates goals
             this.intermediate_goals.clear();
-            this.intermediate_goals.addAll(determineIntermediateGoals(CardinalPoint.SOUTH, x, y, dest_x, dest_y));
-
+            this.intermediate_goals.addAll(determineIntermediateGoals(0, begin, x, y, dest_x, dest_y));
+            System.out.println("Intermediate goals : " + this.intermediate_goals);
             //Send the creation
+            //*
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
                 Vehicle_Body v_body = (Vehicle_Body) this.body;
                 M_Hello mess = new M_Hello(this.id, v_body.getInfrastructure().getId(),
@@ -94,6 +109,7 @@ public class Vehicle_Brain extends A_Brain {
                                             this.intermediate_goals.get(this.intermediate_goals.size()-1));
                 this.body.sendMessage(mess);
             }
+            //*/
         }
     }
 
@@ -139,8 +155,8 @@ public class Vehicle_Brain extends A_Brain {
      * 
      * n.b : can be changed to an A*
      */
-    private ArrayList<CardinalPoint> determineIntermediateGoals(CardinalPoint begin, int current_x, int current_y, int dest_x, int dest_y){
-        
+    private ArrayList<CardinalPoint> determineIntermediateGoals(int depth, CardinalPoint begin, int current_x, int current_y, int dest_x, int dest_y){
+        System.out.println("Test [" + current_x + ", " + current_y + "] begin in " + begin);
         ArrayList<CardinalPoint> goals = new ArrayList<>();
         
         //Get the current infrastructure
@@ -148,12 +164,76 @@ public class Vehicle_Brain extends A_Brain {
         
         //End
         if(current_x == dest_x && current_y == dest_y){
-            //TODO
+            for(Entry<Integer, Way> entry : i.getWays().row(begin).entrySet()){
+                int w_id = entry.getKey();
+                Way w = entry.getValue();
+                
+                if(w.getCells().contains(this.final_goal)){
+                    
+                    if(i instanceof Intersection){
+                        //Cast
+                        Intersection inter = (Intersection) i;
+                        
+                        //Switch ID
+                        if(w_id >= 0 && w_id < inter.getNb_ways().get(Flow.IN, begin))
+                            goals.add(begin.getFront());
+                        else if(w_id == inter.getNb_ways().get(Flow.IN, begin))
+                            goals.add(begin.getRight());
+                        else
+                            goals.add(begin.getLeft());
+                    }
+                }
+            }
         }
-        //Not the end
         else{
-            //TODO
+            //Check in neighbors
+            HashMap<CardinalPoint, ArrayList<CardinalPoint>> neighbors = new HashMap<>();
+            
+            /* --- NORTH --- */
+            if(depth < this.body.getEnvironment().getMap().size()
+                    && this.body.getEnvironment().getMap().contains(current_x, current_y-1)
+                    && i.isAnAvailableFlow(begin, CardinalPoint.NORTH))
+                neighbors.put(CardinalPoint.NORTH, 
+                        determineIntermediateGoals(depth+1, CardinalPoint.SOUTH, current_x, current_y-1, dest_x, dest_y));
+            
+            /* --- EAST --- */
+            if(depth < this.body.getEnvironment().getMap().size() 
+                    && this.body.getEnvironment().getMap().contains(current_x+1, current_y)
+                    && i.isAnAvailableFlow(begin, CardinalPoint.EAST))
+                neighbors.put(CardinalPoint.EAST, 
+                        determineIntermediateGoals(depth+1, CardinalPoint.WEST, current_x+1, current_y, dest_x, dest_y));
+            
+            /* --- SOUTH --- */
+            if(depth < this.body.getEnvironment().getMap().size()
+                    && this.body.getEnvironment().getMap().contains(current_x, current_y+1)
+                    && i.isAnAvailableFlow(begin, CardinalPoint.SOUTH))
+                neighbors.put(CardinalPoint.SOUTH, 
+                        determineIntermediateGoals(depth+1, CardinalPoint.NORTH, current_x, current_y+1, dest_x, dest_y));
+            
+            /* --- WEST --- */
+            if(depth < this.body.getEnvironment().getMap().size()
+                    && this.body.getEnvironment().getMap().contains(current_x-1, current_y)
+                    && i.isAnAvailableFlow(begin, CardinalPoint.WEST))
+                neighbors.put(CardinalPoint.WEST, 
+                        determineIntermediateGoals(depth+1, CardinalPoint.EAST, current_x-1, current_y, dest_x, dest_y));
+            
+            //Get the min
+            int min = Integer.MAX_VALUE;
+            CardinalPoint c_min = null;
+            for(Entry<CardinalPoint, ArrayList<CardinalPoint>> e : neighbors.entrySet()){
+                if(e.getValue().size() < min){
+                    min = e.getValue().size();
+                    c_min = e.getKey();
+                }
+            }
+            
+            //Add the min array to goals
+            if(c_min != null){
+                goals.addAll(neighbors.get(c_min));
+                goals.add(c_min);
+            }
         }
+        
         return goals;
     }
     

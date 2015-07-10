@@ -280,7 +280,12 @@ abstract public class Infrastructure {
      * @return if the infrastructure have the cell c or not.
      */
     public boolean haveCell(Cell c){
-        return this.ways.containsValue(c);
+        for(Way w : this.ways.values()){
+            if(w.getCells().contains(c))
+                return true;
+        }
+        
+        return false;
     }
     
     /**

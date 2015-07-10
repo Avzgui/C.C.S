@@ -20,9 +20,7 @@ package Model.Agents.Bodies;
 import Model.Agents.Brains.Intersection_Brain;
 import Model.Environment.Environment;
 import Model.Environment.Intersection;
-import Model.Messages.M_Welcome;
 import Model.Messages.Message;
-import Utility.CardinalPoint;
 
 /**
  * The class Intersection_Body, inherited by Infrastructure_Body,

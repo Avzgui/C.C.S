@@ -68,25 +68,28 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 boolean ok = false;
                 for(CardinalPoint c : ways.rowKeySet()){
                     for(Entry<Integer, Way> entry : ways.row(c).entrySet()){
-                        w_id = entry.getKey();
+                        int _id = entry.getKey();
                         Way w = entry.getValue();
                         //If the way contains the position
                         if(w.getCells().contains(pos)){
-                            if(w_id >= 0 && w_id < inter.getNb_ways().get(Flow.IN, c)){
+                            if(_id >= 0 && _id < inter.getNb_ways().get(Flow.IN, c)){
                                 if(c.getFront() == goal){
                                     way = w;
+                                    w_id = _id;
                                     ok = true;
                                 }
                             }
-                            else if(w_id == inter.getNb_ways().get(Flow.IN, c)){
+                            else if(_id == inter.getNb_ways().get(Flow.IN, c)){
                                 if(c.getRight() == goal){
                                     way = w;
+                                    w_id = _id;
                                     ok = true;
                                 }
                             }
                             else{
                                 if(c.getLeft() == goal){
                                     way = w;
+                                    w_id = _id;
                                     ok = true;
                                 }
                             }
