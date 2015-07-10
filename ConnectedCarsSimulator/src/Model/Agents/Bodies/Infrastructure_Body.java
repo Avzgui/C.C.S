@@ -18,6 +18,7 @@
 package Model.Agents.Bodies;
 
 import Model.Agents.Brains.Infrastructure_Brain;
+import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
 import Model.Messages.M_Hello;
@@ -95,6 +96,22 @@ abstract public class Infrastructure_Body extends A_Body {
      */
     public void addNeighbor(Infrastructure_Body neighbor){
         this.neighbors.add(neighbor);
+    }
+    
+    /**
+     * Returns if there is a vehicle on a cell, or not.
+     * 
+     * @param c cell tested.
+     * @return if there is a vehicle, or not, on a cell.
+     */
+    public boolean haveVehicleOnCell(Cell c){
+        
+        for(Vehicle_Body vehicle : this.vehicles){
+            if(vehicle.getPosition().equals(c))
+                return true;
+        }
+        
+        return false;
     }
     
     @Override
