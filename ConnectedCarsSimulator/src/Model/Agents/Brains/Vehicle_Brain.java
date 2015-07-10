@@ -170,18 +170,35 @@ public class Vehicle_Brain extends A_Brain {
                 this.way = new Way((Way) m.getDatum().get(0));
                 while(!this.way.isEmpty() 
                         && !v_body.getPosition().equals(this.way.pop()));
-
-                //Set speed to one
-                if(!this.way.isEmpty())
-                    v_body.setSpeed(1.0);
             }
         }
         else
             super.processMessage(mess);
     }
+    
+    /**
+     * Reasoning layer's function to update the direction of the agent.
+     */
+    private void updateDirection(){
+        if(this.way != null){
+            Vehicle_Body v_body = (Vehicle_Body) this.body;
+            if(v_body.getDirection() == null && !this.way.isEmpty())
+                v_body.setDirection(this.way.pop());
+        }
+    }
+    
+    private void updateSpeed(){
+        //By default, speed set to zero
+        Vehicle_Body v_body = (Vehicle_Body) this.body;
+        v_body.setSpeed(0.0);
+        
+        if(v_body.lookIfCellIsFree(v_body.getDirection()))
+            v_body.setSpeed(1.0);
+    }
 
     @Override
     public void run(){
+        
         //Process all the messages
         while(!this.messages_memory.isEmpty()){
             processMessage(this.messages_memory.get(0));
@@ -189,10 +206,9 @@ public class Vehicle_Brain extends A_Brain {
         }
         
         //Update direction
-        if(this.way != null){
-            Vehicle_Body v_body = (Vehicle_Body) this.body;
-            if(v_body.getDirection() == null && !this.way.isEmpty())
-                v_body.setDirection(this.way.pop());
-        }
+        updateDirection();
+        
+        //Update speed
+        updateSpeed();
     }
 }
