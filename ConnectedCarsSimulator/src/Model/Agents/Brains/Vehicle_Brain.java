@@ -177,6 +177,16 @@ public class Vehicle_Brain extends A_Brain {
     }
     
     /**
+     * Reasoning layer's function to proccess all the messages.
+     */
+    private void checkAllMessages(){
+        while(!this.messages_memory.isEmpty()){
+            processMessage(this.messages_memory.get(0));
+            this.messages_memory.remove(0);
+        }
+    }
+    
+    /**
      * Reasoning layer's function to update the direction of the agent.
      */
     private void updateDirection(){
@@ -187,6 +197,9 @@ public class Vehicle_Brain extends A_Brain {
         }
     }
     
+    /**
+     * Reasoning layer's function to update the speed of the agent.
+     */
     private void updateSpeed(){
         //By default, speed set to zero
         Vehicle_Body v_body = (Vehicle_Body) this.body;
@@ -200,10 +213,7 @@ public class Vehicle_Brain extends A_Brain {
     public void run(){
         
         //Process all the messages
-        while(!this.messages_memory.isEmpty()){
-            processMessage(this.messages_memory.get(0));
-            this.messages_memory.remove(0);
-        }
+        checkAllMessages();
         
         //Update direction
         updateDirection();
