@@ -23,7 +23,9 @@ import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
 import Model.Messages.M_Hello;
 import Model.Messages.Message;
+import Utility.CardinalPoint;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The class Infrastructure_Body represents the body of an infrastructure agent.
@@ -34,7 +36,7 @@ abstract public class Infrastructure_Body extends A_Body {
 
     protected final Infrastructure infrastructure;
     protected final ArrayList<Vehicle_Body> vehicles;
-    protected final ArrayList<Infrastructure_Body> neighbors;
+    protected final HashMap<CardinalPoint, Infrastructure_Body> neighbors;
     
     /**
      * Constructor
@@ -49,7 +51,7 @@ abstract public class Infrastructure_Body extends A_Body {
         super(id, env, brain);
         this.infrastructure = infrastructure;
         this.vehicles = new ArrayList<>();
-        this.neighbors = new ArrayList<>();
+        this.neighbors = new HashMap<>();
         this.position = null;
     }
 
@@ -101,17 +103,18 @@ abstract public class Infrastructure_Body extends A_Body {
      * 
      * @return the array of neighbors.
      */
-    public ArrayList<Infrastructure_Body> getNeighbors() {
-        return neighbors;
+    public HashMap<CardinalPoint, Infrastructure_Body> getNeighbors() {
+        return this.neighbors;
     }
     
     /**
      * Adds a infrastructure to the array of neighbors.
      * 
+     * @param point the cardinal point where is the neighbor.
      * @param neighbor the new neighbor of the infrastructure.
      */
-    public void addNeighbor(Infrastructure_Body neighbor){
-        this.neighbors.add(neighbor);
+    public void addNeighbor(CardinalPoint point, Infrastructure_Body neighbor){
+        this.neighbors.put(point, neighbor);
     }
     
     /**

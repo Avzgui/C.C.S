@@ -144,10 +144,7 @@ public class Vehicle_Brain extends A_Brain {
                 }
             }
             else{
-                //For each neighbors
-                for(Infrastructure_Body body : current.getNeighbors()){
-                    //TODO !!
-                }
+                // TODO
             }
         }
                 
@@ -187,6 +184,14 @@ public class Vehicle_Brain extends A_Brain {
     }
     
     /**
+     * Reasoning layer's function to update the current infrastructure,
+     * signal the coming in the agent and update goals.
+     */
+    private void updateInfrastructure(){
+        //TODO
+    }
+    
+    /**
      * Reasoning layer's function to update the direction of the agent.
      */
     private void updateDirection(){
@@ -214,6 +219,9 @@ public class Vehicle_Brain extends A_Brain {
         
         //Process all the messages
         checkAllMessages();
+        
+        //Update infrastructure
+        updateInfrastructure();
         
         //Update direction
         updateDirection();

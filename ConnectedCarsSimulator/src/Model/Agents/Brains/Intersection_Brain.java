@@ -19,6 +19,7 @@ package Model.Agents.Brains;
 
 import Model.Agents.Bodies.Intersection_Body;
 import Model.Environment.Cell;
+import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import Model.Environment.Way;
 import Model.Messages.M_Hello;
@@ -63,21 +64,21 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 Intersection inter = (Intersection) i_body.getInfrastructure();
                 Table<CardinalPoint, Integer, Way> ways = inter.getWays();
                 Way way = null;
-                
+                int w_id = -1;
                 boolean ok = false;
                 for(CardinalPoint c : ways.rowKeySet()){
                     for(Entry<Integer, Way> entry : ways.row(c).entrySet()){
-                        int id = entry.getKey();
+                        w_id = entry.getKey();
                         Way w = entry.getValue();
                         //If the way contains the position
                         if(w.getCells().contains(pos)){
-                            if(id >= 0 && id < inter.getNb_ways().get(Flow.IN, c)){
+                            if(w_id >= 0 && w_id < inter.getNb_ways().get(Flow.IN, c)){
                                 if(c.getFront() == goal){
                                     way = w;
                                     ok = true;
                                 }
                             }
-                            else if(id == inter.getNb_ways().get(Flow.IN, c)){
+                            else if(w_id == inter.getNb_ways().get(Flow.IN, c)){
                                 if(c.getRight() == goal){
                                     way = w;
                                     ok = true;
@@ -94,11 +95,19 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     if(ok) break;
                 }
                 
+                //Get the first cell of the neighbor.
+                if(i_body.getNeighbors().containsKey(goal)){
+                    Infrastructure neighbor = i_body.getNeighbors().get(goal).getInfrastructure();
+                    Way w = neighbor.getWays().get(goal.getFront(), w_id);
+                    if(w != null && !w.isEmpty()){
+                        Cell next = w.getCells().get(0);
+                        if(next != null && way != null)
+                            way.addCell(next);
+                    }
+                }
+                
                 //Send the way to the vehicle
                 this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(), way));
-            }
-            else{
-                //Redirected the message, maybe for coalition later.
             }
         }
         else
