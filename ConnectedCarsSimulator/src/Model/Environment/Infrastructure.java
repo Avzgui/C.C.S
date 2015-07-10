@@ -274,6 +274,16 @@ abstract public class Infrastructure {
     }
     
     /**
+     * Returns if the infrastructure have the cell c.
+     * 
+     * @param c cell tested.
+     * @return if the infrastructure have the cell c or not.
+     */
+    public boolean haveCell(Cell c){
+        return this.ways.containsValue(c);
+    }
+    
+    /**
      * Returns a position where build an another infrastructure.
      * 
      * @param position cardinal point where the other infrastructure should to be build.
