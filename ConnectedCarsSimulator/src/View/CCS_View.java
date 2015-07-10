@@ -31,6 +31,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -41,6 +42,7 @@ import javax.swing.JPanel;
 public class CCS_View extends Thread {
     
     private final CCS_Model model;
+    private final JFrame frame;
     private final JPanel central_panel;
     private final int cell_size;
     /**
@@ -105,31 +107,48 @@ public class CCS_View extends Thread {
         this.central_panel.setPreferredSize(new Dimension(800, 600));
         
         //Init Jframe
-        JFrame frame = new JFrame("C.C.S : Connected Cars' Simulator");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(800, 600));
-        frame.setResizable(true);
+        this.frame = new JFrame("C.C.S : Connected Cars' Simulator");
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setPreferredSize(new Dimension(800, 600));
+        this.frame.setResizable(true);
         
         //add components
-        frame.setLayout(new BorderLayout());
-        frame.add(this.central_panel, BorderLayout.CENTER);
+        this.frame.setLayout(new BorderLayout());
+        this.frame.add(this.central_panel, BorderLayout.CENTER);
         
         //Pack and show
-        frame.pack();
-        frame.setVisible(true);
+        this.frame.pack();
+        this.frame.setVisible(true);
     }
     
     @Override
     public void run(){
         
-        while(true){
+        while(this.model.getCollision() == 0){
             try {
                 sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            //Repaint the central panel
             this.central_panel.repaint();
+            
+            //Check the state of collision
+            switch(this.model.getCollision()){
+                case 1:
+                    JOptionPane.showMessageDialog(this.frame,
+                            "Two Vehicles in the same cell !!",
+                            "Crash !!",
+                            JOptionPane.ERROR_MESSAGE);
+                break;
+                case 2:
+                    JOptionPane.showMessageDialog(this.frame,
+                            "Several vehicles are locked each other !!",
+                            "Crash !!",
+                            JOptionPane.ERROR_MESSAGE);
+                break;
+            }
         }
     }
 }

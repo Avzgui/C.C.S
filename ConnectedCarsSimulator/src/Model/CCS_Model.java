@@ -65,6 +65,8 @@ public class CCS_Model extends Thread {
     private final ArrayList<A_Infrastructure> infrastructures;
     private int nb_agents;
     private int ticks;
+    private int collision;
+    private File envFile;
     
     /**
      * Constructor
@@ -75,6 +77,8 @@ public class CCS_Model extends Thread {
         this.infrastructures = new ArrayList<>();
         this.nb_agents = 0;
         this.ticks = 0;
+        this.collision = 0;
+        this.envFile = null;
     }
 
     /**
@@ -120,6 +124,24 @@ public class CCS_Model extends Thread {
      */
     public int getTicks() {
         return ticks;
+    }
+
+    /**
+     * Returns the collision code of the last simulation.
+     * 
+     * @return the collision code.
+     */
+    public int getCollision() {
+        return collision;
+    }
+
+    /**
+     * Returns the file with which the environment was load.
+     * 
+     * @return the last environment XML file loaded.
+     */
+    public File getEnvFile() {
+        return envFile;
     }
     
     /**
@@ -168,6 +190,9 @@ public class CCS_Model extends Thread {
             });
             Document doc = dBuilder.parse(file);
 
+            //Here the document is in a good format
+            this.envFile = file;
+            
             //Clear environment
             this.env.removeAll();
             
@@ -267,8 +292,22 @@ public class CCS_Model extends Thread {
         }
     }
     
+    /**
+     * To save a simulation in a XML file.
+     * 
+     * TODO
+     * 
+     * @param file file to save the simulation.
+     */
+    public void saveSimulationToXML(File file){
+        // TODO
+    }
+    
     @Override
     public void run(){
+        //Initialization of the simulation
+        
+        
         //Init agents
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
@@ -278,20 +317,20 @@ public class CCS_Model extends Thread {
         this.vehicles.add(vehicle);
         //*/
         
-        //*
+        /*
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(10, 0), new Cell(22, 12));
         this.vehicles.add(vehicle);
         //*/
         
-        //*
+        /*
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 10), new Cell(10, 22));
         this.vehicles.add(vehicle);
         //*/
         
         //Run the simulation while there is vehicles
-        while(!this.vehicles.isEmpty() 
+        while(!this.vehicles.isEmpty()
                 && this.ticks < 100
-                && this.env.collisionManager() == 0){
+                && this.collision == 0){
             //*
             try {
                 sleep(100);
@@ -315,6 +354,9 @@ public class CCS_Model extends Thread {
 
             //Update the environment
             this.env.update();
+            
+            //Get the collision code
+            this.collision = this.env.collisionManager();
             
             //Increment the ticks
             this.ticks++;
