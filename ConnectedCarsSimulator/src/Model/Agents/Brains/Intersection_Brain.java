@@ -141,7 +141,8 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     }
                     //*/
                     //Send the way to the vehicle
-                    this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(), way));
+                    this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(),
+                            way, 0, null));
                 }
             }
         }
@@ -173,6 +174,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
             processMessage(this.messages_memory.get(0));
             this.messages_memory.remove(0);
         }
+        
+        //Update configuration (check the vote)
     }
-    
 }
