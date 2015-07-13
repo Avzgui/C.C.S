@@ -28,6 +28,7 @@ import Model.Messages.M_Hello;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
+import Utility.Crossing_Configuration;
 import Utility.Flow;
 import com.google.common.collect.Table;
 import java.util.Map.Entry;
@@ -40,6 +41,8 @@ import java.util.Map.Entry;
  */
 public class Intersection_Brain extends Infrastructure_Brain {
 
+    private Crossing_Configuration configuration;
+    
     /**
      * Constructor
      * 
@@ -48,6 +51,25 @@ public class Intersection_Brain extends Infrastructure_Brain {
      */
     public Intersection_Brain(int id, Intersection_Body body) {
         super(id, body);
+        this.configuration = null;
+    }
+
+    /**
+     * Returns the current crossing configuration.
+     * 
+     * @return the crossing configuration.
+     */
+    public Crossing_Configuration getConfiguration() {
+        return new Crossing_Configuration(this.configuration);
+    }
+
+    /**
+     * Changes the current configuration.
+     * 
+     * @param configuration the new crossing configuration.
+     */
+    public void setConfiguration(Crossing_Configuration configuration) {
+        this.configuration = new Crossing_Configuration(configuration);
     }
     
     

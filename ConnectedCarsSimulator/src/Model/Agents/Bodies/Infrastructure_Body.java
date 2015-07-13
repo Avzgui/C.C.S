@@ -147,4 +147,16 @@ abstract public class Infrastructure_Body extends A_Body {
         else
             super.receiveMessage(mess);
     }
+    
+    
+    /**
+     * Sends a message to all of the vehicles in the infrastructure
+     * 
+     * @param mess 
+     */
+    public void sendBroadcast(Message mess){
+        for(Vehicle_Body vehicle : this.vehicles){
+            vehicle.receiveMessage(mess);
+        }
+    }
 }
