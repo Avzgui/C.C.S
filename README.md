@@ -13,7 +13,8 @@ of Matthis GACIARZ and Samir AKNINE.
 
 ## Requirements
 
-This project was done with NetBeans IDE, so you should use NetBeans IDE too.
+This project was realized with the NetBeans IDE, so you should also use the NetBeans IDE,
+to keep the projects' settings.
 
 link : https://netbeans.org/
 
