@@ -49,6 +49,18 @@ public class Reservation {
         this.trajectory = trajectory;
         this.step = step;
     }
+    
+    /**
+     * Copy constructor
+     * 
+     * @param other The reservation to copy.
+     */
+    public Reservation(Reservation other){
+        this.vehicle_id = other.getVehicle_id();
+        this.intersection_id = other.getIntersection_id();
+        this.trajectory = new Trajectory(other.getTrajectory());
+        this.step = other.getStep();
+    }
 
     /**
      * Returns the ID of the vehicle who reserved.
