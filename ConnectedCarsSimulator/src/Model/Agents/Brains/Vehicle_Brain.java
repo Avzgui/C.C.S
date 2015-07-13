@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package Model.Agents.Brains;
 
 import Model.Agents.Bodies.A_Body;
@@ -45,6 +46,7 @@ public class Vehicle_Brain extends A_Brain {
     protected Trajectory trajectory;
     protected final Cell final_goal;
     protected final ArrayList<CardinalPoint> intermediate_goals;
+    protected Cell whereStop;
     
     /**
      * Constructor
@@ -58,6 +60,7 @@ public class Vehicle_Brain extends A_Brain {
         this.trajectory = null;
         this.final_goal = goal;
         this.intermediate_goals = new ArrayList<>();
+        this.whereStop = null;
     }
     
     @Override
@@ -246,7 +249,11 @@ public class Vehicle_Brain extends A_Brain {
             
             //Get the trajectory
             if(m.getDatum().get(0) != null){
+                //Get trajectory
                 this.trajectory = new Trajectory((Trajectory) m.getDatum().get(0));
+                //Get crossing tick
+                //Get the cell where the vehicle will wait his crossing right
+                this.whereStop = new Cell((Cell) m.getDatum().get(2));
                 while(!this.trajectory.isEmpty() 
                         && !v_body.getPosition().equals(this.trajectory.pop()));
             }
@@ -276,6 +283,7 @@ public class Vehicle_Brain extends A_Brain {
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
                 //Say bye to the current infrastructure
                 this.body.sendMessage(new M_Bye(this.id, v_body.getInfrastructure().getId()));
+                this.whereStop = null;
                 
                 //Get the current goal
                 CardinalPoint cp = this.intermediate_goals.get(this.intermediate_goals.size()-1);
@@ -318,8 +326,12 @@ public class Vehicle_Brain extends A_Brain {
         Vehicle_Body v_body = (Vehicle_Body) this.body;
         v_body.setSpeed(0.0);
         
-        if(v_body.lookIfCellIsFree(v_body.getDirection()))
-            v_body.setSpeed(1.0);
+        //If we not have to stop and wait
+        if(this.whereStop == null || !v_body.getPosition().equals(this.whereStop)){
+            //If the cell where the vehicle gone is free
+            if(v_body.lookIfCellIsFree(v_body.getDirection()))
+                v_body.setSpeed(1.0);
+        }
     }
 
     @Override

@@ -89,6 +89,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 Table<CardinalPoint, Integer, Trajectory> ways = inter.getTrajectories();
                 Trajectory way = null;
                 int w_id = -1;
+                CardinalPoint w_cp = null;
                 boolean ok = false;
                 for(CardinalPoint c : ways.rowKeySet()){
                     for(Entry<Integer, Trajectory> entry : ways.row(c).entrySet()){
@@ -100,6 +101,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                                 if(c.getFront() == goal){
                                     way = w;
                                     w_id = _id;
+                                    w_cp = c;
                                     ok = true;
                                 }
                             }
@@ -107,6 +109,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                                 if(c.getRight() == goal){
                                     way = w;
                                     w_id = _id;
+                                    w_cp = c;
                                     ok = true;
                                 }
                             }
@@ -114,6 +117,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                                 if(c.getLeft() == goal){
                                     way = w;
                                     w_id = _id;
+                                    w_cp = c;
                                     ok = true;
                                 }
                             }
@@ -121,6 +125,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     }
                     if(ok) break;
                 }
+                
                 if(ok){
                     for(Vehicle_Body v : i_body.getEnvironment().getVehicles()){
                         if(v.getId() == m.getSender_id()){
@@ -140,9 +145,18 @@ public class Intersection_Brain extends Infrastructure_Brain {
                         }
                     }
                     //*/
+                    
+                    //Determine the cell where the vehicle will wait
+                    Cell whereStop = null;
+                    if(w_cp != null){
+                        Intersection i = (Intersection) i_body.getInfrastructure();
+                        if(way != null && way.getCells() != null && !way.getCells().isEmpty())
+                            whereStop = way.getCells().get(i.getWays_size().get(Flow.IN, w_cp) - 1);
+                    }
+                    
                     //Send the way to the vehicle
                     this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(),
-                            way, 0, null));
+                            way, 0, whereStop));
                 }
             }
         }

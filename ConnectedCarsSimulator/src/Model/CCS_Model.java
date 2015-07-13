@@ -406,7 +406,7 @@ public class CCS_Model extends Thread {
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
         
-        /*
+        //*
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 12), new Cell(12, 0));
         this.vehicles.add(vehicle);
         //*/
