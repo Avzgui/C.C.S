@@ -65,7 +65,7 @@ public class CCS_Model extends Thread {
     private final ArrayList<A_Vehicle> vehicles;
     private final ArrayList<A_Infrastructure> infrastructures;
     private int nb_agents;
-    private int ticks;
+    public static int ticks;
     private int collision;
     private File envFile;
     

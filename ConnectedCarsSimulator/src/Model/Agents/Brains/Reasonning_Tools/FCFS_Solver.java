@@ -15,13 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package Model.Agents.Brains.Reasonning_Tools;
 
+import Model.Agents.Brains.Intersection_Brain;
+
 /**
- * TODO (maybe optional)
+ * The class FCFS_Solver it used by the intersection to set a crossing time
+ * to the new vehicles.
  * 
  * @author Antoine "Avzgui" Richard
  */
 public class FCFS_Solver {
     
+    private final Intersection_Brain brain;
+    
+    /**
+     * Constructor
+     * 
+     * @param brain 
+     */
+    public FCFS_Solver(Intersection_Brain brain){
+        this.brain = brain;
+    }
 }

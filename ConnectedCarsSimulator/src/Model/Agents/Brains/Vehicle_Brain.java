@@ -21,6 +21,7 @@ package Model.Agents.Brains;
 import Model.Agents.Bodies.A_Body;
 import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
+import Model.CCS_Model;
 import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
@@ -47,6 +48,7 @@ public class Vehicle_Brain extends A_Brain {
     protected final Cell final_goal;
     protected final ArrayList<CardinalPoint> intermediate_goals;
     protected Cell whereStop;
+    protected int crossing_tick;
     
     /**
      * Constructor
@@ -61,6 +63,7 @@ public class Vehicle_Brain extends A_Brain {
         this.final_goal = goal;
         this.intermediate_goals = new ArrayList<>();
         this.whereStop = null;
+        this.crossing_tick = 0;
     }
     
     @Override
@@ -252,6 +255,7 @@ public class Vehicle_Brain extends A_Brain {
                 //Get trajectory
                 this.trajectory = new Trajectory((Trajectory) m.getDatum().get(0));
                 //Get crossing tick
+                this.crossing_tick = (Integer) m.getDatum().get(1);
                 //Get the cell where the vehicle will wait his crossing right
                 this.whereStop = new Cell((Cell) m.getDatum().get(2));
                 while(!this.trajectory.isEmpty() 
@@ -327,7 +331,9 @@ public class Vehicle_Brain extends A_Brain {
         v_body.setSpeed(0.0);
         
         //If we not have to stop and wait
-        if(this.whereStop == null || !v_body.getPosition().equals(this.whereStop)){
+        if(this.whereStop == null 
+                || !v_body.getPosition().equals(this.whereStop)
+                || this.crossing_tick <= CCS_Model.ticks){
             //If the cell where the vehicle gone is free
             if(v_body.lookIfCellIsFree(v_body.getDirection()))
                 v_body.setSpeed(1.0);
