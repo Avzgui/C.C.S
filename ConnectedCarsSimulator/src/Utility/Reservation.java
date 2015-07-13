@@ -24,7 +24,7 @@ import java.util.Objects;
  * The class Reservation contains the datum used to know the reservation
  * of a vehicle agent on an intersection.
  * 
- * The vehicle travels the intersection with a trajectory, at a step.
+ * The vehicle travels the intersection with a trajectory, at a crossing_step.
  * 
  * @author Antoine "Avzgui" Richard
  */
@@ -32,7 +32,7 @@ public class Reservation {
     private final int vehicle_id;
     private final int intersection_id;
     private final Trajectory trajectory;
-    private final int step;
+    private final int crossing_step;
     
     /**
      * Constructor
@@ -47,7 +47,7 @@ public class Reservation {
         this.vehicle_id = vehicle_id;
         this.intersection_id = intersection_id;
         this.trajectory = trajectory;
-        this.step = step;
+        this.crossing_step = step;
     }
     
     /**
@@ -59,7 +59,7 @@ public class Reservation {
         this.vehicle_id = other.getVehicle_id();
         this.intersection_id = other.getIntersection_id();
         this.trajectory = new Trajectory(other.getTrajectory());
-        this.step = other.getStep();
+        this.crossing_step = other.getCrossing_step();
     }
 
     /**
@@ -90,17 +90,17 @@ public class Reservation {
     }
 
     /**
-     * Returns the step reserved by the vehicle to cross the intersection.
+     * Returns the crossing_step reserved by the vehicle to cross the intersection.
      * 
-     * @return the step reserved by the vehicle
+     * @return the crossing_step reserved by the vehicle
      */
-    public int getStep() {
-        return step;
+    public int getCrossing_step() {
+        return crossing_step;
     }
 
     @Override
     public String toString() {
-        return "Reservation{" + "\n\tvehicle_id=" + vehicle_id + ",\n\tintersection_id=" + intersection_id + ",\n\ttrajectory=" + trajectory + ",\n\tstep=" + step + "\n}";
+        return "Reservation{" + "\n\tvehicle_id=" + vehicle_id + ",\n\tintersection_id=" + intersection_id + ",\n\ttrajectory=" + trajectory + ",\n\tstep=" + crossing_step + "\n}";
     }
 
     @Override
@@ -109,7 +109,7 @@ public class Reservation {
         hash = 53 * hash + this.vehicle_id;
         hash = 53 * hash + this.intersection_id;
         hash = 53 * hash + Objects.hashCode(this.trajectory);
-        hash = 53 * hash + this.step;
+        hash = 53 * hash + this.crossing_step;
         return hash;
     }
 
@@ -131,7 +131,7 @@ public class Reservation {
         if (!Objects.equals(this.trajectory, other.trajectory)) {
             return false;
         }
-        if (this.step != other.step) {
+        if (this.crossing_step != other.crossing_step) {
             return false;
         }
         return true;
