@@ -17,14 +17,111 @@
  */
 package Utility;
 
+import Model.Environment.Trajectory;
+import java.util.Objects;
+
 /**
  * The class Reservation contains the datum used to know the reservation
  * of a vehicle agent on an intersection.
  * 
+ * The vehicle travels the intersection with a trajectory, at a step.
+ * 
  * @author Antoine "Avzgui" Richard
  */
 public class Reservation {
-    int id;
-    int vehicle_id;
-    int intersection_id;
+    private final int vehicle_id;
+    private final int intersection_id;
+    private final Trajectory trajectory;
+    private final int step;
+    
+    /**
+     * Constructor
+     * 
+     * @param vehicle_id ID of the vehicle who reserved.
+     * @param intersection_id ID of the intersection.
+     * @param trajectory Trajectory of the vehicle.
+     * @param step Step reserved by the vehicle to cross the intersection.
+     */
+    public Reservation(int vehicle_id, int intersection_id,
+            Trajectory trajectory, int step){
+        this.vehicle_id = vehicle_id;
+        this.intersection_id = intersection_id;
+        this.trajectory = trajectory;
+        this.step = step;
+    }
+
+    /**
+     * Returns the ID of the vehicle who reserved.
+     * 
+     * @return the ID of the vehicle.
+     */
+    public int getVehicle_id() {
+        return vehicle_id;
+    }
+
+    /**
+     * Returns the ID of the intersection.
+     * 
+     * @return the ID of the intersection.
+     */
+    public int getIntersection_id() {
+        return intersection_id;
+    }
+
+    /**
+     * Returns the trajectory of vehicle on the intersection.
+     * 
+     * @return the trajectory of the vehicle. 
+     */
+    public Trajectory getTrajectory() {
+        return trajectory;
+    }
+
+    /**
+     * Returns the step reserved by the vehicle to cross the intersection.
+     * 
+     * @return the step reserved by the vehicle
+     */
+    public int getStep() {
+        return step;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" + "\n\tvehicle_id=" + vehicle_id + ",\n\tintersection_id=" + intersection_id + ",\n\ttrajectory=" + trajectory + ",\n\tstep=" + step + "\n}";
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + this.vehicle_id;
+        hash = 53 * hash + this.intersection_id;
+        hash = 53 * hash + Objects.hashCode(this.trajectory);
+        hash = 53 * hash + this.step;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Reservation other = (Reservation) obj;
+        if (this.vehicle_id != other.vehicle_id) {
+            return false;
+        }
+        if (this.intersection_id != other.intersection_id) {
+            return false;
+        }
+        if (!Objects.equals(this.trajectory, other.trajectory)) {
+            return false;
+        }
+        if (this.step != other.step) {
+            return false;
+        }
+        return true;
+    }
 }
