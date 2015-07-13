@@ -399,8 +399,9 @@ public class CCS_Model extends Thread {
     @Override
     public void run(){
         //Initialization of the simulation
-        
-        
+        this.ticks = 0;
+        this.collision = 0;
+        this.nb_agents = 0;
         //Init agents
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);

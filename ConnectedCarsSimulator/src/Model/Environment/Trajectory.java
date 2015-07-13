@@ -22,19 +22,19 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * The class Way represents the differents ways that can take a vehicle, in an
+ * The class Trajectory represents a path that can take a vehicle, in an
  * Infrastructure. A Way is composed of several cells.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class Way {
+public class Trajectory {
     
     private ArrayList<Cell> cells;
 
     /**
      * Constructor
      */
-    public Way() {
+    public Trajectory() {
         this.cells = new ArrayList<>();
     }
     
@@ -43,14 +43,14 @@ public class Way {
      * 
      * @param other an another way.
      */
-    public Way(Way other){
+    public Trajectory(Trajectory other){
         this.cells = new ArrayList<>();
         for(Cell cell : other.getCells())
             this.cells.add(new Cell(cell));
     }
 
     /**
-     * Returns the array of all cells who compose the way.
+     * Returns the array of all cells who compose the trajectory.
      * 
      * @return an array of cells.
      */
@@ -59,7 +59,7 @@ public class Way {
     }
 
     /**
-     * Changes the array of cells who compose the way.
+     * Changes the array of cells who compose the trajectory.
      * 
      * @param cells an array of cells.
      */
@@ -70,7 +70,7 @@ public class Way {
     /**
      * Adds a cell to the array of cells.
      * 
-     * @param cell a new cell for the way.
+     * @param cell a new cell for the trajectory.
      */
     public void addCell(Cell cell){
         if(!this.cells.contains(cell))
@@ -88,9 +88,9 @@ public class Way {
     }
     
     /**
-     * Returns and removes the first cell of the way.
+     * Returns and removes the first cell of the trajectory.
      * 
-     * @return the first cell of the way.
+     * @return the first cell of the trajectory.
      */
     public Cell pop(){
         Cell c = this.cells.get(0);
@@ -99,9 +99,9 @@ public class Way {
     }
     
     /**
-     * Returns if the way have no more cells or not.
+     * Returns if the trajectory have no more cells or not.
      * 
-     * @return if the way is empty or not.
+     * @return if the trajectory is empty or not.
      */
     public boolean isEmpty(){
         return this.cells.isEmpty();
@@ -130,7 +130,7 @@ public class Way {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Way other = (Way) obj;
+        final Trajectory other = (Trajectory) obj;
         if (!Objects.equals(this.cells, other.cells)) {
             return false;
         }

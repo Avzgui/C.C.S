@@ -137,11 +137,11 @@ abstract public class Infrastructure_Body extends A_Body {
     @Override
     public void receiveMessage(Message mess){
         if(mess instanceof M_Hello){
-            System.out.println("Infrastructure receive M_Hello");
+            System.out.println("Infrastructure " + this.id + " receive M_Hello");
             this.brain.storeMessage(mess);
         }
         else if (mess instanceof M_Bye){
-            System.out.println("Infrastructure receive M_Bye");
+            System.out.println("Infrastructure " + this.id + " receive M_Bye");
             this.brain.storeMessage(mess);
         }
         else

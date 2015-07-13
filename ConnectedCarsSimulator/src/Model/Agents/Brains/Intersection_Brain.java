@@ -22,7 +22,7 @@ import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
-import Model.Environment.Way;
+import Model.Environment.Trajectory;
 import Model.Messages.M_Bye;
 import Model.Messages.M_Hello;
 import Model.Messages.M_Welcome;
@@ -56,7 +56,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
         if(mess instanceof M_Hello){
             //Check the id
             if(mess.getReceiver_id() == this.id){
-                System.out.println("Intersection process M_Hello");
+                System.out.println("Intersection " + this.id + " process M_Hello");
                 M_Hello m = (M_Hello) mess;
                 Cell pos = (Cell) m.getDatum().get(0);
                 CardinalPoint goal = (CardinalPoint) m.getDatum().get(1);
@@ -64,14 +64,14 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 //Get the good way.
                 Intersection_Body i_body = (Intersection_Body) this.body;
                 Intersection inter = (Intersection) i_body.getInfrastructure();
-                Table<CardinalPoint, Integer, Way> ways = inter.getWays();
-                Way way = null;
+                Table<CardinalPoint, Integer, Trajectory> ways = inter.getTrajectories();
+                Trajectory way = null;
                 int w_id = -1;
                 boolean ok = false;
                 for(CardinalPoint c : ways.rowKeySet()){
-                    for(Entry<Integer, Way> entry : ways.row(c).entrySet()){
+                    for(Entry<Integer, Trajectory> entry : ways.row(c).entrySet()){
                         int _id = entry.getKey();
-                        Way w = entry.getValue();
+                        Trajectory w = entry.getValue();
                         //If the way contains the position
                         if(w.getCells().contains(pos)){
                             if(_id >= 0 && _id < inter.getNb_ways().get(Flow.IN, c)){
@@ -110,7 +110,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     //*
                     if(i_body.getNeighbors().containsKey(goal)){
                         Infrastructure neighbor = i_body.getNeighbors().get(goal).getInfrastructure();
-                        Way w = neighbor.getWays().get(goal.getFront(), w_id);
+                        Trajectory w = neighbor.getTrajectories().get(goal.getFront(), w_id);
                         if(w != null && !w.isEmpty()){
                             Cell next = w.getCells().get(0);
                             if(next != null && way != null)
@@ -125,7 +125,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
         }
         else if(mess instanceof M_Bye){
             if(mess.getReceiver_id() == this.id){
-                System.out.println("Intersection process M_Bye");
+                System.out.println("Intersection " + this.id + " process M_Bye");
                 //Search and remove the vehicle
                 Intersection_Body i_body = (Intersection_Body) this.body;
                 Vehicle_Body toRemove = null;

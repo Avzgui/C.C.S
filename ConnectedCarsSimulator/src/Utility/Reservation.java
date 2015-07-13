@@ -15,28 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package Model.Messages;
-
-import Model.Environment.Trajectory;
+package Utility;
 
 /**
- * The class M_Welcome, inhered by Message, is used by the infrastructure agents
- * to tell to their new vehicules their way and configuration.
+ * The class Reservation contains the datum used to know the reservation
+ * of a vehicle agent on an intersection.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class M_Welcome extends Message {
-    
-    /**
-     * Constructor
-     * 
-     * @param sender_id ID of the sender.
-     * @param receiver_id ID of the receiver.
-     * @param way data.
-     */
-    public M_Welcome(int sender_id, int receiver_id, Trajectory way) {
-        super(sender_id, receiver_id);
-        this.datum.add(way);
-    }
-    
+public class Reservation {
+    int id;
+    int vehicle_id;
+    int intersection_id;
 }

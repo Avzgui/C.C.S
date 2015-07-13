@@ -23,7 +23,7 @@ import Model.Agents.Bodies.Vehicle_Body;
 import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
-import Model.Environment.Way;
+import Model.Environment.Trajectory;
 import Model.Messages.M_Bye;
 import Model.Messages.M_Hello;
 import Model.Messages.M_Welcome;
@@ -42,7 +42,7 @@ import java.util.Map.Entry;
  */
 public class Vehicle_Brain extends A_Brain {
 
-    protected Way way;
+    protected Trajectory trajectory;
     protected final Cell final_goal;
     protected final ArrayList<CardinalPoint> intermediate_goals;
     
@@ -55,7 +55,7 @@ public class Vehicle_Brain extends A_Brain {
      */
     public Vehicle_Brain(int id, Vehicle_Body body, Cell goal) {
         super(id, body);
-        this.way = null;
+        this.trajectory = null;
         this.final_goal = goal;
         this.intermediate_goals = new ArrayList<>();
     }
@@ -85,8 +85,8 @@ public class Vehicle_Brain extends A_Brain {
                     x = row;
                     y = entry.getKey();
                     Infrastructure i = entry.getValue();
-                    for(CardinalPoint cp : i.getWays().rowKeySet()){
-                        for(Entry<Integer, Way> e : i.getWays().row(cp).entrySet()){
+                    for(CardinalPoint cp : i.getTrajectories().rowKeySet()){
+                        for(Entry<Integer, Trajectory> e : i.getTrajectories().row(cp).entrySet()){
                             if(e.getValue().getCells().get(0).equals(this.body.getPosition()))
                                 begin = cp;
                         }
@@ -114,21 +114,21 @@ public class Vehicle_Brain extends A_Brain {
     }
 
     /**
-     * Returns the way the agent have to follow.
+     * Returns the trajectory the agent have to follow.
      * 
-     * @return the way of the agent.
+     * @return the trajectory of the agent.
      */
-    public Way getWay() {
-        return way;
+    public Trajectory getTrajectory() {
+        return trajectory;
     }
 
     /**
-     * Changes the way of the agent.
+     * Changes the trajectory of the agent.
      * 
-     * @param way the new way to set.
+     * @param trajectory the new trajectory to set.
      */
-    public void setWay(Way way) {
-        this.way = way;
+    public void setTrajectory(Trajectory trajectory) {
+        this.trajectory = trajectory;
     }
 
     /**
@@ -163,9 +163,9 @@ public class Vehicle_Brain extends A_Brain {
         
         //End
         if(current_x == dest_x && current_y == dest_y){
-            for(Entry<Integer, Way> entry : i.getWays().row(begin).entrySet()){
+            for(Entry<Integer, Trajectory> entry : i.getTrajectories().row(begin).entrySet()){
                 int w_id = entry.getKey();
-                Way w = entry.getValue();
+                Trajectory w = entry.getValue();
                 if(w.getCells().contains(this.final_goal)){
                     if(i instanceof Intersection){
                         //Cast
@@ -238,17 +238,17 @@ public class Vehicle_Brain extends A_Brain {
     @SuppressWarnings("empty-statement")
     protected void processMessage(Message mess){
         if(mess instanceof M_Welcome){
-            System.out.println("Vehicle process M_Welcome");
+            System.out.println("Vehicle " + this.id + " process M_Welcome");
             
             //Get the message
             M_Welcome m = (M_Welcome) mess;
             Vehicle_Body v_body = (Vehicle_Body) this.body;
             
-            //Get the way
+            //Get the trajectory
             if(m.getDatum().get(0) != null){
-                this.way = new Way((Way) m.getDatum().get(0));
-                while(!this.way.isEmpty() 
-                        && !v_body.getPosition().equals(this.way.pop()));
+                this.trajectory = new Trajectory((Trajectory) m.getDatum().get(0));
+                while(!this.trajectory.isEmpty() 
+                        && !v_body.getPosition().equals(this.trajectory.pop()));
             }
         }
         else
@@ -272,7 +272,7 @@ public class Vehicle_Brain extends A_Brain {
     private void updateInfrastructure(){
         Vehicle_Body v_body = (Vehicle_Body) this.body;
         //If vehicle not on the infrastructure anymore
-        if(this.way != null && this.way.isEmpty()){
+        if(this.trajectory != null && this.trajectory.isEmpty()){
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
                 //Say bye to the current infrastructure
                 this.body.sendMessage(new M_Bye(this.id, v_body.getInfrastructure().getId()));
@@ -303,10 +303,10 @@ public class Vehicle_Brain extends A_Brain {
      * Reasoning layer's function to update the direction of the agent.
      */
     private void updateDirection(){
-        if(this.way != null){
+        if(this.trajectory != null){
             Vehicle_Body v_body = (Vehicle_Body) this.body;
-            if(v_body.getDirection() == null && !this.way.isEmpty())
-                v_body.setDirection(this.way.pop());
+            if(v_body.getDirection() == null && !this.trajectory.isEmpty())
+                v_body.setDirection(this.trajectory.pop());
         }
     }
     

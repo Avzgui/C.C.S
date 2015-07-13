@@ -29,8 +29,8 @@ import java.util.Map.Entry;
  * infrastructure (road or intersection). It groups all of the attributes and
  * methods in common between his children class.
  * 
- * An infrastructure is composed by several ways, each way being ranked by 
- * an input CardinalPoint and an ID.
+ * An infrastructure is composed by several trajectories, each way being ranked 
+ * by an input CardinalPoint and an ID.
  * 
  * @author Antoine "Avzgui" Richard
  * 
@@ -40,7 +40,7 @@ abstract public class Infrastructure {
     
     protected int x;
     protected int y;
-    protected final Table<CardinalPoint, Integer, Way> ways;
+    protected final Table<CardinalPoint, Integer, Trajectory> trajectories;
     protected final Table<CardinalPoint, CardinalPoint, Boolean> available_flows;
     protected int height;
     protected int width;
@@ -54,7 +54,7 @@ abstract public class Infrastructure {
     public Infrastructure(int x, int y){
         this.x = x;
         this.y = y;
-        this.ways = HashBasedTable.create();
+        this.trajectories = HashBasedTable.create();
         
         //Init the available flows
         this.available_flows = HashBasedTable.create();
@@ -88,15 +88,15 @@ abstract public class Infrastructure {
     public Infrastructure(Infrastructure other){
         this.x = other.getX();
         this.y = other.getY();
-        this.ways = HashBasedTable.create();
+        this.trajectories = HashBasedTable.create();
         
-        Table<CardinalPoint, Integer, Way> tmp = other.getWays();
+        Table<CardinalPoint, Integer, Trajectory> tmp = other.getTrajectories();
         for(CardinalPoint point : tmp.rowKeySet()){
-            for(Entry<Integer, Way> entry : tmp.row(point).entrySet()){
+            for(Entry<Integer, Trajectory> entry : tmp.row(point).entrySet()){
                 if(tmp.contains(point, entry.getKey())
-                    && !this.ways.contains(point, entry.getKey()))
+                    && !this.trajectories.contains(point, entry.getKey()))
                 {
-                    this.ways.put(point, entry.getKey(), entry.getValue());
+                    this.trajectories.put(point, entry.getKey(), entry.getValue());
                 }
             }
         }
@@ -203,13 +203,13 @@ abstract public class Infrastructure {
     }
 
     /**
-     * Returns the ways of the infrastructure. Ranked by their input cardinal
+     * Returns the trajectories of the infrastructure. Ranked by their input cardinal
      * point and their ID.
      * 
-     * @return the table of ways of the infrastructure.
+     * @return the table of trajectories of the infrastructure.
      */
-    public Table<CardinalPoint, Integer, Way> getWays() {
-        return this.ways;
+    public Table<CardinalPoint, Integer, Trajectory> getTrajectories() {
+        return this.trajectories;
     }
 
     /**
@@ -234,25 +234,25 @@ abstract public class Infrastructure {
     }
     
     /**
-     * Adds a way to the table of ways.
+     * Adds a way to the table of trajectories.
      * 
      * @param begin the input cardinal point of the way.
      * @param id the id of the way.
      * @param way the way to add.
      */
-    public void addWay(CardinalPoint begin, int id, Way way){
-        this.ways.put(begin, id, way);
+    public void addWay(CardinalPoint begin, int id, Trajectory way){
+        this.trajectories.put(begin, id, way);
     }
     
     /**
-     * Removes a way of the table of ways.
+     * Removes a way of the table of trajectories.
      * 
      * @param begin the input cardinal point of the way.
      * @param id the id of the way.
      */
     public void removeWay(CardinalPoint begin, int id){
-        if(this.ways.contains(begin, id))
-            this.ways.remove(begin, id);
+        if(this.trajectories.contains(begin, id))
+            this.trajectories.remove(begin, id);
     }
     
     /**
@@ -263,7 +263,7 @@ abstract public class Infrastructure {
     public ArrayList<Cell> getCells(){
        ArrayList<Cell> cells = new ArrayList<>();
        
-       for(Way way : this.ways.values()){
+       for(Trajectory way : this.trajectories.values()){
            for(Cell cell : way.getCells()){
                 if(!cells.contains(cell))
                     cells.add(cell);
@@ -280,7 +280,7 @@ abstract public class Infrastructure {
      * @return if the infrastructure have the cell c or not.
      */
     public boolean haveCell(Cell c){
-        for(Way w : this.ways.values()){
+        for(Trajectory w : this.trajectories.values()){
             if(w.getCells().contains(c))
                 return true;
         }
@@ -303,14 +303,14 @@ abstract public class Infrastructure {
     /**
      * Private method to update the infrastructure after any changement.
      * 
-     * Update the ways, the height and the width of the infrastructure.
+     * Update the trajectories, the height and the width of the infrastructure.
      */
     abstract protected void update();
     
     /**
-     * Private method to create all the ways who begins at the cardinal point.
+     * Private method to create all the trajectories who begins at the cardinal point.
      * 
-     * @param begin cardinal point where begins the ways to create.
+     * @param begin cardinal point where begins the trajectories to create.
      */
     abstract protected void createWays(CardinalPoint begin);
     

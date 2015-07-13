@@ -131,7 +131,7 @@ public class Vehicle_Body extends A_Body {
          * like we can do in 
          */
         if(mess instanceof M_Welcome){
-            System.out.println("Vehicle receive M_Welcome");
+            System.out.println("Vehicle " + this.id + " receive M_Welcome");
             this.brain.storeMessage(mess);
         }
     }

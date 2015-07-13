@@ -33,7 +33,7 @@ import java.util.Map.Entry;
 /**
  * The class Intersection, inherited of Infrastructure, is the environment's 
  * representation of an intersection. Composed by maximum eight input and output.
- * Generate each ways during construction and updates.
+ Generate each trajectories during construction and updates.
  * 
  * @author Antoine "Avzgui" Richard
  * 
@@ -55,8 +55,8 @@ public class Intersection extends Infrastructure {
      * 
      * @param x coordinate x
      * @param y coordinate y
-     * @param nb_ways numbers of ways for each input and output of the intersection.
-     * @param ways_size sizes of ways for each input and output of the intersection.
+     * @param nb_ways numbers of trajectories for each input and output of the intersection.
+     * @param ways_size sizes of trajectories for each input and output of the intersection.
      * @param indonesian_cross to know the type of the intersection.
      */
     @SuppressWarnings("empty-statement")
@@ -71,7 +71,7 @@ public class Intersection extends Infrastructure {
         this.conflict_zone_size = new HashMap<>();
         this.indonesian_cross = indonesian_cross;
         
-        //Initialize conflict zone, ways and sizes
+        //Initialize conflict zone, trajectories and sizes
         update();
         
     }
@@ -89,7 +89,7 @@ public class Intersection extends Infrastructure {
         this.conflict_zone_size = new HashMap<>(other.conflict_zone_size);
         this.indonesian_cross = other.indonesian_cross;
         
-        //Initialize conflict zone, ways and sizes
+        //Initialize conflict zone, trajectories and sizes
         update();
     }
     
@@ -119,7 +119,7 @@ public class Intersection extends Infrastructure {
         this.height = max1+max2+max3+max4+1;
         this.center_y = this.y+max1+max3;
         
-        //Initialize the ways
+        //Initialize the trajectories
         createWays(CardinalPoint.NORTH);
         createWays(CardinalPoint.SOUTH);
         createWays(CardinalPoint.WEST);
@@ -155,18 +155,18 @@ public class Intersection extends Infrastructure {
     }
 
     /**
-     * Returns the numbers of ways for each input and output.
+     * Returns the numbers of trajectories for each input and output.
      * 
-     * @return the table of numbers of ways.
+     * @return the table of numbers of trajectories.
      */
     public Table<Flow, CardinalPoint, Integer> getNb_ways() {
         return nb_ways;
     }
 
     /**
-     * Changes the numbers of ways for each input and output.
+     * Changes the numbers of trajectories for each input and output.
      * 
-     * @param nb_ways a table of numbers of ways
+     * @param nb_ways a table of numbers of trajectories
      */
     public void setNb_ways(Table<Flow, CardinalPoint, Integer> nb_ways) {
         this.nb_ways = nb_ways;
@@ -174,7 +174,7 @@ public class Intersection extends Infrastructure {
     }
     
     /**
-     * Changes a number of ways.
+     * Changes a number of trajectories.
      * 
      * @param flow flow key of the number of way.
      * @param point cardinal point of the number of way.
@@ -186,16 +186,16 @@ public class Intersection extends Infrastructure {
     }
 
     /**
-     * Returns the sizes of the ways for each input and output.
+     * Returns the sizes of the trajectories for each input and output.
      * 
-     * @return the table of sizes of the ways.
+     * @return the table of sizes of the trajectories.
      */
     public Table<Flow, CardinalPoint, Integer> getWays_size() {
         return ways_size;
     }
 
     /**
-     * Changes the sizes of the ways for each input and output.
+     * Changes the sizes of the trajectories for each input and output.
      * 
      * @param ways_size a table of size for each intput and output
      */
@@ -205,7 +205,7 @@ public class Intersection extends Infrastructure {
     }
     
     /**
-     * Changes a number of ways.
+     * Changes a number of trajectories.
      * 
      * @param flow flow key of the number of way.
      * @param point cardinal point of the number of way.
@@ -249,8 +249,8 @@ public class Intersection extends Infrastructure {
     @Override
     protected void createWays(CardinalPoint begin){
        
-        //Clear all the ways
-        this.ways.row(begin).clear();
+        //Clear all the trajectories
+        this.trajectories.row(begin).clear();
         
         //Set all flows as not available
         this.available_flows.put(begin, CardinalPoint.NORTH, false);
@@ -262,7 +262,7 @@ public class Intersection extends Infrastructure {
         for(int i = 0 ; i < this.nb_ways.get(Flow.IN, begin) ; i++){
             
             //Create the future way
-            Way way = new Way();
+            Trajectory way = new Trajectory();
             
             //Get the zone in the conflict zone, dx and dy
             CardinalPoint zone = getZone(begin, Flow.IN);
@@ -308,7 +308,7 @@ public class Intersection extends Infrastructure {
             if(i == 0 && this.nb_ways.get(Flow.OUT, begin.getRight()) >= 1){
                 
                 //Create right way, copy of the beginning of way
-                Way right_way = new Way(way);
+                Trajectory right_way = new Trajectory(way);
                 
                 CardinalPoint right = begin.getRight();
                 int right_zone_size = this.conflict_zone_size.get(right);
@@ -344,8 +344,8 @@ public class Intersection extends Infrastructure {
                     right_way.addCell(new Cell(cell_x, cell_y));
                 }
                 
-                //Add the way to the array of ways
-                this.ways.put(begin, this.nb_ways.get(Flow.IN, begin)+i, right_way);
+                //Add the way to the array of trajectories
+                this.trajectories.put(begin, this.nb_ways.get(Flow.IN, begin)+i, right_way);
                 
                 //Set the flow begin -> right as available
                 this.available_flows.put(begin, right, true);
@@ -358,7 +358,7 @@ public class Intersection extends Infrastructure {
                     && i < this.nb_ways.get(Flow.OUT, begin.getRight())){
                 
                 //Create right way, copy of the beginning of way
-                Way left_way = new Way(way);
+                Trajectory left_way = new Trajectory(way);
                 
                 CardinalPoint left = begin.getLeft();
                 int left_zone_size = this.conflict_zone_size.get(left);
@@ -475,8 +475,8 @@ public class Intersection extends Infrastructure {
                     left_way.addCell(new Cell(cell_x, cell_y));
                 }
                 
-                //Add the way to the array of ways
-                this.ways.put(begin, this.nb_ways.get(Flow.IN, begin)+i, left_way);
+                //Add the way to the array of trajectories
+                this.trajectories.put(begin, this.nb_ways.get(Flow.IN, begin)+i, left_way);
                 
                 //Set the flow begin -> left as available
                 this.available_flows.put(begin, left, true);
@@ -551,8 +551,8 @@ public class Intersection extends Infrastructure {
             }
             //*/
             
-            //Add the way to the array of ways
-            this.ways.put(begin, i, way);
+            //Add the way to the array of trajectories
+            this.trajectories.put(begin, i, way);
             
             //Set the flow begin -> front as available
             this.available_flows.put(begin, begin.getFront(), true);
