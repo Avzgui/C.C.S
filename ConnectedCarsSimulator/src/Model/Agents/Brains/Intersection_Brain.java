@@ -30,6 +30,7 @@ import Model.Messages.Message;
 import Utility.CardinalPoint;
 import Utility.Crossing_Configuration;
 import Utility.Flow;
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.util.Map.Entry;
 
@@ -42,6 +43,7 @@ import java.util.Map.Entry;
 public class Intersection_Brain extends Infrastructure_Brain {
 
     private Crossing_Configuration configuration;
+    private final Table<Integer, Trajectory, Integer> vehicles_memory;
     
     /**
      * Constructor
@@ -52,6 +54,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
     public Intersection_Brain(int id, Intersection_Body body) {
         super(id, body);
         this.configuration = null;
+        this.vehicles_memory = HashBasedTable.create();
     }
 
     /**
@@ -71,7 +74,19 @@ public class Intersection_Brain extends Infrastructure_Brain {
     public void setConfiguration(Crossing_Configuration configuration) {
         this.configuration = new Crossing_Configuration(configuration);
     }
-    
+
+    /**
+     * Returns the table of the vehicles' memory.
+     * 
+     * row : ID of the vehicle.
+     * column : trajectory of the vehicle.
+     * value : crossing tick.
+     * 
+     * @return the vehicles' memory of the brain.
+     */
+    public Table<Integer, Trajectory, Integer> getVehicles_memory() {
+        return HashBasedTable.create(vehicles_memory);
+    }
     
     @Override
     protected void processMessage(Message mess){
@@ -153,6 +168,8 @@ public class Intersection_Brain extends Infrastructure_Brain {
                         if(way != null && way.getCells() != null && !way.getCells().isEmpty())
                             whereStop = way.getCells().get(i.getWays_size().get(Flow.IN, w_cp) - 1);
                     }
+                    
+                    //FCFS deterlination of tick TODO
                     
                     //Send the way to the vehicle
                     this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(),
