@@ -346,6 +346,8 @@ public class Vehicle_Brain extends A_Brain {
         //Process all the messages
         checkAllMessages();
         
+        //Vote
+        
         //Update direction
         updateDirection();
         
