@@ -406,7 +406,7 @@ public class CCS_Model extends Thread {
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
         
-        //*
+        /*
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 12), new Cell(12, 0));
         this.vehicles.add(vehicle);
         //*/
@@ -427,7 +427,7 @@ public class CCS_Model extends Thread {
                 && this.collision == 0){
             //*
             try {
-                sleep(500);
+                sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }

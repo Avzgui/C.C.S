@@ -109,8 +109,9 @@ abstract public class A_Brain {
      * process it.
      * 
      * @param mess 
+     * @return A message to send.
      */
-    protected void processMessage(Message mess){
+    protected Message processMessage(Message mess){
         throw new UnsupportedOperationException("Message of type : " 
                 + mess.getClass() + ", is unsupported.");
     }

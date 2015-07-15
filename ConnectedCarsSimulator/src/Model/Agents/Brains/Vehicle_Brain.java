@@ -242,7 +242,7 @@ public class Vehicle_Brain extends A_Brain {
     
     @Override
     @SuppressWarnings("empty-statement")
-    protected void processMessage(Message mess){
+    protected Message processMessage(Message mess){
         if(mess instanceof M_Welcome){
             System.out.println("Vehicle " + this.id + " process M_Welcome");
             
@@ -264,23 +264,15 @@ public class Vehicle_Brain extends A_Brain {
         }
         else
             super.processMessage(mess);
-    }
-    
-    /**
-     * Reasoning layer's function to proccess all the messages.
-     */
-    private void checkAllMessages(){
-        while(!this.messages_memory.isEmpty()){
-            processMessage(this.messages_memory.get(0));
-            this.messages_memory.remove(0);
-        }
+        
+        return null;
     }
     
     /**
      * Reasoning layer's function to update the current infrastructure,
      * signal the coming in the agent and update goals.
      */
-    private void updateInfrastructure(){
+    private Message updateInfrastructure(){
         Vehicle_Body v_body = (Vehicle_Body) this.body;
         //If vehicle not on the infrastructure anymore
         if(this.trajectory != null && this.trajectory.isEmpty()){
@@ -305,10 +297,12 @@ public class Vehicle_Brain extends A_Brain {
                     M_Hello mess = new M_Hello(this.id, v_body.getInfrastructure().getId(),
                                                 v_body.getDirection(),
                                                 this.intermediate_goals.get(this.intermediate_goals.size()-1));
-                    this.body.sendMessage(mess);
+                    return mess;
                 }
             }
         }
+        
+        return null;
     }
     
     /**
@@ -344,15 +338,25 @@ public class Vehicle_Brain extends A_Brain {
     public void run(){
         
         //Process all the messages
-        checkAllMessages();
+        while(!this.messages_memory.isEmpty()){
+            Message m = processMessage(this.messages_memory.get(0));
+            this.messages_memory.remove(0);
+            
+            if(m != null)
+                this.body.sendMessage(m);
+        }
         
-        //Vote
+        //Update reservation (TODO)
+        
+        //Vote (TODO)
         
         //Update direction
         updateDirection();
         
         //Update infrastructure
-        updateInfrastructure();
+        Message m = updateInfrastructure();
+        if(m != null)
+                this.body.sendMessage(m);
         
         //Update speed
         updateSpeed();

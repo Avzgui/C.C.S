@@ -88,8 +88,24 @@ public class Intersection_Brain extends Infrastructure_Brain {
         return HashBasedTable.create(vehicles_memory);
     }
     
+    /**
+     * Determine the crossing tick for a new vehicle in the intersection
+     * with a First Comes First Served algorithm.
+     * 
+     * TODO
+     * 
+     * @param trajectory trajectory of the vehicle.
+     * @param pos current position of the vehicle.
+     * @param whereStop position where the vehicle will stop.
+     * 
+     * @return The crossing tick of the vehicle. (-1 if nothing found).
+     */
+    private int FCFS(Trajectory trajectory, Cell pos, Cell whereStop){
+        return -1;
+    }
+    
     @Override
-    protected void processMessage(Message mess){
+    protected Message processMessage(Message mess){
         if(mess instanceof M_Hello){
             //Check the id
             if(mess.getReceiver_id() == this.id){
@@ -169,11 +185,10 @@ public class Intersection_Brain extends Infrastructure_Brain {
                             whereStop = way.getCells().get(i.getWays_size().get(Flow.IN, w_cp) - 1);
                     }
                     
-                    //FCFS deterlination of tick TODO
+                    //FCFS deterlination of the crossing tick TODO
                     
                     //Send the way to the vehicle
-                    this.body.sendMessage(new M_Welcome(this.id, m.getSender_id(),
-                            way, 0, whereStop));
+                    return new M_Welcome(this.id, m.getSender_id(),way, 0, whereStop);
                 }
             }
         }
@@ -196,14 +211,19 @@ public class Intersection_Brain extends Infrastructure_Brain {
         }
         else
             super.processMessage(mess);
+        
+        return null;
     }
 
     @Override
     public void run() {
         //Process all the messages
         while(!this.messages_memory.isEmpty()){
-            processMessage(this.messages_memory.get(0));
+            Message m = processMessage(this.messages_memory.get(0));
             this.messages_memory.remove(0);
+            
+            if(m != null)
+                this.body.sendMessage(m);
         }
         
         //Update configuration (check the vote)
