@@ -47,7 +47,6 @@ public class Vehicle_Brain extends A_Brain {
     protected Trajectory trajectory;
     protected final Cell final_goal;
     protected final ArrayList<CardinalPoint> intermediate_goals;
-    protected Cell whereStop;
     protected int crossing_tick;
     
     /**
@@ -62,7 +61,6 @@ public class Vehicle_Brain extends A_Brain {
         this.trajectory = null;
         this.final_goal = goal;
         this.intermediate_goals = new ArrayList<>();
-        this.whereStop = null;
         this.crossing_tick = 0;
     }
     
@@ -254,10 +252,10 @@ public class Vehicle_Brain extends A_Brain {
             if(m.getDatum().get(0) != null){
                 //Get trajectory
                 this.trajectory = new Trajectory((Trajectory) m.getDatum().get(0));
+                
                 //Get crossing tick
                 this.crossing_tick = (Integer) m.getDatum().get(1);
-                //Get the cell where the vehicle will wait his crossing right
-                this.whereStop = new Cell((Cell) m.getDatum().get(2));
+                
                 while(!this.trajectory.isEmpty() 
                         && !v_body.getPosition().equals(this.trajectory.pop()));
             }
@@ -279,7 +277,6 @@ public class Vehicle_Brain extends A_Brain {
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
                 //Say bye to the current infrastructure
                 this.body.sendMessage(new M_Bye(this.id, v_body.getInfrastructure().getId()));
-                this.whereStop = null;
                 
                 //Get the current goal
                 CardinalPoint cp = this.intermediate_goals.get(this.intermediate_goals.size()-1);
@@ -325,8 +322,8 @@ public class Vehicle_Brain extends A_Brain {
         v_body.setSpeed(0.0);
         
         //If we not have to stop and wait
-        if(this.whereStop == null 
-                || !v_body.getPosition().equals(this.whereStop)
+        if(this.trajectory.getWhereToStop() == null 
+                || !v_body.getPosition().equals(this.trajectory.getWhereToStop())
                 || this.crossing_tick <= CCS_Model.ticks){
             //If the cell where the vehicle gone is free
             if(v_body.lookIfCellIsFree(v_body.getDirection()))

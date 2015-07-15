@@ -19,6 +19,7 @@ package Model.Agents.Brains;
 
 import Model.Agents.Bodies.Intersection_Body;
 import Model.Agents.Bodies.Vehicle_Body;
+import Model.CCS_Model;
 import Model.Environment.Cell;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
@@ -30,9 +31,14 @@ import Model.Messages.Message;
 import Utility.CardinalPoint;
 import Utility.Crossing_Configuration;
 import Utility.Flow;
+import Utility.Reservation;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.util.Map.Entry;
+import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.constraints.IntConstraintFactory;
+import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.variables.VariableFactory;
 
 /**
  * The class Intersection_Brain, inherited by Infrastructure_Brain,
@@ -43,7 +49,6 @@ import java.util.Map.Entry;
 public class Intersection_Brain extends Infrastructure_Brain {
 
     private Crossing_Configuration configuration;
-    private final Table<Integer, Trajectory, Integer> vehicles_memory;
     
     /**
      * Constructor
@@ -54,7 +59,6 @@ public class Intersection_Brain extends Infrastructure_Brain {
     public Intersection_Brain(int id, Intersection_Body body) {
         super(id, body);
         this.configuration = null;
-        this.vehicles_memory = HashBasedTable.create();
     }
 
     /**
@@ -74,25 +78,10 @@ public class Intersection_Brain extends Infrastructure_Brain {
     public void setConfiguration(Crossing_Configuration configuration) {
         this.configuration = new Crossing_Configuration(configuration);
     }
-
-    /**
-     * Returns the table of the vehicles' memory.
-     * 
-     * row : ID of the vehicle.
-     * column : trajectory of the vehicle.
-     * value : crossing tick.
-     * 
-     * @return the vehicles' memory of the brain.
-     */
-    public Table<Integer, Trajectory, Integer> getVehicles_memory() {
-        return HashBasedTable.create(vehicles_memory);
-    }
     
     /**
      * Determine the crossing tick for a new vehicle in the intersection
      * with a First Comes First Served algorithm.
-     * 
-     * TODO
      * 
      * @param trajectory trajectory of the vehicle.
      * @param pos current position of the vehicle.
@@ -101,6 +90,35 @@ public class Intersection_Brain extends Infrastructure_Brain {
      * @return The crossing tick of the vehicle. (-1 if nothing found).
      */
     private int FCFS(Trajectory trajectory, Cell pos, Cell whereStop){
+        //Solver creation
+        Solver solver = new Solver("FCFS");
+        
+        //Variables creation
+        IntVar x = VariableFactory.enumerated("X", 0, Integer.MAX_VALUE, solver);
+        IntVar offset = VariableFactory.fixed(2, solver);
+        
+        //Create constraints
+        
+        /* ----- Constraint 1 : x is sup to actual tick adding to the distance ----- */
+        solver.post(IntConstraintFactory.arithm(x, ">=", CCS_Model.ticks + (int) pos.getDistance(whereStop)));
+        
+        //For each réservation
+        for(Reservation r : configuration.getReservations().values()){
+            /* ----- Constraint 2 : x is sup to the other ticks already reserved  ----- */
+            solver.post(IntConstraintFactory.arithm(x, ">=", r.getCrossing_tick()));
+            
+            /* ----- Constraint 3 : 
+                for each cell of the trajectory reserved in conflict with a cell' of trajectory,
+                    |(x+dist(cell')) - (tick+dist(cell))| >= offset
+            ----- */
+            Trajectory t = r.getTrajectory();
+            for(Cell c : t.getCells()){
+                if(trajectory.getCells().contains(c)){
+                    
+                }
+            }
+        }
+        
         return -1;
     }
     
@@ -184,11 +202,13 @@ public class Intersection_Brain extends Infrastructure_Brain {
                         if(way != null && way.getCells() != null && !way.getCells().isEmpty())
                             whereStop = way.getCells().get(i.getWays_size().get(Flow.IN, w_cp) - 1);
                     }
+                    way.setWhereToStop(whereStop);
                     
                     //FCFS deterlination of the crossing tick TODO
+                    //FCFS(way, pos, whereStop);
                     
                     //Send the way to the vehicle
-                    return new M_Welcome(this.id, m.getSender_id(),way, 0, whereStop);
+                    return new M_Welcome(this.id, m.getSender_id(),way, 0);
                 }
             }
         }

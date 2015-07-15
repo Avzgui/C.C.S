@@ -30,12 +30,14 @@ import java.util.Objects;
 public class Trajectory {
     
     private ArrayList<Cell> cells;
+    private Cell whereToStop;
 
     /**
      * Constructor
      */
     public Trajectory() {
         this.cells = new ArrayList<>();
+        this.whereToStop = null;
     }
     
     /**
@@ -47,6 +49,10 @@ public class Trajectory {
         this.cells = new ArrayList<>();
         for(Cell cell : other.getCells())
             this.cells.add(new Cell(cell));
+        
+        this.whereToStop = null;
+        if(other.getWhereToStop() != null)
+            this.whereToStop = new Cell(other.getWhereToStop());
     }
 
     /**
@@ -96,6 +102,25 @@ public class Trajectory {
         Cell c = this.cells.get(0);
         this.cells.remove(0);
         return c;
+    }
+
+    /**
+     * Returns the cell where to stop in the trajectory.
+     * 
+     * @return the cell where to stop.
+     */
+    public Cell getWhereToStop() {
+        return whereToStop;
+    }
+
+    /**
+     * Changes the cell where to stop.
+     * 
+     * @param whereToStop the new cell.
+     */
+    public void setWhereToStop(Cell whereToStop) {
+        if(this.cells.contains(whereToStop))
+            this.whereToStop = whereToStop;
     }
     
     /**

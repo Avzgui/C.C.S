@@ -17,7 +17,6 @@
  */
 package Model.Messages;
 
-import Model.Environment.Cell;
 import Model.Environment.Trajectory;
 
 /**
@@ -35,13 +34,11 @@ public class M_Welcome extends Message {
      * @param receiver_id ID of the receiver.
      * @param trajectory trajectory of the vehicle in the intersection.
      * @param tick the tick when the vehicle can cross the intersection.
-     * @param whereStop the cell where the vehicle must wait his crossing right.
      */
     public M_Welcome(int sender_id, int receiver_id, 
-            Trajectory trajectory, int tick, Cell whereStop) {
+            Trajectory trajectory, int tick) {
         super(sender_id, receiver_id);
         this.datum.add(trajectory);
         this.datum.add(tick);
-        this.datum.add(whereStop);
     }
 }

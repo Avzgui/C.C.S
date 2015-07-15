@@ -91,14 +91,13 @@ public class Cell {
     }
     
     /**
-     * Returns the euclidian distance between the current cell and another.
+     * Returns the manhattan distance between the current cell and another.
      * 
      * @param other the other cell.
-     * @return the euclidian distance between two cells.
+     * @return the manhattan distance between two cells.
      */
     public double getDistance(Cell other){
-        return Math.sqrt(Math.pow(this.x - other.x, 2.0) 
-                        + Math.pow(this.y - other.y, 2.0));
+        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
     }
 
     @Override
