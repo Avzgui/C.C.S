@@ -28,7 +28,7 @@ import java.util.Objects;
  * @author Antoine "Avzgui" Richard
  */
 public class Crossing_Configuration {
-    private final int id;
+    private int id;
     private final int intersection_id;
     private final HashMap<Integer, Reservation> reservations;
     
@@ -79,6 +79,15 @@ public class Crossing_Configuration {
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * Changes the ID of the configuration.
+     * 
+     * @param id the new ID.
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**

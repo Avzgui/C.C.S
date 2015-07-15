@@ -96,7 +96,7 @@ public class Cell {
      * @param other the other cell.
      * @return the manhattan distance between two cells.
      */
-    public double getDistance(Cell other){
+    public int getDistance(Cell other){
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
     }
 

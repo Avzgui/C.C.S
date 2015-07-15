@@ -32,9 +32,9 @@ import Utility.CardinalPoint;
 import Utility.Crossing_Configuration;
 import Utility.Flow;
 import Utility.Reservation;
-import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.util.Map.Entry;
+import org.chocosolver.solver.ResolutionPolicy;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.IntConstraintFactory;
 import org.chocosolver.solver.variables.IntVar;
@@ -58,7 +58,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
      */
     public Intersection_Brain(int id, Intersection_Body body) {
         super(id, body);
-        this.configuration = null;
+        this.configuration = new Crossing_Configuration(0, this.id);
     }
 
     /**
@@ -94,7 +94,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
         Solver solver = new Solver("FCFS");
         
         //Variables creation
-        IntVar x = VariableFactory.enumerated("X", 0, Integer.MAX_VALUE, solver);
+        IntVar x = VariableFactory.enumerated("X", 0, VariableFactory.MAX_INT_BOUND, solver);
         IntVar offset = VariableFactory.fixed(2, solver);
         
         //Create constraints
@@ -108,18 +108,29 @@ public class Intersection_Brain extends Infrastructure_Brain {
             solver.post(IntConstraintFactory.arithm(x, ">=", r.getCrossing_tick()));
             
             /* ----- Constraint 3 : 
-                for each cell of the trajectory reserved in conflict with a cell' of trajectory,
-                    |(x+dist(cell')) - (tick+dist(cell))| >= offset
+                for each cell of the trajectory reserved creates conflict with trajectory,
+                    |(x+dist(cell)) - (tick+dist(cell))| >= offset
             ----- */
             Trajectory t = r.getTrajectory();
             for(Cell c : t.getCells()){
+                // Cell in conflict
                 if(trajectory.getCells().contains(c)){
                     
+                    //(tick+dist(cell))
+                    int dist_1 = x.getValue() + whereStop.getDistance(c);
+                    
+                    //(tick+dist(cell))
+                    int dist_2 = r.getCrossing_tick() + t.getWhereToStop().getDistance(c);
+                    
+                    solver.post(IntConstraintFactory.arithm(offset, "<=", Math.abs(dist_1 - dist_2)));
                 }
             }
         }
         
-        return -1;
+        //Find solution
+        solver.findOptimalSolution(ResolutionPolicy.MINIMIZE, x);
+        
+        return x.getValue();
     }
     
     @Override
@@ -132,41 +143,41 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 Cell pos = (Cell) m.getDatum().get(0);
                 CardinalPoint goal = (CardinalPoint) m.getDatum().get(1);
                 
-                //Get the good way.
+                //Get the good trajectory.
                 Intersection_Body i_body = (Intersection_Body) this.body;
                 Intersection inter = (Intersection) i_body.getInfrastructure();
                 Table<CardinalPoint, Integer, Trajectory> ways = inter.getTrajectories();
-                Trajectory way = null;
-                int w_id = -1;
-                CardinalPoint w_cp = null;
+                Trajectory trajectory = null;
+                int t_id = -1;
+                CardinalPoint t_cp = null;
                 boolean ok = false;
                 for(CardinalPoint c : ways.rowKeySet()){
                     for(Entry<Integer, Trajectory> entry : ways.row(c).entrySet()){
                         int _id = entry.getKey();
                         Trajectory w = entry.getValue();
-                        //If the way contains the position
+                        //If the trajectory contains the position
                         if(w.getCells().contains(pos)){
                             if(_id >= 0 && _id < inter.getNb_ways().get(Flow.IN, c)){
                                 if(c.getFront() == goal){
-                                    way = w;
-                                    w_id = _id;
-                                    w_cp = c;
+                                    trajectory = w;
+                                    t_id = _id;
+                                    t_cp = c;
                                     ok = true;
                                 }
                             }
                             else if(_id == inter.getNb_ways().get(Flow.IN, c)){
                                 if(c.getRight() == goal){
-                                    way = w;
-                                    w_id = _id;
-                                    w_cp = c;
+                                    trajectory = w;
+                                    t_id = _id;
+                                    t_cp = c;
                                     ok = true;
                                 }
                             }
                             else{
                                 if(c.getLeft() == goal){
-                                    way = w;
-                                    w_id = _id;
-                                    w_cp = c;
+                                    trajectory = w;
+                                    t_id = _id;
+                                    t_cp = c;
                                     ok = true;
                                 }
                             }
@@ -186,29 +197,36 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     //*
                     if(i_body.getNeighbors().containsKey(goal)){
                         Infrastructure neighbor = i_body.getNeighbors().get(goal).getInfrastructure();
-                        Trajectory w = neighbor.getTrajectories().get(goal.getFront(), w_id);
+                        Trajectory w = neighbor.getTrajectories().get(goal.getFront(), t_id);
                         if(w != null && !w.isEmpty()){
                             Cell next = w.getCells().get(0);
-                            if(next != null && way != null)
-                                way.addCell(next);
+                            if(next != null && trajectory != null)
+                                trajectory.addCell(next);
                         }
                     }
                     //*/
                     
                     //Determine the cell where the vehicle will wait
                     Cell whereStop = null;
-                    if(w_cp != null){
+                    if(t_cp != null){
                         Intersection i = (Intersection) i_body.getInfrastructure();
-                        if(way != null && way.getCells() != null && !way.getCells().isEmpty())
-                            whereStop = way.getCells().get(i.getWays_size().get(Flow.IN, w_cp) - 1);
+                        if(trajectory != null && trajectory.getCells() != null && !trajectory.getCells().isEmpty())
+                            whereStop = trajectory.getCells().get(i.getWays_size().get(Flow.IN, t_cp) - 1);
                     }
-                    way.setWhereToStop(whereStop);
+                    
+                    if(trajectory != null)
+                        trajectory.setWhereToStop(whereStop);
                     
                     //FCFS deterlination of the crossing tick TODO
-                    //FCFS(way, pos, whereStop);
+                    int tick = FCFS(trajectory, pos, whereStop);
+                    System.out.println("FCFS : " + tick);
                     
-                    //Send the way to the vehicle
-                    return new M_Welcome(this.id, m.getSender_id(),way, 0);
+                    //Create the new reservation and add it to the configuration
+                    Reservation reserv = new Reservation(m.getSender_id(), this.id, trajectory, tick);
+                    this.configuration.addReservation(m.getSender_id(), reserv);
+                    
+                    //Send the trajectory to the vehicle
+                    return new M_Welcome(this.id, m.getSender_id(),trajectory, tick);
                 }
             }
         }
