@@ -18,6 +18,7 @@
 
 package Model.Environment;
 
+import Utility.Lane;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -29,8 +30,9 @@ import java.util.Objects;
  */
 public class Trajectory {
     
-    private ArrayList<Cell> cells;
+    private final ArrayList<Cell> cells;
     private Cell whereToStop;
+    private Lane lane;
 
     /**
      * Constructor
@@ -38,6 +40,7 @@ public class Trajectory {
     public Trajectory() {
         this.cells = new ArrayList<>();
         this.whereToStop = null;
+        this.lane = null;
     }
     
     /**
@@ -53,6 +56,8 @@ public class Trajectory {
         this.whereToStop = null;
         if(other.getWhereToStop() != null)
             this.whereToStop = new Cell(other.getWhereToStop());
+        
+        this.lane = other.lane;
     }
 
     /**
@@ -62,15 +67,6 @@ public class Trajectory {
      */
     public ArrayList<Cell> getCells() {
         return cells;
-    }
-
-    /**
-     * Changes the array of cells who compose the trajectory.
-     * 
-     * @param cells an array of cells.
-     */
-    public void setCells(ArrayList<Cell> cells) {
-        this.cells = cells;
     }
     
     /**
@@ -121,6 +117,24 @@ public class Trajectory {
     public void setWhereToStop(Cell whereToStop) {
         if(this.cells.contains(whereToStop))
             this.whereToStop = whereToStop;
+    }
+
+    /**
+     * Returns the lane where is the trajectory in the road.
+     * 
+     * @return the lane of the trajectory.
+     */
+    public Lane getLane() {
+        return lane;
+    }
+
+    /**
+     * Changes the actual lane of the trajectory.
+     * 
+     * @param lane the new lane. 
+     */
+    public void setLane(Lane lane) {
+        this.lane = lane;
     }
     
     /**

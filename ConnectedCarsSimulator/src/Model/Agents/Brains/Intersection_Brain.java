@@ -105,7 +105,8 @@ public class Intersection_Brain extends Infrastructure_Brain {
         //For each réservation
         for(Reservation r : configuration.getReservations().values()){
             
-            //TODO Same way or not ?
+            //Same way or not ?
+            
             
             /* ----- Constraint 2 : x is sup to the other ticks already reserved  ----- */
             solver.post(IntConstraintFactory.arithm(x, ">=", r.getCrossing_tick()));
