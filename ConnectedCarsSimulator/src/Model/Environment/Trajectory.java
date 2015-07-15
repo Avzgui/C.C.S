@@ -124,6 +124,38 @@ public class Trajectory {
     }
     
     /**
+     * Returns the number of cells between two cells of the trajectory.
+     * 
+     * @param begin the begin cell.
+     * @param end the finish cell.
+     * @return the distance between the both cells.
+     */
+    public int getDistance(Cell begin, Cell end){
+        
+        if(begin.equals(end))
+            return 0;
+        
+        if(this.cells.contains(begin) && this.cells.contains(end)){
+            boolean count = false;
+            int d = 0;
+            
+            for(Cell c : this.cells){
+                if(c.equals(end))
+                    count = false;
+                
+                if(c.equals(begin))
+                    count = true;
+                else if(count)
+                    d++;
+            }
+            
+            return d;
+        }
+        
+        return -1;
+    }
+    
+    /**
      * Returns if the trajectory have no more cells or not.
      * 
      * @return if the trajectory is empty or not.

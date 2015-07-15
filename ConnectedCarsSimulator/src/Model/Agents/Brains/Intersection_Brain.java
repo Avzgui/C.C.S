@@ -100,10 +100,13 @@ public class Intersection_Brain extends Infrastructure_Brain {
         //Create constraints
         
         /* ----- Constraint 1 : x is sup to actual tick adding to the distance ----- */
-        solver.post(IntConstraintFactory.arithm(x, ">=", CCS_Model.ticks + (int) pos.getDistance(whereStop)));
+        solver.post(IntConstraintFactory.arithm(x, ">=", CCS_Model.ticks + pos.getDistance(whereStop)));
         
         //For each réservation
         for(Reservation r : configuration.getReservations().values()){
+            
+            //TODO Same way or not ?
+            
             /* ----- Constraint 2 : x is sup to the other ticks already reserved  ----- */
             solver.post(IntConstraintFactory.arithm(x, ">=", r.getCrossing_tick()));
             
@@ -217,7 +220,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     if(trajectory != null)
                         trajectory.setWhereToStop(whereStop);
                     
-                    //FCFS deterlination of the crossing tick TODO
+                    //FCFS deterlination of the crossing tick
                     int tick = FCFS(trajectory, pos, whereStop);
                     System.out.println("FCFS : " + tick);
                     
