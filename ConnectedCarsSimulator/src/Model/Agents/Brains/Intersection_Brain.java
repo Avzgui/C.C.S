@@ -117,12 +117,12 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 if(trajectory.getCells().contains(c)){
                     
                     //(tick+dist(cell))
-                    int dist_1 = x.getValue() + whereStop.getDistance(c);
+                    int dist_1 = whereStop.getDistance(c);
                     
                     //(tick+dist(cell))
                     int dist_2 = r.getCrossing_tick() + t.getWhereToStop().getDistance(c);
                     
-                    solver.post(IntConstraintFactory.arithm(offset, "<=", Math.abs(dist_1 - dist_2)));
+                    solver.post(IntConstraintFactory.arithm(x, "-", offset, ">=", Math.abs(dist_2 - dist_1)));
                 }
             }
         }
