@@ -77,7 +77,7 @@ public class CCS_Model extends Thread {
         this.vehicles = new ArrayList<>();
         this.infrastructures = new ArrayList<>();
         this.nb_agents = 0;
-        this.ticks = 0;
+        CCS_Model.ticks = 0;
         this.collision = 0;
         this.envFile = null;
     }
@@ -198,7 +198,7 @@ public class CCS_Model extends Thread {
             this.env.removeAll();
             
             //Clear agents
-            this.ticks = 0;
+            CCS_Model.ticks = 0;
             this.nb_agents = 0;
             this.vehicles.clear();
             this.infrastructures.clear();
@@ -399,7 +399,7 @@ public class CCS_Model extends Thread {
     @Override
     public void run(){
         //Initialization of the simulation
-        this.ticks = 0;
+        CCS_Model.ticks = 0;
         this.collision = 0;
         this.nb_agents = 0;
         //Init agents
@@ -423,7 +423,7 @@ public class CCS_Model extends Thread {
         
         //Run the simulation while there is vehicles
         while(!this.vehicles.isEmpty()
-                && this.ticks < 100
+                && CCS_Model.ticks < 100
                 && this.collision == 0){
             //*
             try {
@@ -433,10 +433,12 @@ public class CCS_Model extends Thread {
             }
             //*/
             
+            System.out.println("\n----- Tick : " + CCS_Model.ticks + " -----\n");
+            
             //Remove all the vehicles who was in their goal.
             removeVehicles();
             
-            //Generate new vehicles
+            //Generate new vehicles (TODO)
             
             //Update the infrastructures
             for(A_Infrastructure i : this.infrastructures)
@@ -453,7 +455,7 @@ public class CCS_Model extends Thread {
             this.collision = this.env.collisionManager();
             
             //Increment the ticks
-            this.ticks++;
+            CCS_Model.ticks++;
         }
     }
 }
