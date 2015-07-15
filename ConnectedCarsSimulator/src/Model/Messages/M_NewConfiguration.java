@@ -15,42 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
-package Utility;
+package Model.Messages;
 
 /**
- * The enumeration Flow is used to know on which "flow"
- * is a vehicular in an Infrastructure.
+ * TODO
  * 
  * @author Antoine "Avzgui" Richard
  */
-public enum Flow {
-    IN,
-    OUT;
-    
-    /**
-     * Returns the opposite of the current Flow.
-     * 
-     * @return the opposite Flow
-     */
-    public Flow getOpposite(){
-        switch(this){
-            case IN :
-                return OUT;
-            case OUT :
-                return IN;
-        }
-        return null;
+public class M_NewConfiguration extends Message {
+
+    public M_NewConfiguration(int sender_id, int receiver_id) {
+        super(sender_id, receiver_id);
     }
     
-    @Override
-    public String toString(){
-        switch(this){
-            case IN :
-                return "IN";
-            case OUT :
-                return "OUT";
-        }
-        return null;
-    } 
 }

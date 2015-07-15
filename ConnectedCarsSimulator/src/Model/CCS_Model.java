@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Antoine "Avzgui" Richard
+ * Copyright (C) 2015 Antoine "Avzgui" Richard and collaborators
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -402,6 +402,7 @@ public class CCS_Model extends Thread {
         CCS_Model.ticks = 0;
         this.collision = 0;
         this.nb_agents = 0;
+        
         //Init agents
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
