@@ -105,28 +105,30 @@ public class Intersection_Brain extends Infrastructure_Brain {
         //For each réservation
         for(Reservation r : configuration.getReservations().values()){
             
-            //Same way or not ?
-            
-            
-            /* ----- Constraint 2 : x is sup to the other ticks already reserved  ----- */
-            solver.post(IntConstraintFactory.arithm(x, ">=", r.getCrossing_tick()));
-            
-            /* ----- Constraint 3 : 
-                for each cell of the trajectory reserved creates conflict with trajectory,
-                    |(x+dist(cell)) - (tick+dist(cell))| >= offset
-            ----- */
+            //Same lane or not ?
             Trajectory t = r.getTrajectory();
-            for(Cell c : t.getCells()){
-                // Cell in conflict
-                if(trajectory.getCells().contains(c)){
-                    
-                    //(tick+dist(cell))
-                    int dist_1 = whereStop.getDistance(c);
-                    
-                    //(tick+dist(cell))
-                    int dist_2 = r.getCrossing_tick() + t.getWhereToStop().getDistance(c);
-                    
-                    solver.post(IntConstraintFactory.arithm(x, "-", offset, ">=", Math.abs(dist_2 - dist_1)));
+            
+            if(t.getLane() == trajectory.getLane()){
+                /* ----- Constraint 2 : x is sup to the other ticks already reserved  ----- */
+                solver.post(IntConstraintFactory.arithm(x, ">=", r.getCrossing_tick()));
+            }
+            else{
+                /* ----- Constraint 3 : 
+                    for each cell of the trajectory reserved creates conflict with trajectory,
+                        |(x+dist(cell)) - (tick+dist(cell))| >= offset
+                ----- */
+                for(Cell c : t.getCells()){
+                    // Cell in conflict
+                    if(trajectory.getCells().contains(c)){
+
+                        //(tick+dist(cell))
+                        int dist_1 = whereStop.getDistance(c);
+
+                        //(tick+dist(cell))
+                        int dist_2 = r.getCrossing_tick() + t.getWhereToStop().getDistance(c);
+
+                        solver.post(IntConstraintFactory.arithm(x, "-", offset, ">=", Math.abs(dist_2 - dist_1)));
+                    }
                 }
             }
         }

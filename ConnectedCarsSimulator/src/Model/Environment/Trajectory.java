@@ -18,6 +18,7 @@
 
 package Model.Environment;
 
+import Utility.CardinalPoint;
 import Utility.Lane;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,6 +34,7 @@ public class Trajectory {
     private final ArrayList<Cell> cells;
     private Cell whereToStop;
     private Lane lane;
+    private CardinalPoint begin;
 
     /**
      * Constructor
@@ -41,6 +43,7 @@ public class Trajectory {
         this.cells = new ArrayList<>();
         this.whereToStop = null;
         this.lane = null;
+        this.begin = null;
     }
     
     /**
@@ -57,7 +60,8 @@ public class Trajectory {
         if(other.getWhereToStop() != null)
             this.whereToStop = new Cell(other.getWhereToStop());
         
-        this.lane = other.lane;
+        this.lane = other.getLane();
+        this.begin = other.getBegin();
     }
 
     /**
@@ -135,6 +139,24 @@ public class Trajectory {
      */
     public void setLane(Lane lane) {
         this.lane = lane;
+    }
+
+    /**
+     * Returns the cardinal point where begin the trajectory.
+     * 
+     * @return the cardinal point where begin the trajectory.
+     */
+    public CardinalPoint getBegin() {
+        return begin;
+    }
+
+    /**
+     * Changes the cardinal point where begin the trajectory.
+     * 
+     * @param begin the new beginning.
+     */
+    public void setBegin(CardinalPoint begin) {
+        this.begin = begin;
     }
     
     /**
