@@ -108,7 +108,8 @@ public class Intersection_Brain extends Infrastructure_Brain {
             //Same lane or not ?
             Trajectory t = r.getTrajectory();
             
-            if(t.getLane() == trajectory.getLane()){
+            if(t.getBegin() == trajectory.getBegin()
+                    && t.getLane() == trajectory.getLane()){
                 /* ----- Constraint 2 : x is sup to the other ticks already reserved  ----- */
                 solver.post(IntConstraintFactory.arithm(x, ">=", r.getCrossing_tick()));
             }
@@ -122,10 +123,10 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     if(trajectory.getCells().contains(c)){
 
                         //(tick+dist(cell))
-                        int dist_1 = whereStop.getDistance(c);
+                        int dist_1 = trajectory.getDistance(whereStop, c);
 
                         //(tick+dist(cell))
-                        int dist_2 = r.getCrossing_tick() + t.getWhereToStop().getDistance(c);
+                        int dist_2 = r.getCrossing_tick() + t.getDistance(t.getWhereToStop(), c);
 
                         solver.post(IntConstraintFactory.arithm(x, "-", offset, ">=", Math.abs(dist_2 - dist_1)));
                     }

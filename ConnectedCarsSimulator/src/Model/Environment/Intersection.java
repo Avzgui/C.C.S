@@ -265,6 +265,7 @@ public class Intersection extends Infrastructure {
             //Create the future way
             Trajectory way = new Trajectory();
             way.setLane(Lane.MID);
+            way.setBegin(begin);
             
             //Get the zone in the conflict zone, dx and dy
             CardinalPoint zone = getZone(begin, Flow.IN);
