@@ -24,6 +24,7 @@ import static Utility.CardinalPoint.EAST;
 import static Utility.CardinalPoint.NORTH;
 import static Utility.CardinalPoint.SOUTH;
 import static Utility.CardinalPoint.WEST;
+import Utility.Lane;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import java.util.ArrayList;
@@ -263,6 +264,7 @@ public class Intersection extends Infrastructure {
             
             //Create the future way
             Trajectory way = new Trajectory();
+            way.setLane(Lane.MID);
             
             //Get the zone in the conflict zone, dx and dy
             CardinalPoint zone = getZone(begin, Flow.IN);
@@ -303,10 +305,11 @@ public class Intersection extends Infrastructure {
             //*/
             
             
-            /* ----- Casual Case : right way ----- */
+            /* ----- Casual Case : right lane ----- */
             //*
-            if(i == 0 && this.nb_ways.get(Flow.OUT, begin.getRight()) >= 1){
-                
+            if(i == 0){
+              way.setLane(Lane.RIGHT);
+              if(this.nb_ways.get(Flow.OUT, begin.getRight()) >= 1){
                 //Create right way, copy of the beginning of way
                 Trajectory right_way = new Trajectory(way);
                 
@@ -349,13 +352,15 @@ public class Intersection extends Infrastructure {
                 
                 //Set the flow begin -> right as available
                 this.available_flows.put(begin, right, true);
+              }
             }
             //*/
             
-            /* ----- Casual Case : left way ----- */
+            /* ----- Casual Case : left lane ----- */
             //*
-            if(i == this.nb_ways.get(Flow.IN, begin) - 1
-                    && i < this.nb_ways.get(Flow.OUT, begin.getRight())){
+            if(i == this.nb_ways.get(Flow.IN, begin) - 1){
+              way.setLane(Lane.LEFT);
+              if(i < this.nb_ways.get(Flow.OUT, begin.getRight())){
                 
                 //Create right way, copy of the beginning of way
                 Trajectory left_way = new Trajectory(way);
@@ -480,12 +485,13 @@ public class Intersection extends Infrastructure {
                 
                 //Set the flow begin -> left as available
                 this.available_flows.put(begin, left, true);
+              }
             }
             //*/
             
             
             
-            /* ----- General Case : front way ----- */
+            /* ----- General Case : front lane ----- */
             
             //If the front way can be create
             //*
