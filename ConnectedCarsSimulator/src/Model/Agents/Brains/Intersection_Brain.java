@@ -208,7 +208,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                                 + t.getDistance(t.getWhereToStop(), c) 
                                 - trajectory.getDistance(trajectory.getWhereToStop(), c), solver);
                         
-                        solver.post(IntConstraintFactory.distance(x, dist, ">", offset.getValue()));
+                        solver.post(IntConstraintFactory.distance(x, dist, ">", offset));
                     }
                 }
             }

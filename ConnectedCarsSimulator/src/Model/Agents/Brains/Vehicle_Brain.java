@@ -100,6 +100,9 @@ public class Vehicle_Brain extends A_Brain {
         
         //Destination founded
         if(ok && begin != null){
+            System.out.println("Pos found in " + begin + " of : [" + x + ", " + y + "]");
+            System.out.println("Final goal found in : [" + dest_x + ", " + dest_y + "]");
+            System.out.println("\nVehicle " + this.id + " intermadiate goals determination : ");
             //Determine the intermediates goals
             this.intermediate_goals.clear();
             this.intermediate_goals.addAll(determineIntermediateGoals(0, begin, x, y, dest_x, dest_y));
@@ -142,6 +145,8 @@ public class Vehicle_Brain extends A_Brain {
      * n.b : can be changed to an A*
      */
     private ArrayList<CardinalPoint> determineIntermediateGoals(int depth, CardinalPoint begin, int current_x, int current_y, int dest_x, int dest_y){
+        
+        System.out.println("\nDetph :" + depth + ", in " + begin + " of pos : [" + current_x + ", " + current_y + "]");
         ArrayList<CardinalPoint> goals = new ArrayList<>();
         
         //Get the current infrastructure
@@ -149,10 +154,12 @@ public class Vehicle_Brain extends A_Brain {
         
         //End
         if(current_x == dest_x && current_y == dest_y){
+            System.out.println("Destination found");
             for(Entry<Integer, Trajectory> entry : i.getTrajectories().row(begin).entrySet()){
                 int w_id = entry.getKey();
                 Trajectory w = entry.getValue();
                 if(w.getCells().contains(this.final_goal)){
+                    System.out.println("trajectory found");
                     if(i instanceof Intersection){
                         //Cast
                         Intersection inter = (Intersection) i;
@@ -204,7 +211,7 @@ public class Vehicle_Brain extends A_Brain {
             int min = Integer.MAX_VALUE;
             CardinalPoint c_min = null;
             for(Entry<CardinalPoint, ArrayList<CardinalPoint>> e : neighbors.entrySet()){
-                if(e.getValue().size() < min){
+                if(!e.getValue().isEmpty() && e.getValue().size() < min){
                     min = e.getValue().size();
                     c_min = e.getKey();
                 }
@@ -216,6 +223,8 @@ public class Vehicle_Brain extends A_Brain {
                 goals.add(c_min);
             }
         }
+        
+        System.out.println("Intermediate state : " + goals);
         
         return goals;
     }

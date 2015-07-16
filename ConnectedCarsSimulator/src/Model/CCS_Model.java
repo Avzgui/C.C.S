@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -405,9 +406,35 @@ public class CCS_Model extends Thread {
         
         //Init agents
         //Five Intersections
+        //* East to South
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(30, 22), new Cell(17, 30));
         this.vehicles.add(vehicle);
+        //*/
         
+        //* South to West
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 30), new Cell(-8, 17));
+        this.vehicles.add(vehicle);
+        //*/
+        
+        //* West to North
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(-8, 0), new Cell(5, -8));
+        this.vehicles.add(vehicle);
+        //*/
+        
+        //* North to East
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, -8), new Cell(30, 5));
+        this.vehicles.add(vehicle);
+        //*/
+        
+        //* East to West
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(40, 8), new Cell(-13, 8));
+        this.vehicles.add(vehicle);
+        //*/
+        
+        //* South to North
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 40), new Cell(17, -4));
+        this.vehicles.add(vehicle);
+        //*/
         
         //One intersection
         //Front trajectory, right tale
@@ -502,17 +529,18 @@ public class CCS_Model extends Thread {
         //*/
         
         
-        //Run the simulation while there is vehicles
-        while(!this.vehicles.isEmpty()
+        //*Run the simulation while there is vehicles
+        Collections.shuffle(this.vehicles);
+        while(CCS_Model.ticks == 0
+                || (!this.vehicles.isEmpty()
                 && CCS_Model.ticks < 100
-                && this.collision == 0){
-            //*
+                && this.collision == 0)){
+            
             try {
                 sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //*/
             
             //Increment the ticks
             CCS_Model.ticks++;
@@ -523,26 +551,7 @@ public class CCS_Model extends Thread {
             removeVehicles();
             
             //Generate new vehicles (TODO)
-            if(CCS_Model.ticks==2){
-                /* South to East
-                vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 22), new Cell(22, 14));
-                this.vehicles.add(vehicle);
-                //*/
-
-                /* West to South
-                vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 14), new Cell(8, 22));
-                this.vehicles.add(vehicle);
-                //*/
-
-                /* North to West
-                vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(8, 0), new Cell(0, 8));
-                this.vehicles.add(vehicle);
-                //*/
-
-                /* East to North
-                vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 8), new Cell(14, 0));
-                this.vehicles.add(vehicle);
-                //*/
+            if(CCS_Model.ticks>=2){
             }
             
             //Update the infrastructures
@@ -559,5 +568,6 @@ public class CCS_Model extends Thread {
             //Get the collision code
             this.collision = this.env.collisionManager();
         }
+        //*/
     }
 }
