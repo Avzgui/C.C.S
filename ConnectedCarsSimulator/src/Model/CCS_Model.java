@@ -67,6 +67,7 @@ public class CCS_Model extends Thread {
     private final ArrayList<A_Infrastructure> infrastructures;
     private int nb_agents;
     public static int ticks;
+    private int stepByTick;
     private int collision;
     private File envFile;
     
@@ -81,6 +82,7 @@ public class CCS_Model extends Thread {
         CCS_Model.ticks = 0;
         this.collision = 0;
         this.envFile = null;
+        this.stepByTick = 20;
     }
 
     /**
@@ -126,6 +128,24 @@ public class CCS_Model extends Thread {
      */
     public int getTicks() {
         return ticks;
+    }
+    
+    /**
+     * Returns the number of model's ticks by environment's time.
+     * 
+     * @return the number of step by sticks.
+     */
+    public int getStepByTick() {
+        return stepByTick;
+    }
+
+    /**
+     * Changes the number of model's ticks by environment's time.
+     * 
+     * @param stepByTick the new number of step by sticks.
+     */
+    public void setStepByTick(int stepByTick) {
+        this.stepByTick = stepByTick;
     }
 
     /**
@@ -538,7 +558,7 @@ public class CCS_Model extends Thread {
                 && this.collision == 0)){
             
             try {
-                sleep(10);
+                sleep(5);
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -559,7 +579,7 @@ public class CCS_Model extends Thread {
                 v.update();
             
             //Each 10 ticks
-            if(CCS_Model.ticks % 10 == 0){
+            if(CCS_Model.ticks % this.stepByTick == 0){
                 //Update the environment
                 this.env.update();
                 
