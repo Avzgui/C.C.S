@@ -19,8 +19,8 @@ package Model.Agents.Brains;
 
 import Model.Agents.Bodies.Intersection_Body;
 import Model.Agents.Bodies.Vehicle_Body;
-import Model.CCS_Model;
 import Model.Environment.Cell;
+import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import Model.Environment.Trajectory;
@@ -181,7 +181,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
         //Create constraints
         
         /* ----- Constraint 1 : x is sup to actual tick adding to the distance ----- */
-        solver.post(IntConstraintFactory.arithm(x, ">", CCS_Model.ticks + trajectory.getDistance(pos, trajectory.getWhereToStop())));
+        solver.post(IntConstraintFactory.arithm(x, ">", Environment.time + trajectory.getDistance(pos, trajectory.getWhereToStop()) + 1));
         
         //For each réservation
         for(Reservation r : configuration.getReservations().values()){

@@ -21,8 +21,8 @@ package Model.Agents.Brains;
 import Model.Agents.Bodies.A_Body;
 import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
-import Model.CCS_Model;
 import Model.Environment.Cell;
+import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import Model.Environment.Trajectory;
@@ -244,9 +244,12 @@ public class Vehicle_Brain extends A_Brain {
                 //Get trajectory
                 this.reserv = new Reservation((Reservation) m.getDatum().get(0));
                 
-                while(this.reserv != null
-                        && !this.reserv.getTrajectory().isEmpty()
-                        && !v_body.getPosition().equals(this.reserv.getTrajectory().pop()));
+                if(this.reserv != null && this.reserv.getTrajectory() != null
+                        && this.reserv.getTrajectory().getCells().contains(v_body.getPosition())){
+                    while(this.reserv != null
+                            && !this.reserv.getTrajectory().isEmpty()
+                            && !v_body.getPosition().equals(this.reserv.getTrajectory().pop()));
+                }
             }
         }
         else
@@ -297,8 +300,11 @@ public class Vehicle_Brain extends A_Brain {
     private void updateDirection(){
         if(this.reserv != null){
             Vehicle_Body v_body = (Vehicle_Body) this.body;
-            if(v_body.getDirection() == null && !this.reserv.getTrajectory().isEmpty())
-                v_body.setDirection(this.reserv.getTrajectory().pop());
+            if(v_body.getDirection() == null && this.reserv.getTrajectory() != null && !this.reserv.getTrajectory().isEmpty()){
+                do{
+                    v_body.setDirection(this.reserv.getTrajectory().pop());
+                }while(!this.reserv.getTrajectory().isEmpty() && v_body.getPosition().equals(v_body.getDirection()));
+            }
         }
     }
     
@@ -314,7 +320,7 @@ public class Vehicle_Brain extends A_Brain {
         if(this.reserv != null && (
                 this.reserv.getTrajectory().getWhereToStop() == null 
                 || !v_body.getPosition().equals(this.reserv.getTrajectory().getWhereToStop())
-                || this.reserv.getCrossing_tick() <= CCS_Model.ticks)){
+                || this.reserv.getCrossing_tick() <= Environment.time + 1)){
             //If the cell where the vehicle gone is free
             //if(v_body.lookIfCellIsFree(v_body.getDirection()))
                 v_body.setSpeed(1.0);

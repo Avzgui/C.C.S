@@ -102,6 +102,7 @@ public class CCS_View extends Thread {
               //Paint ticks
               g2.setColor(Color.RED);
               g2.drawString("tick : "+model.getTicks(), 10, 20);
+              g2.drawString("time : "+ Environment.time, 10, 50);
           }
         };
         this.central_panel.setPreferredSize(new Dimension(800, 600));

@@ -403,6 +403,7 @@ public class CCS_Model extends Thread {
         CCS_Model.ticks = 0;
         this.collision = 0;
         this.nb_agents = 0;
+        Environment.time = 0;
         
         //Init agents
         //Five Intersections
@@ -533,26 +534,21 @@ public class CCS_Model extends Thread {
         Collections.shuffle(this.vehicles);
         while(CCS_Model.ticks == 0
                 || (!this.vehicles.isEmpty()
-                && CCS_Model.ticks < 100
+                //&& CCS_Model.ticks < 100
                 && this.collision == 0)){
             
             try {
-                sleep(1000);
+                sleep(10);
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            
+            
             //Increment the ticks
             CCS_Model.ticks++;
             
-            System.out.println("\n----- Tick : " + CCS_Model.ticks + " -----\n");
-            
-            //Remove all the vehicles who was in their goal.
-            removeVehicles();
-            
-            //Generate new vehicles (TODO)
-            if(CCS_Model.ticks>=2){
-            }
+            System.out.println("\n----- Tick : " + CCS_Model.ticks + " ----- Environment Time : " + Environment.time + " -----\n");
             
             //Update the infrastructures
             for(A_Infrastructure i : this.infrastructures)
@@ -561,12 +557,23 @@ public class CCS_Model extends Thread {
             //Update the vehicles
             for(A_Vehicle v : this.vehicles)
                 v.update();
-
-            //Update the environment
-            this.env.update();
             
-            //Get the collision code
-            this.collision = this.env.collisionManager();
+            //Each 10 ticks
+            if(CCS_Model.ticks % 10 == 0){
+                //Update the environment
+                this.env.update();
+                
+                //Get the collision code
+                this.collision = this.env.collisionManager();
+                
+                //Remove all the vehicles who was in their goal.
+                removeVehicles();
+
+                //Generate new vehicles (TODO)
+                if(CCS_Model.ticks>=1){
+                }
+            }
+
         }
         //*/
     }

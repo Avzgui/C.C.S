@@ -46,7 +46,8 @@ public class Environment {
     private final Table<Integer, Integer, Infrastructure> map;
     private final ArrayList<Vehicle_Body> vehicles;
     private final ArrayList<Infrastructure_Body> infrastructures;
-
+    public static int time;
+            
     /**
      * Constructor
      */
@@ -279,12 +280,17 @@ public class Environment {
         //Move vehicules
         for(Vehicle_Body body : this.vehicles){
             Cell direction = body.getDirection();
-            if(direction != null && body.getSpeed() > 0){
+            if(direction != null 
+                    && body.getSpeed() > 0
+                    ){
                 //update the vehicle's position
                 body.setPosition(new Cell(direction));
                 body.setDirection(null);
             }
         }
+        
+        //Increment time
+        Environment.time++;
     }
     
     /**
@@ -315,9 +321,9 @@ public class Environment {
             Cell direction = v1.getDirection();
             
             //While the direction is lock, get the vehicle who on the cell
-            while(infrastructure.getVehicleOnCell(direction) != null){
+            while(direction != null && infrastructure.getVehicleOnCell(direction) != null){
                 Vehicle_Body v2 = infrastructure.getVehicleOnCell(direction);
-                
+
                 //If a loop is dicovered
                 if(v2.equals(v1))
                     return 2;
