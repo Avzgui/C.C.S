@@ -508,6 +508,7 @@ public class CCS_Model extends Thread {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
             //*/
+            
             //Increment the ticks
             CCS_Model.ticks++;
             
