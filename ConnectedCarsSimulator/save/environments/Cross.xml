@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE network SYSTEM "../../src/Utility/CCS_Environment.dtd">
+
+<network>
+	<intersection x="0" y="0">
+        <indonesian>true</indonesian>
+        <cardinal type="north">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="east">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="south">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="west">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+    </intersection>
+
+    <intersection x="0" y="-1">
+        <indonesian>true</indonesian>
+        <cardinal type="north">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="east">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="south">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="west">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+    </intersection>
+    
+    <intersection x="0" y="1">
+        <indonesian>true</indonesian>
+        <cardinal type="north">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="east">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="south">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="west">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+    </intersection>
+    
+    <intersection x="-1" y="0">
+        <indonesian>true</indonesian>
+        <cardinal type="north">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="east">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="south">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="west">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+    </intersection>
+    
+    <intersection x="1" y="0">
+        <indonesian>true</indonesian>
+        <cardinal type="north">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="east">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="south">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+        <cardinal type="west">
+            <flow type="in">
+                <ways>3</ways>
+                <size>8</size>
+            </flow>
+            <flow type="out">
+                <ways>3</ways>
+                <size>3</size>
+            </flow>
+        </cardinal>
+    </intersection>
+</network>

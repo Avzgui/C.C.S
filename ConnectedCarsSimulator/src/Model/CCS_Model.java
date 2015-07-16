@@ -404,25 +404,30 @@ public class CCS_Model extends Thread {
         this.nb_agents = 0;
         
         //Init agents
+        //Five Intersections
+        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(30, 22), new Cell(17, 30));
+        this.vehicles.add(vehicle);
         
+        
+        //One intersection
         //Front trajectory, right tale
         
-        //* South to North
+        /* South to North
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 22), new Cell(14, 0));
         this.vehicles.add(vehicle);
         //*/
         
-        //* West to East
+        /* West to East
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 14), new Cell(22, 14));
         this.vehicles.add(vehicle);
         //*/
         
-        //* North to South
+        /* North to South
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(8, 0), new Cell(8, 22));
         this.vehicles.add(vehicle);
         //*/
         
-        //* East to West
+        /* East to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 8), new Cell(0, 8));
         this.vehicles.add(vehicle);
         //*/
@@ -430,22 +435,22 @@ public class CCS_Model extends Thread {
         
         //Front trajectory, mid tale
         
-        //* South to North
+        /* South to North
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(13, 22), new Cell(13, 0));
         this.vehicles.add(vehicle);
         //*/
         
-        //* West to East
+        /* West to East
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 13), new Cell(22, 13));
         this.vehicles.add(vehicle);
         //*/
         
-        //* North to South
+        /* North to South
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(9, 0), new Cell(9, 22));
         this.vehicles.add(vehicle);
         //*/
         
-        //* East to West
+        /* East to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 9), new Cell(0, 9));
         this.vehicles.add(vehicle);
         //*/
@@ -453,22 +458,22 @@ public class CCS_Model extends Thread {
         
         // Left trajectory
         
-        //* South to West
+        /* South to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
         //*/
         
-        //* West to North
+        /* West to North
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 12), new Cell(12, 0));
         this.vehicles.add(vehicle);
         //*/
         
-        //* North to East
+        /* North to East
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(10, 0), new Cell(22, 12));
         this.vehicles.add(vehicle);
         //*/
         
-        //* East to South
+        /* East to South
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 10), new Cell(10, 22));
         this.vehicles.add(vehicle);
         //*/
@@ -519,22 +524,22 @@ public class CCS_Model extends Thread {
             
             //Generate new vehicles (TODO)
             if(CCS_Model.ticks==2){
-                //* South to East
+                /* South to East
                 vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 22), new Cell(22, 14));
                 this.vehicles.add(vehicle);
                 //*/
 
-                //* West to South
+                /* West to South
                 vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 14), new Cell(8, 22));
                 this.vehicles.add(vehicle);
                 //*/
 
-                //* North to West
+                /* North to West
                 vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(8, 0), new Cell(0, 8));
                 this.vehicles.add(vehicle);
                 //*/
 
-                //* East to North
+                /* East to North
                 vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 8), new Cell(14, 0));
                 this.vehicles.add(vehicle);
                 //*/

@@ -103,6 +103,7 @@ public class Vehicle_Brain extends A_Brain {
             //Determine the intermediates goals
             this.intermediate_goals.clear();
             this.intermediate_goals.addAll(determineIntermediateGoals(0, begin, x, y, dest_x, dest_y));
+            System.out.println("Vehicle " + this.id + " intermadiate goals : " + this.intermediate_goals);
             //Send the creation
             //*
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
@@ -252,7 +253,7 @@ public class Vehicle_Brain extends A_Brain {
     private Message updateInfrastructure(){
         Vehicle_Body v_body = (Vehicle_Body) this.body;
         //If vehicle not on the infrastructure anymore
-        if(this.reserv != null && !this.reserv.getTrajectory().isEmpty()){
+        if(this.reserv != null && this.reserv.getTrajectory().isEmpty()){
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
                 //Say bye to the current infrastructure
                 this.body.sendMessage(new M_Bye(this.id, v_body.getInfrastructure().getId()));
