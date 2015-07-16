@@ -32,6 +32,7 @@ import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
 import Utility.Flow;
+import Utility.Reservation;
 import com.google.common.collect.Table;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,10 +45,9 @@ import java.util.Map.Entry;
  */
 public class Vehicle_Brain extends A_Brain {
 
-    protected Trajectory trajectory;
+    protected Reservation reserv;
     protected final Cell final_goal;
     protected final ArrayList<CardinalPoint> intermediate_goals;
-    protected int crossing_tick;
     
     /**
      * Constructor
@@ -58,10 +58,9 @@ public class Vehicle_Brain extends A_Brain {
      */
     public Vehicle_Brain(int id, Vehicle_Body body, Cell goal) {
         super(id, body);
-        this.trajectory = null;
+        this.reserv = null;
         this.final_goal = goal;
         this.intermediate_goals = new ArrayList<>();
-        this.crossing_tick = 0;
     }
     
     @Override
@@ -115,24 +114,6 @@ public class Vehicle_Brain extends A_Brain {
             }
             //*/
         }
-    }
-
-    /**
-     * Returns the trajectory the agent have to follow.
-     * 
-     * @return the trajectory of the agent.
-     */
-    public Trajectory getTrajectory() {
-        return trajectory;
-    }
-
-    /**
-     * Changes the trajectory of the agent.
-     * 
-     * @param trajectory the new trajectory to set.
-     */
-    public void setTrajectory(Trajectory trajectory) {
-        this.trajectory = trajectory;
     }
 
     /**
@@ -251,13 +232,11 @@ public class Vehicle_Brain extends A_Brain {
             //Get the trajectory
             if(m.getDatum().get(0) != null){
                 //Get trajectory
-                this.trajectory = new Trajectory((Trajectory) m.getDatum().get(0));
+                this.reserv = new Reservation((Reservation) m.getDatum().get(0));
                 
-                //Get crossing tick
-                this.crossing_tick = (Integer) m.getDatum().get(1);
-                
-                while(!this.trajectory.isEmpty() 
-                        && !v_body.getPosition().equals(this.trajectory.pop()));
+                while(this.reserv != null
+                        && !this.reserv.getTrajectory().isEmpty()
+                        && !v_body.getPosition().equals(this.reserv.getTrajectory().pop()));
             }
         }
         else
@@ -273,7 +252,7 @@ public class Vehicle_Brain extends A_Brain {
     private Message updateInfrastructure(){
         Vehicle_Body v_body = (Vehicle_Body) this.body;
         //If vehicle not on the infrastructure anymore
-        if(this.trajectory != null && this.trajectory.isEmpty()){
+        if(this.reserv != null && !this.reserv.getTrajectory().isEmpty()){
             if(this.intermediate_goals != null && !this.intermediate_goals.isEmpty()){
                 //Say bye to the current infrastructure
                 this.body.sendMessage(new M_Bye(this.id, v_body.getInfrastructure().getId()));
@@ -306,10 +285,10 @@ public class Vehicle_Brain extends A_Brain {
      * Reasoning layer's function to update the direction of the agent.
      */
     private void updateDirection(){
-        if(this.trajectory != null){
+        if(this.reserv != null){
             Vehicle_Body v_body = (Vehicle_Body) this.body;
-            if(v_body.getDirection() == null && !this.trajectory.isEmpty())
-                v_body.setDirection(this.trajectory.pop());
+            if(v_body.getDirection() == null && !this.reserv.getTrajectory().isEmpty())
+                v_body.setDirection(this.reserv.getTrajectory().pop());
         }
     }
     
@@ -322,9 +301,10 @@ public class Vehicle_Brain extends A_Brain {
         v_body.setSpeed(0.0);
         
         //If we not have to stop and wait
-        if(this.trajectory.getWhereToStop() == null 
-                || !v_body.getPosition().equals(this.trajectory.getWhereToStop())
-                || this.crossing_tick <= CCS_Model.ticks){
+        if(this.reserv != null && (
+                this.reserv.getTrajectory().getWhereToStop() == null 
+                || !v_body.getPosition().equals(this.reserv.getTrajectory().getWhereToStop())
+                || this.reserv.getCrossing_tick() <= CCS_Model.ticks)){
             //If the cell where the vehicle gone is free
             //if(v_body.lookIfCellIsFree(v_body.getDirection()))
                 v_body.setSpeed(1.0);

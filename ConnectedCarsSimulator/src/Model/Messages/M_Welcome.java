@@ -17,7 +17,7 @@
  */
 package Model.Messages;
 
-import Model.Environment.Trajectory;
+import Utility.Reservation;
 
 /**
  * The class M_Welcome, inhered by Message, is used by the infrastructure agents
@@ -32,13 +32,11 @@ public class M_Welcome extends Message {
      * 
      * @param sender_id ID of the sender.
      * @param receiver_id ID of the receiver.
-     * @param trajectory trajectory of the vehicle in the intersection.
-     * @param tick the tick when the vehicle can cross the intersection.
+     * @param reserv The reservation initial sent to the vehicle.
      */
     public M_Welcome(int sender_id, int receiver_id, 
-            Trajectory trajectory, int tick) {
+            Reservation reserv) {
         super(sender_id, receiver_id);
-        this.datum.add(trajectory);
-        this.datum.add(tick);
+        this.datum.add(reserv);
     }
 }

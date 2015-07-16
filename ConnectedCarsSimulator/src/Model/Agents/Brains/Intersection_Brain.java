@@ -233,7 +233,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     this.configuration.addReservation(m.getSender_id(), reserv);
                     
                     //Send the trajectory to the vehicle
-                    return new M_Welcome(this.id, m.getSender_id(),trajectory, tick);
+                    return new M_Welcome(this.id, m.getSender_id(), reserv);
                 }
             }
         }
@@ -250,8 +250,10 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     }
                 }
                 
-                if(toRemove != null)
+                if(toRemove != null){
                     i_body.getVehicles().remove(toRemove);
+                    this.configuration.removeReservation(toRemove.getId());
+                }
             }
         }
         else
