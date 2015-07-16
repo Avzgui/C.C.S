@@ -80,16 +80,96 @@ public class Intersection_Brain extends Infrastructure_Brain {
     }
     
     /**
+     * Reasonning methods use to find a trajectory for the new vehicle.
+     * 
+     * @param pos postion of the new vehicle in the intersection.
+     * @param goal destination of the new vehicle.
+     * 
+     * @return the trajectory of the vehicle.
+     */
+    private Trajectory findTrajectory(Cell pos, CardinalPoint goal){
+        //Get the good trajectory.
+        Intersection_Body i_body = (Intersection_Body) this.body;
+        Intersection inter = (Intersection) i_body.getInfrastructure();
+        Table<CardinalPoint, Integer, Trajectory> ways = inter.getTrajectories();
+        Trajectory trajectory = null;
+        int t_id = -1;
+        CardinalPoint t_cp = null;
+        boolean ok = false;
+        for(CardinalPoint c : ways.rowKeySet()){
+            for(Entry<Integer, Trajectory> entry : ways.row(c).entrySet()){
+                int _id = entry.getKey();
+                Trajectory w = entry.getValue();
+                //If the trajectory contains the position
+                if(w.getCells().contains(pos)){
+                    if(_id >= 0 && _id < inter.getNb_ways().get(Flow.IN, c)){
+                        if(c.getFront() == goal){
+                            trajectory = w;
+                            t_id = _id;
+                            t_cp = c;
+                            ok = true;
+                        }
+                    }
+                    else if(_id == inter.getNb_ways().get(Flow.IN, c)){
+                        if(c.getRight() == goal){
+                            trajectory = w;
+                            t_id = _id;
+                            t_cp = c;
+                            ok = true;
+                        }
+                    }
+                    else{
+                        if(c.getLeft() == goal){
+                            trajectory = w;
+                            t_id = _id;
+                            t_cp = c;
+                            ok = true;
+                        }
+                    }
+                }
+            }
+            if(ok) break;
+        }
+
+        if(ok){
+            //Get the first cell of the neighbor.
+            //*
+            if(i_body.getNeighbors().containsKey(goal)){
+                Infrastructure neighbor = i_body.getNeighbors().get(goal).getInfrastructure();
+                Trajectory w = neighbor.getTrajectories().get(goal.getFront(), t_id);
+                if(w != null && !w.isEmpty()){
+                    Cell next = w.getCells().get(0);
+                    if(next != null && trajectory != null)
+                        trajectory.addCell(next);
+                }
+            }
+            //*/
+
+            //Determine the cell where the vehicle will wait
+            Cell whereStop = null;
+            if(t_cp != null){
+                Intersection i = (Intersection) i_body.getInfrastructure();
+                if(trajectory != null && trajectory.getCells() != null && !trajectory.getCells().isEmpty())
+                    whereStop = trajectory.getCells().get(i.getWays_size().get(Flow.IN, t_cp) - 1);
+            }
+
+            if(trajectory != null)
+                trajectory.setWhereToStop(whereStop);
+        }
+                
+        return trajectory;
+    }
+    
+    /**
      * Determine the crossing tick for a new vehicle in the intersection
      * with a First Comes First Served algorithm.
      * 
      * @param trajectory trajectory of the vehicle.
      * @param pos current position of the vehicle.
-     * @param whereStop position where the vehicle will stop.
      * 
      * @return The crossing tick of the vehicle. (-1 if nothing found).
      */
-    private int FCFS(Trajectory trajectory, Cell pos, Cell whereStop){
+    private int FCFS(Trajectory trajectory, Cell pos){
         //Solver creation
         Solver solver = new Solver("FCFS");
         
@@ -101,7 +181,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
         //Create constraints
         
         /* ----- Constraint 1 : x is sup to actual tick adding to the distance ----- */
-        solver.post(IntConstraintFactory.arithm(x, ">", CCS_Model.ticks + trajectory.getDistance(pos, whereStop)));
+        solver.post(IntConstraintFactory.arithm(x, ">", CCS_Model.ticks + trajectory.getDistance(pos, trajectory.getWhereToStop())));
         
         //For each réservation
         for(Reservation r : configuration.getReservations().values()){
@@ -126,7 +206,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                         
                         IntVar dist = VariableFactory.fixed(r.getCrossing_tick() 
                                 + t.getDistance(t.getWhereToStop(), c) 
-                                - trajectory.getDistance(whereStop, c), solver);
+                                - trajectory.getDistance(trajectory.getWhereToStop(), c), solver);
                         
                         solver.post(IntConstraintFactory.distance(x, dist, ">", offset.getValue()));
                     }
@@ -150,82 +230,21 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 Cell pos = (Cell) m.getDatum().get(0);
                 CardinalPoint goal = (CardinalPoint) m.getDatum().get(1);
                 
-                //Get the good trajectory.
-                Intersection_Body i_body = (Intersection_Body) this.body;
-                Intersection inter = (Intersection) i_body.getInfrastructure();
-                Table<CardinalPoint, Integer, Trajectory> ways = inter.getTrajectories();
-                Trajectory trajectory = null;
-                int t_id = -1;
-                CardinalPoint t_cp = null;
-                boolean ok = false;
-                for(CardinalPoint c : ways.rowKeySet()){
-                    for(Entry<Integer, Trajectory> entry : ways.row(c).entrySet()){
-                        int _id = entry.getKey();
-                        Trajectory w = entry.getValue();
-                        //If the trajectory contains the position
-                        if(w.getCells().contains(pos)){
-                            if(_id >= 0 && _id < inter.getNb_ways().get(Flow.IN, c)){
-                                if(c.getFront() == goal){
-                                    trajectory = w;
-                                    t_id = _id;
-                                    t_cp = c;
-                                    ok = true;
-                                }
-                            }
-                            else if(_id == inter.getNb_ways().get(Flow.IN, c)){
-                                if(c.getRight() == goal){
-                                    trajectory = w;
-                                    t_id = _id;
-                                    t_cp = c;
-                                    ok = true;
-                                }
-                            }
-                            else{
-                                if(c.getLeft() == goal){
-                                    trajectory = w;
-                                    t_id = _id;
-                                    t_cp = c;
-                                    ok = true;
-                                }
-                            }
-                        }
-                    }
-                    if(ok) break;
-                }
+                //Find the trajectory
+                Trajectory trajectory = findTrajectory(pos, goal);
                 
-                if(ok){
+                
+                if(trajectory != null){
+                    Intersection_Body i_body = (Intersection_Body) this.body;
                     for(Vehicle_Body v : i_body.getEnvironment().getVehicles()){
                         if(v.getId() == m.getSender_id()){
                             i_body.addVehicle(v);
                             break;
                         }
                     }
-                    //Get the first cell of the neighbor.
-                    //*
-                    if(i_body.getNeighbors().containsKey(goal)){
-                        Infrastructure neighbor = i_body.getNeighbors().get(goal).getInfrastructure();
-                        Trajectory w = neighbor.getTrajectories().get(goal.getFront(), t_id);
-                        if(w != null && !w.isEmpty()){
-                            Cell next = w.getCells().get(0);
-                            if(next != null && trajectory != null)
-                                trajectory.addCell(next);
-                        }
-                    }
-                    //*/
-                    
-                    //Determine the cell where the vehicle will wait
-                    Cell whereStop = null;
-                    if(t_cp != null){
-                        Intersection i = (Intersection) i_body.getInfrastructure();
-                        if(trajectory != null && trajectory.getCells() != null && !trajectory.getCells().isEmpty())
-                            whereStop = trajectory.getCells().get(i.getWays_size().get(Flow.IN, t_cp) - 1);
-                    }
-                    
-                    if(trajectory != null)
-                        trajectory.setWhereToStop(whereStop);
                     
                     //FCFS deterlination of the crossing tick
-                    int tick = FCFS(trajectory, pos, whereStop);
+                    int tick = FCFS(trajectory, pos);
                     System.out.println("FCFS : " + tick);
                     
                     //Create the new reservation and add it to the configuration
