@@ -97,10 +97,11 @@ public class Intersection_Brain extends Infrastructure_Brain {
         IntVar x = VariableFactory.enumerated("X", 0, VariableFactory.MAX_INT_BOUND, solver);
         IntVar offset = VariableFactory.fixed(2, solver);
         
+        
         //Create constraints
         
         /* ----- Constraint 1 : x is sup to actual tick adding to the distance ----- */
-        solver.post(IntConstraintFactory.arithm(x, ">=", CCS_Model.ticks + pos.getDistance(whereStop)));
+        solver.post(IntConstraintFactory.arithm(x, ">", CCS_Model.ticks + trajectory.getDistance(pos, whereStop)));
         
         //For each réservation
         for(Reservation r : configuration.getReservations().values()){
@@ -116,19 +117,18 @@ public class Intersection_Brain extends Infrastructure_Brain {
             else{
                 /* ----- Constraint 3 : 
                     for each cell of the trajectory reserved creates conflict with trajectory,
-                        |(x+dist(cell)) - (tick+dist(cell))| >= offset
+                        |(x+dist1) - (tick+dist2)| >= offset
+                   <=>  |x - (tick+dist2-dist1)| >= offset
                 ----- */
                 for(Cell c : t.getCells()){
                     // Cell in conflict
                     if(trajectory.getCells().contains(c)){
-
-                        //(tick+dist(cell))
-                        int dist_1 = trajectory.getDistance(whereStop, c);
-
-                        //(tick+dist(cell))
-                        int dist_2 = r.getCrossing_tick() + t.getDistance(t.getWhereToStop(), c);
-
-                        solver.post(IntConstraintFactory.arithm(x, "-", offset, ">=", Math.abs(dist_2 - dist_1)));
+                        
+                        IntVar dist = VariableFactory.fixed(r.getCrossing_tick() 
+                                + t.getDistance(t.getWhereToStop(), c) 
+                                - trajectory.getDistance(whereStop, c), solver);
+                        
+                        solver.post(IntConstraintFactory.distance(x, dist, ">", offset.getValue()));
                     }
                 }
             }

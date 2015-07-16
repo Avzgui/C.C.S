@@ -407,7 +407,7 @@ public class CCS_Model extends Thread {
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
         
-        /*
+        //*
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 12), new Cell(12, 0));
         this.vehicles.add(vehicle);
         //*/
@@ -433,6 +433,8 @@ public class CCS_Model extends Thread {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
             //*/
+            //Increment the ticks
+            CCS_Model.ticks++;
             
             System.out.println("\n----- Tick : " + CCS_Model.ticks + " -----\n");
             
@@ -454,9 +456,6 @@ public class CCS_Model extends Thread {
             
             //Get the collision code
             this.collision = this.env.collisionManager();
-            
-            //Increment the ticks
-            CCS_Model.ticks++;
         }
     }
 }
