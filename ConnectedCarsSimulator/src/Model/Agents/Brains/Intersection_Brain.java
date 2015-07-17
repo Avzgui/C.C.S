@@ -49,6 +49,7 @@ import org.chocosolver.solver.variables.VariableFactory;
 public class Intersection_Brain extends Infrastructure_Brain {
 
     private Crossing_Configuration configuration;
+    private int negociation_zone_size;
     
     /**
      * Constructor
@@ -59,6 +60,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
     public Intersection_Brain(int id, Intersection_Body body) {
         super(id, body);
         this.configuration = new Crossing_Configuration(0, this.id);
+        this.negociation_zone_size = 6;
     }
 
     /**
@@ -77,6 +79,24 @@ public class Intersection_Brain extends Infrastructure_Brain {
      */
     public void setConfiguration(Crossing_Configuration configuration) {
         this.configuration = new Crossing_Configuration(configuration);
+    }
+
+    /**
+     * Returns the size of the negociation zones.
+     * 
+     * @return the size of the negociation zones.
+     */
+    public int getNegociation_zone_size() {
+        return negociation_zone_size;
+    }
+
+    /**
+     * Changes the size of the negociation zones.
+     * 
+     * @param negociation_zone_size the new size of the negociation zones.
+     */
+    public void setNegociation_zone_size(int negociation_zone_size) {
+        this.negociation_zone_size = negociation_zone_size;
     }
     
     /**

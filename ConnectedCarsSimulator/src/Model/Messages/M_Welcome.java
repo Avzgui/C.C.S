@@ -37,6 +37,6 @@ public class M_Welcome extends Message {
     public M_Welcome(int sender_id, int receiver_id, 
             Reservation reserv) {
         super(sender_id, receiver_id);
-        this.datum.add(reserv);
+        this.datum.add(new Reservation(reserv));
     }
 }
