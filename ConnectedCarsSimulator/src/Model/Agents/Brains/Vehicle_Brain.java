@@ -27,16 +27,26 @@ import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import Model.Environment.Trajectory;
 import Model.Messages.M_Bye;
+import Model.Messages.M_Conf;
 import Model.Messages.M_Hello;
+import Model.Messages.M_NewConfiguration;
+import Model.Messages.M_Offer;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
+import Utility.Crossing_Configuration;
 import Utility.Flow;
 import Utility.Reservation;
 import com.google.common.collect.Table;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import org.chocosolver.solver.ResolutionPolicy;
+import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.constraints.IntConstraintFactory;
+import org.chocosolver.solver.search.strategy.IntStrategyFactory;
+import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.variables.VariableFactory;
 
 /**
  * The class Vehicle_Brain represents the behavior layer of a vehicle agent.
@@ -46,6 +56,9 @@ import java.util.Map.Entry;
 public class Vehicle_Brain extends A_Brain {
 
     protected Reservation reserv;
+    protected final ArrayList<Crossing_Configuration> proposals;
+    protected Crossing_Configuration current;
+    
     protected final Cell final_goal;
     protected final ArrayList<CardinalPoint> intermediate_goals;
     
@@ -61,6 +74,8 @@ public class Vehicle_Brain extends A_Brain {
         this.reserv = null;
         this.final_goal = goal;
         this.intermediate_goals = new ArrayList<>();
+        this.proposals = new ArrayList<>();
+        this.current = null;
     }
     
     @Override
@@ -252,8 +267,114 @@ public class Vehicle_Brain extends A_Brain {
                 }
             }
         }
+        else if(mess instanceof M_NewConfiguration){
+            System.out.println("Vehicle " + this.id + " process M_NewConfiguration");
+            
+            //Get new reservation
+            Crossing_Configuration current = (Crossing_Configuration) mess.getDatum().get(0);
+            if(current != null && current.getReservations() != null && current.getReservations().containsKey(this.id))
+                this.reserv = current.getReservation(this.id);
+            
+            //Get proposals
+            this.proposals.clear();
+            ArrayList<Crossing_Configuration> copy = (ArrayList<Crossing_Configuration>) mess.getDatum().get(1);
+            for(Crossing_Configuration cc : copy)
+                this.proposals.add(new Crossing_Configuration(cc));
+            
+            //Propose a new configuration
+            this.current = new Crossing_Configuration(current);
+        }
         else
             super.processMessage(mess);
+        
+        return null;
+    }
+    
+    /**
+     * Reasonning method to process a possibly better crossing time for the vehicle.
+     * 
+     * just a selfish strategy for now
+     * 
+     * @return the new crossing configuration proposed.
+     */
+    private M_Offer proposeConfiguration(){
+        
+        if(this.current != null){
+            //Get array of reservations
+            ArrayList<Reservation> o_reserv = new ArrayList(this.current.getReservations().values());
+
+            //Solver creation
+            Solver solver = new Solver("Offer v"+this.id);
+            
+            
+            //Variables creation
+            IntVar[] r = VariableFactory.integerArray("R"+this.id, o_reserv.size(), Environment.time, Environment.time+100, solver);
+            IntVar offset = VariableFactory.fixed(2, solver);
+            IntVar sum = VariableFactory.integer("Sum"+this.id, 0, VariableFactory.MAX_INT_BOUND, solver);
+
+            //For each réservation
+            for(int i = 0 ; i < o_reserv.size() ; i++){
+
+                //Get trajectory
+                Trajectory trajectory = new Trajectory(o_reserv.get(i).getTrajectory());
+
+                //Get pos of the vehicle (to ameliorate)
+                Cell pos = null;
+                Vehicle_Body v_body = (Vehicle_Body) this.body;
+                for(Vehicle_Body b : v_body.getInfrastructure().getVehicles()){
+                    if(b.getId() == o_reserv.get(i).getVehicle_id())
+                        pos = new Cell(b.getPosition());
+                }
+                
+                if(pos != null){
+                    //If something to not change the reservation
+                    
+                    
+                    /* ----- Constraint 1 : x is sup to actual tick adding to the distance ----- */
+                    solver.post(IntConstraintFactory.arithm(r[i], ">", Environment.time + trajectory.getDistance(pos, trajectory.getWhereToStop()) + 1));
+
+                    for(int j = i+1 ; j < o_reserv.size() ; j++){
+                        //Same lane or not ?
+                        Trajectory t = o_reserv.get(j).getTrajectory();
+
+                        if(t.getBegin() == trajectory.getBegin()
+                                && t.getLane() == trajectory.getLane()){
+                            /* ----- Constraint 2 : x is sup to the other ticks already reserved  ----- */
+                            solver.post(IntConstraintFactory.arithm(r[i], ">", r[j]));
+                        }
+                        else{
+                            /* ----- Constraint 3 : 
+                                for each cell of the trajectory reserved creates conflict with trajectory,
+                                    |(x+dist1) - (tick+dist2)| >= offset
+                               <=>  |x - (tick+dist2-dist1)| >= offset
+                            ----- */
+                            for(Cell c : t.getCells()){
+                                // Cell in conflict
+                                if(trajectory.getCells().contains(c)){
+
+                                    IntVar dist1 = VariableFactory.integer("D1"+this.id+"["+i+", "+j+"]", 0, 100, solver);
+                                    solver.post(IntConstraintFactory.arithm(dist1, "=", r[i], "+", trajectory.getDistance(trajectory.getWhereToStop(), c)));
+                                    
+                                    IntVar dist2 = VariableFactory.integer("D2"+this.id+"["+i+", "+j+"]", 0, 100, solver);
+                                    solver.post(IntConstraintFactory.arithm(dist2, "=", r[j], "+", t.getDistance(t.getWhereToStop(), c)));
+                                    
+                                    solver.post(IntConstraintFactory.distance(dist1, dist2, ">", offset));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Find sum min
+            solver.post(IntConstraintFactory.sum(r, sum));
+            solver.findOptimalSolution(ResolutionPolicy.MINIMIZE, sum);
+            
+            //Print solution
+            System.out.println("\nVehicle " + this.id + " Solution find :\nsum : " + sum.getValue());
+            for(int i = 0 ; i < o_reserv.size() ; i++)
+                System.out.println("v"+i+" : " + r[i].getValue());
+        }
         
         return null;
     }
@@ -292,6 +413,19 @@ public class Vehicle_Brain extends A_Brain {
         }
         
         return null;
+    }
+    
+    /**
+     * Behaviour methods to process of the vehicle's vote.
+     * 
+     * @return the votes of the vehicle.
+     */
+    private ArrayList<M_Conf> vote(){
+        ArrayList<M_Conf> votes = new ArrayList<>();
+        
+        //TODO
+        
+        return votes;
     }
     
     /**
@@ -339,9 +473,13 @@ public class Vehicle_Brain extends A_Brain {
                 this.body.sendMessage(m);
         }
         
-        //Update reservation (TODO)
+        //Propose
+        proposeConfiguration();
         
-        //Vote (TODO)
+        //Vote
+        ArrayList<M_Conf> messages = vote();
+        for(M_Conf m : messages)
+            this.body.sendMessage(m);
         
         //Update direction
         updateDirection();

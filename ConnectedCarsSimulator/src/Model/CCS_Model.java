@@ -553,7 +553,6 @@ public class CCS_Model extends Thread {
         
         
         //*Run the simulation while there is vehicles
-        Collections.shuffle(this.vehicles);
         Random rand = new Random();
         while(CCS_Model.ticks == 0
                 || (!this.vehicles.isEmpty()
@@ -561,7 +560,7 @@ public class CCS_Model extends Thread {
                 && this.collision == 0)){
             
             try {
-                sleep(100);
+                sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -578,6 +577,7 @@ public class CCS_Model extends Thread {
                 i.update();
             
             //Update the vehicles
+            Collections.shuffle(this.vehicles);
             for(A_Vehicle v : this.vehicles)
                 v.update();
             

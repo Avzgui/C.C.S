@@ -20,6 +20,7 @@ package Model.Agents.Bodies;
 import Model.Agents.Brains.Vehicle_Brain;
 import Model.Environment.Cell;
 import Model.Environment.Environment;
+import Model.Messages.M_Conf;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 
@@ -128,12 +129,18 @@ public class Vehicle_Body extends A_Body {
     public void receiveMessage(Message mess){
         /* It's ugly
          * but i don't know how to do specialization with java's generics
-         * like we can do in 
+         * like we can do in C++
          */
         if(mess instanceof M_Welcome){
             System.out.println("Vehicle " + this.id + " receive M_Welcome");
             this.brain.storeMessage(mess);
         }
+        else if(mess instanceof M_Conf){
+            System.out.println("Vehicle " + this.id + " receive M_Conf");
+            this.brain.storeMessage(mess);
+        }
+        else
+            super.receiveMessage(mess);
     }
     
     /**

@@ -207,7 +207,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
         Solver solver = new Solver("FCFS");
         
         //Variables creation
-        IntVar x = VariableFactory.enumerated("X", 0, VariableFactory.MAX_INT_BOUND, solver);
+        IntVar x = VariableFactory.enumerated("X", Environment.time, VariableFactory.MAX_INT_BOUND, solver);
         IntVar offset = VariableFactory.fixed(2, solver);
         
         
@@ -218,14 +218,13 @@ public class Intersection_Brain extends Infrastructure_Brain {
         
         //For each réservation
         for(Reservation r : configuration.getReservations().values()){
-            
             //Same lane or not ?
             Trajectory t = r.getTrajectory();
-            
+
             if(t.getBegin() == trajectory.getBegin()
                     && t.getLane() == trajectory.getLane()){
                 /* ----- Constraint 2 : x is sup to the other ticks already reserved  ----- */
-                solver.post(IntConstraintFactory.arithm(x, ">=", r.getCrossing_tick()));
+                solver.post(IntConstraintFactory.arithm(x, ">", r.getCrossing_tick()));
             }
             else{
                 /* ----- Constraint 3 : 
@@ -236,11 +235,11 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 for(Cell c : t.getCells()){
                     // Cell in conflict
                     if(trajectory.getCells().contains(c)){
-                        
+
                         IntVar dist = VariableFactory.fixed(r.getCrossing_tick() 
                                 + t.getDistance(t.getWhereToStop(), c) 
                                 - trajectory.getDistance(trajectory.getWhereToStop(), c), solver);
-                        
+
                         solver.post(IntConstraintFactory.distance(x, dist, ">", offset));
                     }
                 }
@@ -313,11 +312,13 @@ public class Intersection_Brain extends Infrastructure_Brain {
             Crossing_Configuration current = (Crossing_Configuration) mess.getDatum().get(0);
             if(current != null && current.equals(this.configuration)){
                 if(mess instanceof M_Offer){
+                    System.out.println("M_Offer");
                     Crossing_Configuration conf = (Crossing_Configuration) mess.getDatum().get(1);
                     if(conf != null && !this.proposals.contains(conf))
                         this.proposals.add(conf);
                 }
                 else if(mess instanceof M_Accept){
+                    System.out.println("M_Accept");
                     Crossing_Configuration conf = (Crossing_Configuration) mess.getDatum().get(1);
                     if(conf != null){
                         if(this.nb_accept.containsKey(conf)){
@@ -329,6 +330,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
                     }
                 }
                 else if(mess instanceof M_Refuse){
+                    System.out.println("M_Refuse");
                     Crossing_Configuration conf = (Crossing_Configuration) mess.getDatum().get(1);
                     if(conf != null){
                         if(this.nb_refuse.containsKey(conf)){
@@ -370,10 +372,15 @@ public class Intersection_Brain extends Infrastructure_Brain {
             //Check if c_new is not c_curr
             if(!this.configuration.equals(conf_max)){
                 //Check if sup to th_accept
-                if(((double) max_accepts / total_voters) >= th_accept)
+                if(((double) max_accepts / total_voters) >= th_accept){
+                    this.configuration = new Crossing_Configuration(conf_max);
+                    this.configuration.setId(this.configuration.getId()+1);
                     return new M_NewConfiguration(this.id, -1, this.configuration, this.proposals);
+                }
             }
         }
+        else if(!this.proposals.isEmpty())
+            return new M_NewConfiguration(this.id, -1, this.configuration, this.proposals);
         
         return null;
     }
@@ -396,10 +403,14 @@ public class Intersection_Brain extends Infrastructure_Brain {
         
         Intersection_Body i_body = (Intersection_Body) this.body;
         
+        //TODO : if a vehicle is in the negociation zone.
+        
         //Update configuration
         Message m = updateConfiguration();
         if(m != null)
-                i_body.sendBroadcast(m);
+            i_body.sendBroadcast(m);
+        else
+            i_body.sendBroadcast(new M_NewConfiguration(this.id, -1, this.configuration, this.proposals));
         
         System.out.println("\nIntersection " + this.id + "\nConfiguration : " + this.configuration);
     }

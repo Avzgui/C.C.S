@@ -20,6 +20,7 @@ package Model.Agents.Bodies;
 import Model.Agents.Brains.Intersection_Brain;
 import Model.Environment.Environment;
 import Model.Environment.Intersection;
+import Model.Messages.M_Conf;
 import Model.Messages.Message;
 
 /**
@@ -47,6 +48,16 @@ public class Intersection_Body extends Infrastructure_Body {
     @Override
     public void addVehicle(Vehicle_Body vehicle) {
         this.vehicles.add(vehicle);
+    }
+    
+    @Override
+    public void receiveMessage(Message mess){
+        if(mess instanceof M_Conf){
+            System.out.println("Intersection " + this.id + " receive M_Hello");
+            this.brain.storeMessage(mess);
+        }
+        else
+            super.receiveMessage(mess);
     }
 
     @Override
