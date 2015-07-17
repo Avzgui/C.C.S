@@ -313,5 +313,7 @@ public class Intersection_Brain extends Infrastructure_Brain {
         }
         
         //Update configuration (check the vote)
+        
+        System.out.println("\nIntersection " + this.id + "\nConfiguration : " + this.configuration);
     }
 }

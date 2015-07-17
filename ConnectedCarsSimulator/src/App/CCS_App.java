@@ -34,7 +34,7 @@ public class CCS_App {
     public static void main(String[] args) {
         //Init model
         CCS_Model model = new CCS_Model();
-        model.loadEnvironmentFromXML(new File("save/environments/Cross.xml"));
+        model.loadEnvironmentFromXML(new File("save/environments/ASimpleIntersection.xml"));
         model.start();
         
         //Init view

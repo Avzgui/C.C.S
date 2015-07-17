@@ -427,32 +427,32 @@ public class CCS_Model extends Thread {
         
         //Init agents
         //Five Intersections
-        //* East to South
+        /* East to South
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(30, 22), new Cell(17, 30));
         this.vehicles.add(vehicle);
         //*/
         
-        //* South to West
+        /* South to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 30), new Cell(-8, 17));
         this.vehicles.add(vehicle);
         //*/
         
-        //* West to North
+        /* West to North
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(-8, 0), new Cell(5, -8));
         this.vehicles.add(vehicle);
         //*/
         
-        //* North to East
+        /* North to East
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, -8), new Cell(30, 5));
         this.vehicles.add(vehicle);
         //*/
         
-        //* East to West
+        /* East to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(40, 8), new Cell(-13, 8));
         this.vehicles.add(vehicle);
         //*/
         
-        //* South to North
+        /* South to North
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 40), new Cell(17, -4));
         this.vehicles.add(vehicle);
         //*/
@@ -460,7 +460,7 @@ public class CCS_Model extends Thread {
         //One intersection
         //Front trajectory, right tale
         
-        /* South to North
+        //* South to North
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 22), new Cell(14, 0));
         this.vehicles.add(vehicle);
         //*/
@@ -475,7 +475,7 @@ public class CCS_Model extends Thread {
         this.vehicles.add(vehicle);
         //*/
         
-        /* East to West
+        //* East to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 8), new Cell(0, 8));
         this.vehicles.add(vehicle);
         //*/
@@ -506,22 +506,22 @@ public class CCS_Model extends Thread {
         
         // Left trajectory
         
-        /* South to West
+        //* South to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
         this.vehicles.add(vehicle);
         //*/
         
-        /* West to North
+        //* West to North
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 12), new Cell(12, 0));
         this.vehicles.add(vehicle);
         //*/
         
-        /* North to East
+        //* North to East
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(10, 0), new Cell(22, 12));
         this.vehicles.add(vehicle);
         //*/
         
-        /* East to South
+        //* East to South
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 10), new Cell(10, 22));
         this.vehicles.add(vehicle);
         //*/
@@ -534,12 +534,12 @@ public class CCS_Model extends Thread {
         this.vehicles.add(vehicle);
         //*/
         
-        /* West to South
+        //* West to South
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 14), new Cell(8, 22));
         this.vehicles.add(vehicle);
         //*/
         
-        /* North to West
+        //* North to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(8, 0), new Cell(0, 8));
         this.vehicles.add(vehicle);
         //*/
