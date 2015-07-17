@@ -15,27 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package Model.Messages;
 
 import Utility.Crossing_Configuration;
-import java.util.ArrayList;
 
 /**
- * The class M_NewConfiguration, inherited by M_Conf, is used when a new
- * configuration was voted.
+ * The class M_Conf, inherited by Message, represents the parent of all
+ * message concerning a crossing configuration dialog.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class M_NewConfiguration extends M_Conf {
+abstract public class M_Conf extends Message {
 
-    public M_NewConfiguration(int sender_id, int receiver_id,
-        Crossing_Configuration current, ArrayList<Crossing_Configuration> proposition) {
-        super(sender_id, receiver_id, current);
-        
-        ArrayList<Crossing_Configuration> copy = new ArrayList();
-        for(Crossing_Configuration c : proposition)
-            copy.add(new Crossing_Configuration(c));
-        this.datum.add(copy);
+    public M_Conf(int sender_id, int receiver_id,
+            Crossing_Configuration current) {
+        super(sender_id, receiver_id);
+        this.datum.add(new Crossing_Configuration(current));
     }
     
 }

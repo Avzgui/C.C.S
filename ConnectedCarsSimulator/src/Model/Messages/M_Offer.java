@@ -18,24 +18,19 @@
 package Model.Messages;
 
 import Utility.Crossing_Configuration;
-import java.util.ArrayList;
 
 /**
- * The class M_NewConfiguration, inherited by M_Conf, is used when a new
- * configuration was voted.
+ * The class M_Offer, inherited by M_Conf, is sent by a vehicle who propose
+ * a new configuration.
  * 
  * @author Antoine "Avzgui" Richard
  */
-public class M_NewConfiguration extends M_Conf {
+public class M_Offer extends M_Conf {
 
-    public M_NewConfiguration(int sender_id, int receiver_id,
-        Crossing_Configuration current, ArrayList<Crossing_Configuration> proposition) {
+    public M_Offer(int sender_id, int receiver_id, 
+            Crossing_Configuration current, Crossing_Configuration _new) {
         super(sender_id, receiver_id, current);
-        
-        ArrayList<Crossing_Configuration> copy = new ArrayList();
-        for(Crossing_Configuration c : proposition)
-            copy.add(new Crossing_Configuration(c));
-        this.datum.add(copy);
+        this.datum.add(new Crossing_Configuration(_new));
     }
     
 }
