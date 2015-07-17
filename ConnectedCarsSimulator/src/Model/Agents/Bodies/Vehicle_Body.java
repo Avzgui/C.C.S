@@ -149,4 +149,22 @@ public class Vehicle_Body extends A_Body {
     public boolean lookIfCellIsFree(Cell c){
         return !this.infrastructure.haveVehicleOnCell(c);
     }
+    
+    /**
+     * Motor/Sensor method to look if a vehicle on a cell is stopped, or not.
+     * 
+     * @param c cell tested
+     * 
+     * @return if the vehicle on the cell looks stopped or not 
+     */
+    public boolean lookIfVehicleOnCellIsStopped(Cell c){
+       
+       if(this.infrastructure.haveVehicleOnCell(c)){
+           Vehicle_Body v_body = this.infrastructure.getVehicleOnCell(c);
+           if(v_body != null) //just in case
+               return (v_body.getSpeed() == 0.0);
+       }
+       
+       return false; 
+    }
 }

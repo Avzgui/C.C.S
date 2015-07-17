@@ -322,7 +322,7 @@ public class Vehicle_Brain extends A_Brain {
                 || !v_body.getPosition().equals(this.reserv.getTrajectory().getWhereToStop())
                 || this.reserv.getCrossing_tick() <= Environment.time + 1)){
             //If the cell where the vehicle gone is free
-            //if(v_body.lookIfCellIsFree(v_body.getDirection()))
+            if(!v_body.lookIfVehicleOnCellIsStopped(v_body.getDirection()))
                 v_body.setSpeed(1.0);
         }
     }

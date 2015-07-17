@@ -38,6 +38,7 @@ import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -426,6 +427,7 @@ public class CCS_Model extends Thread {
         Environment.time = 0;
         
         //Init agents
+        A_Vehicle vehicle = null;
         //Five Intersections
         /* East to South
         A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(30, 22), new Cell(17, 30));
@@ -461,7 +463,7 @@ public class CCS_Model extends Thread {
         //Front trajectory, right tale
         
         //* South to North
-        A_Vehicle vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 22), new Cell(14, 0));
+        vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 22), new Cell(14, 0));
         this.vehicles.add(vehicle);
         //*/
         
@@ -483,22 +485,22 @@ public class CCS_Model extends Thread {
         
         //Front trajectory, mid tale
         
-        /* South to North
+        //* South to North
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(13, 22), new Cell(13, 0));
         this.vehicles.add(vehicle);
         //*/
         
-        /* West to East
+        //* West to East
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 13), new Cell(22, 13));
         this.vehicles.add(vehicle);
         //*/
         
-        /* North to South
+        //* North to South
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(9, 0), new Cell(9, 22));
         this.vehicles.add(vehicle);
         //*/
         
-        /* East to West
+        //* East to West
         vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 9), new Cell(0, 9));
         this.vehicles.add(vehicle);
         //*/
@@ -552,6 +554,7 @@ public class CCS_Model extends Thread {
         
         //*Run the simulation while there is vehicles
         Collections.shuffle(this.vehicles);
+        Random rand = new Random();
         while(CCS_Model.ticks == 0
                 || (!this.vehicles.isEmpty()
                 //&& CCS_Model.ticks < 100
@@ -589,9 +592,79 @@ public class CCS_Model extends Thread {
                 //Remove all the vehicles who was in their goal.
                 removeVehicles();
 
-                //Generate new vehicles (TODO)
-                if(CCS_Model.ticks>=1){
+                //* Generate new vehicles (TODO properly)
+                if(Environment.time % 1 == 0){
+                    switch(rand.nextInt(16)){
+                        case 0 : //North to West
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(8, 0), new Cell(0, 8));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 1 : //North to South, right lane
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(8, 0), new Cell(8, 22));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 2 : //North to South, mid lane
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(9, 0), new Cell(9, 22));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 3 : // North to East
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(10, 0), new Cell(22, 12));
+                            this.vehicles.add(vehicle);
+                        break;
+                            
+                        case 4 : //East to North
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 8), new Cell(14, 0));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 5 : //East to West, right lane
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 8), new Cell(0, 8));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 6 : //East to West, mid lane
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 9), new Cell(0, 9));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 7 : //East to South
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(22, 10), new Cell(10, 22));
+                            this.vehicles.add(vehicle);
+                        break;
+                            
+                        case 8 : //South to East
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 22), new Cell(22, 14));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 9 : //South to North, right lane
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(14, 22), new Cell(14, 0));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 10 : //South to North, mid lane
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(13, 22), new Cell(13, 0));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 11 : //South to West
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(12, 22), new Cell(0, 10));
+                            this.vehicles.add(vehicle);
+                        break;
+                            
+                        case 12 : //West to South
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 14), new Cell(8, 22));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 13 : //West to East, right lane
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 14), new Cell(22, 14));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 14 : //West to East, mid lane
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 13), new Cell(22, 13));
+                            this.vehicles.add(vehicle);
+                        break;
+                        case 15 : //West to North
+                            vehicle = new A_Vehicle(++this.nb_agents, this.env, new Cell(0, 12), new Cell(12, 0));
+                            this.vehicles.add(vehicle);
+                        break;
+                    }
                 }
+                //*/
             }
 
         }
