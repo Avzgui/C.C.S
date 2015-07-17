@@ -24,8 +24,13 @@ import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
 import Model.Environment.Trajectory;
+import Model.Messages.M_Accept;
 import Model.Messages.M_Bye;
+import Model.Messages.M_Conf;
 import Model.Messages.M_Hello;
+import Model.Messages.M_NewConfiguration;
+import Model.Messages.M_Offer;
+import Model.Messages.M_Refuse;
 import Model.Messages.M_Welcome;
 import Model.Messages.Message;
 import Utility.CardinalPoint;
@@ -33,6 +38,8 @@ import Utility.Crossing_Configuration;
 import Utility.Flow;
 import Utility.Reservation;
 import com.google.common.collect.Table;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import org.chocosolver.solver.ResolutionPolicy;
 import org.chocosolver.solver.Solver;
@@ -50,6 +57,9 @@ public class Intersection_Brain extends Infrastructure_Brain {
 
     private Crossing_Configuration configuration;
     private int negociation_zone_size;
+    private final ArrayList<Crossing_Configuration> proposals;
+    private final HashMap<Crossing_Configuration, Integer> nb_accept;
+    private final HashMap<Crossing_Configuration, Integer> nb_refuse;
     
     /**
      * Constructor
@@ -61,6 +71,9 @@ public class Intersection_Brain extends Infrastructure_Brain {
         super(id, body);
         this.configuration = new Crossing_Configuration(0, this.id);
         this.negociation_zone_size = 6;
+        this.proposals = new ArrayList<>();
+        this.nb_accept = new HashMap<>();
+        this.nb_refuse = new HashMap<>();
     }
 
     /**
@@ -295,14 +308,83 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 }
             }
         }
+        else if(mess instanceof M_Conf){
+            System.out.print("Intersection " + this.id + " process M_Conf : ");
+            Crossing_Configuration current = (Crossing_Configuration) mess.getDatum().get(0);
+            if(current != null && current.equals(this.configuration)){
+                if(mess instanceof M_Offer){
+                    Crossing_Configuration conf = (Crossing_Configuration) mess.getDatum().get(1);
+                    if(conf != null && !this.proposals.contains(conf))
+                        this.proposals.add(conf);
+                }
+                else if(mess instanceof M_Accept){
+                    Crossing_Configuration conf = (Crossing_Configuration) mess.getDatum().get(1);
+                    if(conf != null){
+                        if(this.nb_accept.containsKey(conf)){
+                            int nb = this.nb_accept.get(conf);
+                            this.nb_accept.put(conf, nb+1);
+                        }
+                        else
+                            this.nb_accept.put(conf, 1);
+                    }
+                }
+                else if(mess instanceof M_Refuse){
+                    Crossing_Configuration conf = (Crossing_Configuration) mess.getDatum().get(1);
+                    if(conf != null){
+                        if(this.nb_refuse.containsKey(conf)){
+                            int nb = this.nb_refuse.get(conf);
+                            this.nb_refuse.put(conf, nb+1);
+                        }
+                        else
+                            this.nb_refuse.put(conf, 1);
+                    }
+                }
+            }
+        }
         else
             super.processMessage(mess);
+        
+        return null;
+    }
+    
+    /**
+     * Reasonning methods to update the current configuration.
+     */
+    private Message updateConfiguration(){
+        
+        if(!this.nb_accept.isEmpty()){
+            Intersection_Body i_body = (Intersection_Body) this.body;
+            Crossing_Configuration conf_max = null;
+            int max_accepts = 0;
+            double th_accept = 0.5;
+            double total_voters = i_body.getVehicles().size(); //Not sure.
+            
+            //Get the conf with max accept
+            for(Entry<Crossing_Configuration, Integer> entry : this.nb_accept.entrySet()){
+                if(entry.getValue() > max_accepts){
+                    max_accepts = entry.getValue();
+                    conf_max = entry.getKey();
+                }
+            }
+            
+            //Check if c_new is not c_curr
+            if(!this.configuration.equals(conf_max)){
+                //Check if sup to th_accept
+                if(((double) max_accepts / total_voters) >= th_accept)
+                    return new M_NewConfiguration(this.id, -1, this.configuration, this.proposals);
+            }
+        }
         
         return null;
     }
 
     @Override
     public void run() {
+        
+        this.proposals.clear();
+        this.nb_accept.clear();
+        this.nb_refuse.clear();
+        
         //Process all the messages
         while(!this.messages_memory.isEmpty()){
             Message m = processMessage(this.messages_memory.get(0));
@@ -312,7 +394,12 @@ public class Intersection_Brain extends Infrastructure_Brain {
                 this.body.sendMessage(m);
         }
         
-        //Update configuration (check the vote)
+        Intersection_Body i_body = (Intersection_Body) this.body;
+        
+        //Update configuration
+        Message m = updateConfiguration();
+        if(m != null)
+                i_body.sendBroadcast(m);
         
         System.out.println("\nIntersection " + this.id + "\nConfiguration : " + this.configuration);
     }

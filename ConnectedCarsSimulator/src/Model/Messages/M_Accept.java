@@ -28,9 +28,9 @@ import Utility.Crossing_Configuration;
 public class M_Accept extends M_Conf {
 
     public M_Accept(int sender_id, int receiver_id,
-            Crossing_Configuration current, int conf_id) {
+            Crossing_Configuration current, Crossing_Configuration conf) {
         super(sender_id, receiver_id, current);
-        this.datum.add(conf_id);
+        this.datum.add(conf);
     }
     
 }

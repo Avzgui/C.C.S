@@ -29,11 +29,11 @@ import java.util.ArrayList;
 public class M_NewConfiguration extends M_Conf {
 
     public M_NewConfiguration(int sender_id, int receiver_id,
-        Crossing_Configuration current, ArrayList<Crossing_Configuration> proposition) {
+        Crossing_Configuration current, ArrayList<Crossing_Configuration> proposals) {
         super(sender_id, receiver_id, current);
         
         ArrayList<Crossing_Configuration> copy = new ArrayList();
-        for(Crossing_Configuration c : proposition)
+        for(Crossing_Configuration c : proposals)
             copy.add(new Crossing_Configuration(c));
         this.datum.add(copy);
     }

@@ -83,7 +83,7 @@ public class CCS_Model extends Thread {
         CCS_Model.ticks = 0;
         this.collision = 0;
         this.envFile = null;
-        this.stepByTick = 20;
+        this.stepByTick = 1;
     }
 
     /**
@@ -561,7 +561,7 @@ public class CCS_Model extends Thread {
                 && this.collision == 0)){
             
             try {
-                sleep(5);
+                sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(CCS_View.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -583,16 +583,17 @@ public class CCS_Model extends Thread {
             
             //Each 10 ticks
             if(CCS_Model.ticks % this.stepByTick == 0){
+                
+                //Remove all the vehicles who was in their goal.
+                removeVehicles();
+                
                 //Update the environment
                 this.env.update();
                 
                 //Get the collision code
                 this.collision = this.env.collisionManager();
-                
-                //Remove all the vehicles who was in their goal.
-                removeVehicles();
 
-                //* Generate new vehicles (TODO properly)
+                /* Generate new vehicles (TODO properly)
                 if(Environment.time % 1 == 0){
                     switch(rand.nextInt(16)){
                         case 0 : //North to West

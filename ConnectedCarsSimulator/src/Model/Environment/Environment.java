@@ -307,8 +307,10 @@ public class Environment {
         //Check if there is two vehicle is the same. 
         for(Vehicle_Body v1 : this.vehicles){
             for(Vehicle_Body v2 : this.vehicles){
-                if(!v1.equals(v2) && v1.getPosition().equals(v2.getPosition()))
+                if(!v1.equals(v2) && v1.getPosition().equals(v2.getPosition())){
+                    System.out.println("Vehicle " + v1.getId() + " and Vehicle " + v2.getId() + " both in the cell " + v2.getPosition() );
                     return 1;
+                }
             }
         }
         
