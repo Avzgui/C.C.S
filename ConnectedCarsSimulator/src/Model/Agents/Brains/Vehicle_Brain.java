@@ -55,11 +55,19 @@ import org.chocosolver.solver.variables.VariableFactory;
  */
 public class Vehicle_Brain extends A_Brain {
 
+    /** Current reservation to cross the intersection */
     protected Reservation reserv;
+    
+    /** List of proposals for crossing configuration */
     protected final ArrayList<Crossing_Configuration> proposals;
+    
+    /** Current cossing configuration */
     protected Crossing_Configuration current;
     
+    /** Destination cell of the vehicle */
     protected final Cell final_goal;
+    
+    /** List of directions */
     protected final ArrayList<CardinalPoint> intermediate_goals;
     
     /**
@@ -461,6 +469,9 @@ public class Vehicle_Brain extends A_Brain {
         }
     }
 
+    /** 
+     * Implements the vehicle agent's behaviour.
+     */
     @Override
     public void run(){
         

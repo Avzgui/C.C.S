@@ -32,6 +32,14 @@ import Model.Messages.Message;
  */
 public class Road_Body extends Infrastructure_Body {
 
+    /**
+     * Constructor
+     * 
+     * @param id ID of the body (by default, the same as the agent).
+     * @param env Environment of the body.
+     * @param brain Brain linked to the body.
+     * @param road Infrastructure that the infrastructure agent is responsible.
+     */
     public Road_Body(int id, Environment env, Road_Brain brain, Road road) {
         super(id, env, brain, road);
     }

@@ -31,10 +31,13 @@ import java.util.ArrayList;
  */
 abstract public class A_Brain {
  
+    /** Brain ID. */
     protected final int id;
     
+    /** Link to the agent body. */
     protected A_Body body;
     
+    /** Memory of the agent. */
     protected final ArrayList<Message> messages_memory;
     
     /**
@@ -116,5 +119,8 @@ abstract public class A_Brain {
                 + mess.getClass() + ", is unsupported.");
     }
     
+    /** 
+     * Implements the agent's behaviour.
+     */
     abstract public void run();
 }

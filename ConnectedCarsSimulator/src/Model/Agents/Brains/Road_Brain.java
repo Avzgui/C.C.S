@@ -39,6 +39,11 @@ public class Road_Brain extends Infrastructure_Brain {
         super(id, body);
     }
 
+    /** 
+     * Implements the road agent's behaviour.
+     * 
+     * TODO
+     */
     @Override
     public void run() {
         throw new UnsupportedOperationException("Not supported yet.");

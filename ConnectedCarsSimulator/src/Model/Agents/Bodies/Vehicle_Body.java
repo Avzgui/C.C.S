@@ -32,9 +32,16 @@ import Model.Messages.Message;
  */
 public class Vehicle_Body extends A_Body {
     
+    /** Current infrastructure */
     protected Infrastructure_Body infrastructure;
+    
+    /** Next cell where the vehicle will go */
     protected Cell direction;
+    
+    /** Maximal speed of the vehicle */
     protected final double max_speed;
+    
+    /** Current speed of the vehicle */
     protected double speed;
     
     /**

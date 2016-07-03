@@ -35,8 +35,13 @@ import java.util.HashMap;
  */
 abstract public class Infrastructure_Body extends A_Body {
 
+    /** Link to infrastructure */
     protected final Infrastructure infrastructure;
+    
+    /** Array of vehicles on the infrastructure */
     protected final ArrayList<Vehicle_Body> vehicles;
+    
+    /** List of adjacent infrastructure */
     protected final HashMap<CardinalPoint, Infrastructure_Body> neighbors;
     
     /**

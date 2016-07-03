@@ -385,6 +385,9 @@ public class Intersection_Brain extends Infrastructure_Brain {
         return null;
     }
 
+    /** 
+     * Implements the intersection agent's behaviour.
+     */
     @Override
     public void run() {
         

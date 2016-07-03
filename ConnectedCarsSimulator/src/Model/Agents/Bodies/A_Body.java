@@ -31,9 +31,16 @@ import Model.Messages.Message;
  */
 abstract public class A_Body {
     
+    /** ID of the body */
     protected final int id;
+    
+    /** Position of the body in the environment */
     protected Cell position;
+    
+    /** Environment */
     protected final Environment env;
+    
+    /** Link to the agent's brain */
     protected A_Brain brain;
     
     /**

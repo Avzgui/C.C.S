@@ -122,6 +122,9 @@ public class CCS_View extends Thread {
         this.frame.setVisible(true);
     }
     
+    /**
+     * Update view.
+     */
     @Override
     public void run(){
         

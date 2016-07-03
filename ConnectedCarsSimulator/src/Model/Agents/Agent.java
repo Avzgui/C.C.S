@@ -19,10 +19,7 @@ package Model.Agents;
 
 import Model.Agents.Bodies.A_Body;
 import Model.Agents.Brains.A_Brain;
-import Model.Environment.Environment;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -34,8 +31,13 @@ import java.util.logging.Logger;
  */
 abstract public class Agent {
     
+    /** Agent ID */
     protected final int id;
+    
+    /** Link to the body of the agent */
     protected final A_Body body;
+    
+    /** Link to the brain of the agent */
     protected final A_Brain brain;
     
     /**

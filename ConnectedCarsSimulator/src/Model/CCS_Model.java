@@ -23,7 +23,6 @@ import Model.Agents.A_Intersection;
 import Model.Agents.A_Vehicle;
 import Model.Agents.Bodies.Infrastructure_Body;
 import Model.Agents.Bodies.Vehicle_Body;
-import Model.Environment.Cell;
 import Model.Environment.Environment;
 import Model.Environment.Infrastructure;
 import Model.Environment.Intersection;
@@ -67,7 +66,8 @@ public class CCS_Model extends Thread {
     private final ArrayList<A_Vehicle> vehicles;
     private final ArrayList<A_Infrastructure> infrastructures;
     private int nb_agents;
-    public static int ticks;
+    /** Current tick */
+    public static int ticks; 
     private int stepByTick;
     private int collision;
     private File envFile;
@@ -418,6 +418,9 @@ public class CCS_Model extends Thread {
         // TODO
     }
     
+    /**
+     * Run simulation
+     */
     @Override
     public void run(){
         //Initialization of the simulation
