@@ -279,7 +279,11 @@ public class Environment {
     public void update(){
         //Move vehicules
         for(Vehicle_Body body : this.vehicles){
+            
+            //Get the direction
             Cell direction = body.getDirection();
+            
+            
             if(direction != null 
                     && body.getSpeed() > 0
                     ){
@@ -304,7 +308,7 @@ public class Environment {
      */
     public int collisionManager(){
         
-        //Check if there is two vehicle is the same. 
+        /* Check if there is two vehicle is the same. 
         for(Vehicle_Body v1 : this.vehicles){
             for(Vehicle_Body v2 : this.vehicles){
                 if(!v1.equals(v2) && v1.getPosition().equals(v2.getPosition())){
@@ -313,8 +317,9 @@ public class Environment {
                 }
             }
         }
+        //*/
         
-        //Check if there is a loop of vehicle.
+        //* Check if there is a loop of vehicle.
         for(Vehicle_Body v1 : this.vehicles){
             //Get the infrastructure of the vehicle
             Infrastructure_Body infrastructure = v1.getInfrastructure();
@@ -333,6 +338,7 @@ public class Environment {
                     direction = v2.getDirection();
             }
         }
+        //*/
         
         return 0;
     }

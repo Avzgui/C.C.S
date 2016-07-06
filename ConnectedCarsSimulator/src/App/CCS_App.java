@@ -38,7 +38,7 @@ public class CCS_App {
         model.start();
         
         //Init view
-        CCS_View view = new CCS_View(model, 10);
+        CCS_View view = new CCS_View(model, 15);
         view.start();
     }
 }

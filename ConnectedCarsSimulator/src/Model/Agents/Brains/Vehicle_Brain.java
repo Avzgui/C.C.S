@@ -317,7 +317,7 @@ public class Vehicle_Brain extends A_Brain {
             
             //Variables creation
             IntVar[] r = VariableFactory.integerArray("R"+this.id, o_reserv.size(), Environment.time, Environment.time+100, solver);
-            IntVar offset = VariableFactory.fixed(2, solver);
+            IntVar offset = VariableFactory.fixed(3, solver);
             IntVar sum = VariableFactory.integer("Sum"+this.id, 0, VariableFactory.MAX_INT_BOUND, solver);
 
             //For each réservation
@@ -445,7 +445,10 @@ public class Vehicle_Brain extends A_Brain {
             if(v_body.getDirection() == null && this.reserv.getTrajectory() != null && !this.reserv.getTrajectory().isEmpty()){
                 do{
                     v_body.setDirection(this.reserv.getTrajectory().pop());
-                }while(!this.reserv.getTrajectory().isEmpty() && v_body.getPosition().equals(v_body.getDirection()));
+                }while(!this.reserv.getTrajectory().isEmpty() && !v_body.getPosition().equals(v_body.getDirection()));
+            
+                if(!this.reserv.getTrajectory().isEmpty())
+                    v_body.setDirection(this.reserv.getTrajectory().pop());
             }
         }
     }
